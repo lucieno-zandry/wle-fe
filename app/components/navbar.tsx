@@ -1,9 +1,13 @@
 "use client"
 
 import { Link, Outlet } from "react-router"
-import Button from "./custom-components/button"
+import { useUserStore } from "~/hooks/use-user"
+import { Button } from "./ui/button";
+import UserDropdown from "./user-dropdown";
 
 export default function () {
+    const { user } = useUserStore();
+
     return (
         <header className="flex justify-between items-center px-8 py-4 shadow-sm bg-white sticky top-0 z-50">
             <h1>
@@ -15,9 +19,12 @@ export default function () {
                 <a href="#about" className="text-gray-600 hover:text-gray-900">About</a>
                 <a href="#contact" className="text-gray-600 hover:text-gray-900">Contact</a>
             </nav>
-            <Button className="bg-blue-600 text-white hover:bg-blue-700">
-                Shop Now
-            </Button>
+            {!user && <Button variant="default" asChild>
+                <Link to="/auth" className="text-gray-600 hover:text-gray-900">Log in</Link>
+            </Button>}
+
+            {user &&
+                <UserDropdown />}
         </header>
     )
 }

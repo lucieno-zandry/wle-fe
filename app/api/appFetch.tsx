@@ -22,8 +22,8 @@ const defaultHeaders = (): HeadersInit => {
     }
 
     if (typeof window !== "undefined") {
-        const token = localStorage.getItem('access_token');
-        const tokenType = localStorage.getItem('token_type');
+        const token = localStorage.getItem('token');
+        const tokenType = "Bearer";
 
         if (token && tokenType) {
             headers['Authorization'] = `${tokenType} ${token}`;

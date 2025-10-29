@@ -9,7 +9,6 @@ import React from "react";
 import getUpdatedFormErrors from "~/lib/getUpdatedFormErrors";
 import randomString from "~/lib/random-string";
 
-
 const dataFormat = {
   email: z.email(),
   password: z.string().min(4),

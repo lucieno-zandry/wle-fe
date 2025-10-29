@@ -23,3 +23,22 @@ export function registerUser(data: {
         token: string,
     }>('/auth/register', data)
 }
+
+export function getAuthUser() {
+    return appFetch.get<{ user: User }>('/auth/user/get');
+}
+
+export function getProducts() {
+    return appFetch.get<{ products: Product[] }>('/product/all?limit=10&with=variants&images');
+}
+
+export function getProduct(slug: string) {
+    return appFetch.get<{ product: Product }>(`/product/get/${slug}`);
+}
+
+export function addVariantToCart(payload: {
+    variant_id: number,
+    count: number,
+}) {
+    return appFetch.post('/cart/create', payload);
+}
