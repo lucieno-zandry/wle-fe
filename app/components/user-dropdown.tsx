@@ -17,6 +17,7 @@ import { useUserStore } from "~/hooks/use-user"
 import UserAvatar from "./user-avatar";
 import { LogoutDialog } from "./logout-dialog";
 import React from "react";
+import { Link } from "react-router";
 
 export default function () {
     const { user } = useUserStore();
@@ -37,14 +38,11 @@ export default function () {
                 <DropdownMenuContent className="w-56" align="start">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                            Profile
+                        <DropdownMenuItem asChild>
+                            <Link to={'/settings'}>Settings</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             Billing
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Settings
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
