@@ -7,9 +7,10 @@ import { Link, redirect, useLoaderData, useNavigate } from "react-router";
 import { getEmailInfo, logInWithEmail } from "~/api/http-requests";
 import { useMemo, useState, type FocusEvent, type FormEventHandler } from "react";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
-import useRedirectAction, { useSuccessRedirect } from "~/hooks/use-redirect-action";
+import { useSuccessRedirect } from "~/hooks/use-redirect-action";
 import { toast } from "sonner";
-import { AppFetchException } from "~/api/app-fetch";
+import { ValidationException } from "~/api/app-fetch";
+import BackButton from "~/components/back-button";
 
 const dataFormat = {
   email: z.email(),
@@ -66,7 +67,7 @@ export default function () {
         return successRedirect();
       })
       .catch(error => {
-        if (error instanceof AppFetchException) {
+        if (error instanceof ValidationException) {
           return setFormValidationErrors(error.errors);
         }
 
@@ -76,6 +77,7 @@ export default function () {
   }
 
   return <form className="p-6 md:p-8" method="post" onSubmit={handleSubmit}>
+    <BackButton />
     <FieldGroup>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Welcome back!</h1>

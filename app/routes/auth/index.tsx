@@ -7,6 +7,7 @@ import React from "react";
 import CustomField from "~/components/custom-components/field";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
+import BackButton from "~/components/back-button";
 
 const emailFormat = z.email();
 
@@ -52,6 +53,7 @@ export default function () {
     }, []);
 
     return <Form className="p-6 md:p-8" method="post">
+        <BackButton path="/" />
         <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>

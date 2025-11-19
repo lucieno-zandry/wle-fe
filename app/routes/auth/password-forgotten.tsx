@@ -8,6 +8,7 @@ import CustomField from "~/components/custom-components/field";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { toast } from "sonner";
+import BackButton from "~/components/back-button";
 
 const emailFormat = z.email();
 
@@ -17,7 +18,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
     try {
         const response = await sendPasswordResetLink(email);
-        
+
         if (response.data?.link_sent) {
             toast.success("Password reset link sent");
         }
@@ -55,6 +56,8 @@ export default function () {
     }, []);
 
     return <Form className="p-6 md:p-8" method="post">
+        <BackButton />
+    
         <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Reset your password</h1>

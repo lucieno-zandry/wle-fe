@@ -5,7 +5,7 @@ import z from "zod";
 import Field from "../custom-components/field";
 import { updateAuthUser } from "~/api/http-requests";
 import { toast } from "sonner";
-import { AppFetchException } from "~/api/app-fetch";
+import { ValidationException } from "~/api/app-fetch";
 import Button from "../custom-components/button";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 
@@ -46,7 +46,7 @@ export default function () {
                 setFormData({ ...formData, password: "", password_confirmation: "" });
             })
             .catch(error => {
-                if (error instanceof AppFetchException) {
+                if (error instanceof ValidationException) {
                     setValidationMessages(error.errors);
                 } else {
                     toast.error("Failed to update password with status : " + error.status);

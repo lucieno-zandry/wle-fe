@@ -70,3 +70,7 @@ export function removeCartItem(cartItemId: number) {
 export function sendPasswordResetLink(email: FormDataEntryValue) {
     return appFetch.post<{ link_sent: boolean }>('/auth/password/forgot', { email });
 }
+
+export function resetPassword(payload: FormData | { password: FormDataEntryValue, password_confirmation: FormDataEntryValue, token: FormDataEntryValue }) {
+    return appFetch.post<{ user: User, token: string }>('/auth/password/reset', payload);
+}

@@ -5,12 +5,22 @@ import redirectPathnames from "~/lib/redirect-pathnames";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export class AppFetchException {
-    errors: any;
+export class ValidationException {
+    errors: Record<string, string[]>;
     status: number;
 
-    constructor(errors: any, status: number) {
+    constructor(errors: Record<string, string[]>, status: number) {
         this.errors = errors;
+        this.status = status;
+    }
+}
+
+export class HttpException {
+    data?: any;
+    status: number;
+
+    constructor(status: number, data: any = undefined) {
+        this.data = data;
         this.status = status;
     }
 }
@@ -76,10 +86,10 @@ async function executeRequest<T>(request: () => Promise<Response>) {
     }
 
     if (formatedResponse.error) {
-        if (formatedResponse.error.errors) {
-            throw new AppFetchException(formatedResponse.error.errors, formatedResponse.status);
+        if (formatedResponse.error.errors && formatedResponse.status === 422) {
+            throw new ValidationException(formatedResponse.error.errors, formatedResponse.status);
         } else {
-            throw { data: formatedResponse.error, status: formatedResponse.status };
+            throw new HttpException(formatedResponse.status, formatedResponse.error);
         }
     }
 
