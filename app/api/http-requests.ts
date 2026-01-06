@@ -140,3 +140,39 @@ export function getOrder(uuid: string) {
 export function createTransaction(data: Pick<Transaction, 'method' | 'order_uuid' | 'amount'>) {
     return appFetch.post<{ transaction: Transaction }>('/transaction/create', data)
 }
+
+export function getNotifications() {
+    return appFetch.get<{
+        notifications: AppNotification[],
+        unread: AppNotification[],
+        unread_count: number,
+    }>('/notifications');
+}
+
+export function getUnreadNotifications() {
+    return appFetch.get<{
+        notifications: AppNotification[],
+        count: number,
+    }>('/notifications/unread');
+}
+
+export function clearReadNotifications() {
+    return appFetch.delete<{ message: string }>('/notifications/clear-read');
+}
+
+export function markAllNotificationsAsRead() {
+    return appFetch.post<{
+        message: string,
+    }>('/notifications/mark-all-read', {});
+}
+
+export function removeNotification(id: string) {
+    return appFetch.delete<{ message: string }>(`/notifications/${id}`);
+}
+
+export function markNotificationAsRead(id: string) {
+    return appFetch.patch<{
+        message: string,
+        notification: AppNotification
+    }>(`/notifications/${id}/read`, {});
+}

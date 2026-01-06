@@ -211,3 +211,33 @@ type Transaction = {
   order?: Order,
   amount: number,
 }
+
+type TransactionNotificationData = {
+  notification_type: "transaction";
+  type: "payment_success" | "payment_failed";
+  transaction_id: number;
+  order_uuid: string;
+  amount: number;
+  payment_method: string;
+  message: string;
+  order_total: number;
+};
+
+type OtherNotificationData = {
+  notification_type: "system";
+  title: string;
+  message: string;
+};
+
+type NotificationData =
+  | TransactionNotificationData
+  | OtherNotificationData;
+
+type AppNotification = {
+  id: string;
+  type: string;
+  data: NotificationData;
+  read_at: string | null;
+  created_at: string;
+  updated_at: string;
+};

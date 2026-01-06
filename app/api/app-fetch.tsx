@@ -150,6 +150,28 @@ async function put<T>(path: string, payload: FormData | Object, init: RequestIni
     return response;
 }
 
+async function patch<T>(path: string, payload: FormData | Object, init: RequestInit = { headers: defaultHeaders() }): Promise<FormatedResponse<T>> {
+    let body: BodyInit;
+
+    if (payload instanceof FormData) {
+        body = payload
+    } else {
+        body = JSON.stringify(payload);
+        init.headers = {
+            ...init.headers,
+            'Content-Type': 'application/json',
+        };
+    }
+
+    const response = await executeRequest<T>(() => fetch(getEndpointUrl(path), {
+        ...init,
+        body,
+        method: "PATCH",
+    }));
+
+    return response;
+}
+
 async function destroy<T>(path: string, init: RequestInit = { headers: defaultHeaders() }): Promise<FormatedResponse<T>> {
     const response = await executeRequest<T>(() => fetch(getEndpointUrl(path), {
         ...init,
@@ -164,4 +186,5 @@ export default {
     post,
     put,
     delete: destroy,
+    patch
 }

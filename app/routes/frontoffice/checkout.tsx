@@ -90,7 +90,6 @@ export default function CheckoutPage() {
             .then(async (response) => {
                 if (response.data?.order) {
                     try {
-                        throw { status: 500, message: "Failed to create transaction" };
                         const transactionResponse = await createTransaction({
                             method,
                             order_uuid: response.data.order.uuid,

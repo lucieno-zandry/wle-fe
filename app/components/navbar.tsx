@@ -5,6 +5,7 @@ import { useUserStore } from "~/hooks/use-user"
 import { Button } from "./ui/button";
 import UserDropdown from "./user-dropdown";
 import Cart from "./cart/cart";
+import Notifications from "./notifications/notifications";
 
 export default function () {
     const { user } = useUserStore();
@@ -24,12 +25,12 @@ export default function () {
                 <Link to="/auth" className="text-gray-600 hover:text-gray-900">Log in</Link>
             </Button>}
 
-            {user  &&
+            {user &&
                 <div className="flex gap-2 items-center">
                     <Cart />
+                    <Notifications />
                     <UserDropdown />
-                </div>
-            }
+                </div>}
         </header>
     )
 }
