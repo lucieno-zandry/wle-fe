@@ -129,7 +129,11 @@ export default function CheckoutPage() {
         }
     }, [loaderCartItems, setCartItems]);
 
-    console.log(method);
+    useEffect(() => {
+        if (itemsCount === 0) {
+            navigate('/orders');
+        }
+    }, [itemsCount]);
 
     return (
         <div className="container max-w-4xl mx-auto p-4 md:p-8">

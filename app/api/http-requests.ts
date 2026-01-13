@@ -180,3 +180,7 @@ export function markNotificationAsRead(id: string) {
 export function searchProducts(keywords: string) {
     return appFetch.get<{ products: Product[] }>(`/product/search/${keywords}?with=category,variants,images`);
 }
+
+export function deleteOrder(uuid: string) {
+    return appFetch.delete<{ message: string }>(`/order/delete?order_uuids=${uuid}`);
+}
