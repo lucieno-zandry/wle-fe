@@ -2,7 +2,6 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
 export default [
     route('/403', 'routes/common/forbidden-error-page.tsx'),
-    route('/404', 'routes/common/not-found-error-page.tsx'),
     route('/500', 'routes/common/internal-server-error-page.tsx'),
     route('/', 'routes/frontoffice/layout.tsx', [
         index('routes/frontoffice/home.tsx'),
@@ -13,6 +12,7 @@ export default [
         route('checkout', 'routes/frontoffice/checkout.tsx'),
         route('orders', 'routes/frontoffice/orders.tsx'),
         route('order/:uuid', 'routes/frontoffice/order-details.tsx'),
+        route('search/:query', 'routes/frontoffice/search-results.tsx'),
     ]),
     route('/auth', 'routes/auth/layout.tsx', [
         index('routes/auth/index.tsx'),
@@ -22,4 +22,5 @@ export default [
         route('password-forgotten', 'routes/auth/password-forgotten.tsx'),
         route('reset-password/:token', 'routes/auth/reset-password.tsx'),
     ]),
+    route('/*', 'routes/common/not-found-error-page.tsx'),
 ] satisfies RouteConfig;

@@ -1,7 +1,6 @@
+import { serializeProductParams, type ProductQueryParams } from "~/lib/serialize-product-params";
 import appFetch from "./app-fetch";
-
-type WhereConditions = Record<string, string | number | [string, string | number]>;
-type WhereInConditions = Record<string, (string | number)[]>;
+import buildWhereParam, { type WhereConditions, type WhereInConditions } from "~/lib/build-where-param";
 
 export function getEmailInfo(email: string) {
     return appFetch.post<{ is_taken: boolean }>('/auth/email/info', { email });
@@ -34,9 +33,15 @@ export function updateAuthUser(payload: { name?: string, email?: string, passwor
     return appFetch.post<{ user: User }>('/auth/user/update', payload);
 }
 
-export function getProducts() {
-    return appFetch.get<{ products: Product[] }>('/product/all?with=variants&images');
+export function getProducts(params?: ProductQueryParams) {
+    return appFetch.get<{ products: Product[] }>('/product/all', {
+        params: serializeProductParams({
+            with: ['variants', 'images', 'category'],
+            ...params,
+        }),
+    });
 }
+
 
 export function getProduct(slug: string) {
     return appFetch.get<{ product: Product }>(`/product/get/${slug}`);
@@ -57,36 +62,18 @@ export function addVariantToCart(payload: {
     return appFetch.post<{ cart_item: CartItem }>(`/cart/create/${payload.variant_id}`, { count: payload.count });
 }
 
-export function getCartItems({ where, whereIn }: {
-    where?: WhereConditions,
-    whereIn?: WhereInConditions
+export function getCartItems({
+    where,
+    whereIn,
+}: {
+    where?: WhereConditions<CartItem>;
+    whereIn?: WhereInConditions;
 } = {}) {
-    // Build "where" clause
-    const whereClause = where
-        ? Object.entries(where)
-            .map(([field, value]) => {
-                if (Array.isArray(value)) {
-                    const [operator, actualValue] = value;
-                    return `${field}${operator}${actualValue}`;
-                }
-                return `${field}=${value}`;
-            })
-            .join(',')
-        : '';
-
-    // Build "whereIn" clause
-    const whereInClause = whereIn
-        ? Object.entries(whereIn)
-            .map(([field, values]) => `${field}:${values.join('|')}`)
-            .join(',')
-        : '';
-
-    // Merge both into one query param
-    const combined = [whereClause, whereInClause].filter(Boolean).join(',');
-
-    const query = combined ? `?where=${encodeURIComponent(combined)}` : '';
-
-    return appFetch.get<{ cart_items: CartItem[] }>(`/cart/all${query}`);
+    return appFetch.get<{ cart_items: CartItem[] }>('/cart/all', {
+        params: {
+            where: buildWhereParam(where, whereIn),
+        },
+    });
 }
 
 export function updateCartItem(cartItemId: number, payload: { count: number }) {
@@ -183,4 +170,8 @@ export function searchProducts(keywords: string) {
 
 export function deleteOrder(uuid: string) {
     return appFetch.delete<{ message: string }>(`/order/delete?order_uuids=${uuid}`);
+}
+
+export function getCategories() {
+    return appFetch.get<{ categories: Category[] }>('/category/all');
 }

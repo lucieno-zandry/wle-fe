@@ -1,5 +1,6 @@
 import useRedirectAction from "~/hooks/use-redirect-action";
 import useRouterStore from "~/hooks/use-router-store";
+import buildQuery from "~/lib/build-query";
 import isCsr from "~/lib/is-csr";
 import redirectPathnames from "~/lib/redirect-pathnames";
 
@@ -96,15 +97,26 @@ async function executeRequest<T>(request: () => Promise<Response>) {
     return formatedResponse;
 }
 
-async function get<T>(path: string, init: RequestInit = { headers: defaultHeaders() }): Promise<FormatedResponse<T>> {
+async function get<T>(
+    path: string,
+    options: RequestInit & { params?: Record<string, any> } = {}
+): Promise<FormatedResponse<T>> {
+    const { params, ...init } = options;
 
-    const response = await executeRequest<T>(() => fetch(getEndpointUrl(path), {
-        ...init,
-        method: "GET",
-    }));
+    if (!options.headers) {
+        init.headers = defaultHeaders();
+    }
 
-    return response;
+    const url = buildQuery(path, params);
+
+    return executeRequest<T>(() =>
+        fetch(getEndpointUrl(url), {
+            ...init,
+            method: "GET",
+        })
+    );
 }
+
 
 async function post<T>(path: string, payload: FormData | Object, init: RequestInit = { headers: defaultHeaders() }): Promise<FormatedResponse<T>> {
     let body: BodyInit;
