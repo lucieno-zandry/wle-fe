@@ -1,8 +1,8 @@
 //checkout.tsx
 
 import { useState, useMemo, useEffect } from "react";
-import { AddressForm } from "~/components/addresses/address-form";
-import { PaymentMethod } from "~/components/checkout/payment-method";
+import AddressForm from "~/components/addresses/address-form";
+import PaymentMethod from "~/components/checkout/payment-method";
 import { OrderReview } from "~/components/checkout/order-review";
 import Button from "~/components/custom-components/button";
 import StepWrapper from "~/components/custom-components/step-wrapper";
@@ -16,7 +16,7 @@ import { useRefreshCart } from "~/hooks/use-cart";
 import { HttpException, ValidationException, type FormatedResponse } from "~/api/app-fetch";
 import useRouterStore from "~/hooks/use-router-store";
 import { useTranslation } from "react-i18next";
-import i18next from "i18next";
+import i18next, { type TFunction } from "i18next";
 import type { WhereInConditions } from "~/lib/build-where-param";
 
 type Step = "address" | "payment" | "review";
@@ -56,7 +56,105 @@ export const clientAction = async ({ request }: ActionFunctionArgs) => {
     return null;
 };
 
-export default function CheckoutPage() {
+
+type CheckoutProps = {
+    activeStep: "address" | "payment" | "review";
+    setActiveStep: (step: "address" | "payment" | "review") => void;
+    completed: { address: boolean; payment: boolean; review: boolean };
+    handleStepComplete: (step: "address" | "payment", nextStep: "payment" | "review") => void;
+    handlePlaceOrder: () => void;
+    loading: boolean;
+    cartItems: CartItem[] | null;
+    itemsCount: number;
+    subtotal: number;
+    discountAmount: number;
+    total: number;
+    t: TFunction;
+};
+
+export function Checkout({
+    activeStep,
+    setActiveStep,
+    completed,
+    handleStepComplete,
+    handlePlaceOrder,
+    loading,
+    cartItems,
+    itemsCount,
+    subtotal,
+    discountAmount,
+    total,
+    t
+}: CheckoutProps) {
+    return (
+        <div className="container max-w-4xl mx-auto p-4 md:p-8">
+            <h1 className="text-3xl font-bold mb-8">{t('checkout:checkout')}</h1>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main Checkout Flow */}
+                <div className="lg:col-span-2 space-y-4">
+                    {/* STEP 1: ADDRESS */}
+                    <StepWrapper
+                        number={1}
+                        title={t('checkout:shippingAddress')}
+                        isActive={activeStep === "address"}
+                        isCompleted={completed.address}
+                        onEdit={() => setActiveStep("address")}
+                    >
+                        <AddressForm onNext={() => handleStepComplete("address", "payment")} />
+                    </StepWrapper>
+
+                    {/* STEP 2: PAYMENT */}
+                    <StepWrapper
+                        number={2}
+                        title={t('checkout:paymentMethod')}
+                        isActive={activeStep === "payment"}
+                        isCompleted={completed.payment}
+                        onEdit={() => setActiveStep("payment")}
+                    >
+                        <PaymentMethod onNext={() => handleStepComplete("payment", "review")} />
+                    </StepWrapper>
+
+                    {/* STEP 3: REVIEW */}
+                    <StepWrapper
+                        number={3}
+                        title={t('checkout:reviewPlaceOrder')}
+                        isActive={activeStep === "review"}
+                        isCompleted={completed.review}
+                    >
+                        {cartItems && (
+                            <OrderReview>
+                                <Button
+                                    className="w-full h-12 text-lg"
+                                    type="button"
+                                    isLoading={loading}
+                                    onClick={handlePlaceOrder}
+                                >
+                                    {t('checkout:placeOrder')}
+                                </Button>
+                            </OrderReview>
+                        )}
+                    </StepWrapper>
+                </div>
+
+                {/* Sticky Order Summary Sidebar */}
+                {cartItems && (
+                    <div className="lg:col-span-1">
+                        <OrderSummary
+                            cartItems={cartItems}
+                            itemsCount={itemsCount}
+                            subtotal={subtotal}
+                            discountAmount={discountAmount}
+                            total={total}
+                        />
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+export default function () {
     const [activeStep, setActiveStep] = useState<Step>("address");
     const [completed, setCompleted] = useState<Record<Step, boolean>>({
         address: false,
@@ -70,6 +168,7 @@ export default function CheckoutPage() {
     const { appliedCoupon, setAppliedCoupon, setCartItemsIds, method } = useCheckoutStore();
     const { cartItems, setCartItems } = useCheckoutStore();
     const { lang } = useRouterStore();
+    const { t } = useTranslation("checkout");
 
     const cartItemsIds = useMemo(() => cartItems.map((item) => item.id) || [], [cartItems]);
 
@@ -98,8 +197,6 @@ export default function CheckoutPage() {
         setCompleted(prev => ({ ...prev, [current]: true }));
         setActiveStep(next);
     };
-
-    const { t } = useTranslation("checkout");
 
     const handlePlaceOrder = () => {
         if (!selectedAddressId || cartItemsIds.length === 0 || !method) return;
@@ -152,62 +249,18 @@ export default function CheckoutPage() {
         }
     }, [loaderCartItems, setCartItems]);
 
-    return (
-        <div className="container max-w-4xl mx-auto p-4 md:p-8">
-            <h1 className="text-3xl font-bold mb-8">Checkout</h1>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Main Checkout Flow */}
-                <div className="lg:col-span-2 space-y-4">
-
-                    {/* STEP 1: ADDRESS */}
-                    <StepWrapper
-                        number={1}
-                        title="Shipping Address"
-                        isActive={activeStep === "address"}
-                        isCompleted={completed.address}
-                        onEdit={() => setActiveStep("address")}
-                    >
-                        <AddressForm onNext={() => handleStepComplete("address", "payment")} />
-                    </StepWrapper>
-
-                    {/* STEP 2: PAYMENT */}
-                    <StepWrapper
-                        number={2}
-                        title="Payment Method"
-                        isActive={activeStep === "payment"}
-                        isCompleted={completed.payment}
-                        onEdit={() => setActiveStep("payment")}
-                    >
-                        <PaymentMethod onNext={() => handleStepComplete("payment", "review")} />
-                    </StepWrapper>
-
-                    {/* STEP 3: REVIEW */}
-                    <StepWrapper
-                        number={3}
-                        title="Review & Place Order"
-                        isActive={activeStep === "review"}
-                        isCompleted={completed.review}
-                    >
-                        {cartItems && (
-                            <OrderReview>
-                                <Button className="w-full h-12 text-lg" type="button" isLoading={loading} onClick={handlePlaceOrder}>Place Order</Button>
-                            </OrderReview>
-                        )}
-                    </StepWrapper>
-                </div>
-
-                {/* Sticky Order Summary Sidebar */}
-                {cartItems &&
-                    <div className="lg:col-span-1">
-                        <OrderSummary
-                            cartItems={cartItems}
-                            itemsCount={itemsCount}
-                            subtotal={subtotal}
-                            discountAmount={discountAmount}
-                            total={total} />
-                    </div>}
-            </div>
-        </div>
-    );
+    return <Checkout
+        activeStep={activeStep}
+        cartItems={cartItems}
+        completed={completed}
+        discountAmount={discountAmount}
+        handlePlaceOrder={handlePlaceOrder}
+        handleStepComplete={handleStepComplete}
+        itemsCount={itemsCount}
+        loading={loading}
+        setActiveStep={setActiveStep}
+        subtotal={subtotal}
+        total={total}
+        t={t}
+    />
 }

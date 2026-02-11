@@ -23,5 +23,8 @@
   "line3_optional": "Ligne 3 (Opt)",
   "phone_number": "Numéro de téléphone",
   "edit": "Modifier l'adresse",
-  "add_new": "Ajouter une addresse"
+  "add_new": "Ajouter une addresse",
+  "noAddressesFound": "Aucune adresse trouvée",
+  "noAddressesDescription": "Vous n'avez pas encore ajouté d'adresses de livraison.",
+  "addNewAddress": "Ajouter une Nouvelle Adresse"
 }

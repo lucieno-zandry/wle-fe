@@ -6,21 +6,28 @@ import { CreditCard, Wallet, Lock } from "lucide-react"; // Or use your own icon
 import { cn } from "~/lib/utils";
 import { useState } from "react";
 import useCheckoutStore from "~/hooks/use-checkout-store";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
-export function PaymentMethod({ onNext }: { onNext: () => void }) {
-    const { method, setMethod } = useCheckoutStore();
+type PaymentMethodProps = {
+    method: "VISA" | "MASTERCARD" | "ORANGEMONEY" | "AIRTELMONEY" | "MVOLA" | "PAYPAL";
+    setMethod: (method: "VISA" | "MASTERCARD" | "ORANGEMONEY" | "AIRTELMONEY" | "MVOLA" | "PAYPAL") => void;
+    onNext: () => void;
+    t: TFunction
+}
 
+export function PaymentMethod({ method, onNext, setMethod, t }: PaymentMethodProps) {
     return (
         <Card className="w-full">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle className="text-xl">Payment Method</CardTitle>
-                        <CardDescription>Select your preferred way to pay.</CardDescription>
+                        <CardTitle className="text-xl">{t('checkout:paymentMethod')}</CardTitle>
+                        <CardDescription>{t('checkout:selectPreferredPayment')}</CardDescription>
                     </div>
                     <div className="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-1 rounded text-xs font-medium">
                         <Lock className="w-3 h-3" />
-                        Secure
+                        {t('checkout:secure')}
                     </div>
                 </div>
             </CardHeader>
@@ -50,8 +57,8 @@ export function PaymentMethod({ onNext }: { onNext: () => void }) {
                                     <CreditCard className="w-5 h-5 text-primary" />
                                 </div>
                                 <div>
-                                    <p className="font-semibold">Credit or Debit Card</p>
-                                    <p className="text-xs text-muted-foreground">Visa, Mastercard, AMEX, JCB</p>
+                                    <p className="font-semibold">{t('checkout:creditDebitCard')}</p>
+                                    <p className="text-xs text-muted-foreground">{t('checkout:cardTypes')}</p>
                                 </div>
                             </div>
 
@@ -83,7 +90,7 @@ export function PaymentMethod({ onNext }: { onNext: () => void }) {
                                 </div>
                                 <div>
                                     <p className="font-semibold">PayPal</p>
-                                    <p className="text-xs text-muted-foreground">You will be redirected to PayPal</p>
+                                    <p className="text-xs text-muted-foreground">{t('checkout:paypalRedirect')}</p>
                                 </div>
                             </div>
                         </Label>
@@ -92,16 +99,22 @@ export function PaymentMethod({ onNext }: { onNext: () => void }) {
 
                 {/* Additional Trust Message */}
                 <p className="text-[12px] text-center text-muted-foreground">
-                    Your transaction is encrypted and your payment details are never stored on our servers.
+                    {t('checkout:transactionEncrypted')}
                 </p>
 
                 <Button
                     onClick={onNext}
                     className="w-full py-6 text-lg font-bold"
                 >
-                    Review Order
+                    {t('checkout:reviewOrder')}
                 </Button>
             </CardContent>
         </Card>
     );
+}
+export default function ({ onNext }: Pick<PaymentMethodProps, "onNext">) {
+    const { method, setMethod } = useCheckoutStore();
+    const { t } = useTranslation("checkout");
+
+    return <PaymentMethod method={method} setMethod={setMethod} onNext={onNext} t={t} />
 }

@@ -23,5 +23,8 @@
   "line3_optional": "Line 3 (Opt)",
   "phone_number": "Phone number",
   "edit": "Edit address",
-  "add_new": "Add new address"
+  "add_new": "Add new address",
+  "noAddressesFound": "No addresses found",
+  "noAddressesDescription": "You haven't added any shipping addresses yet.",
+  "addNewAddress": "Add New Address"
 }

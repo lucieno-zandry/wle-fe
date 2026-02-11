@@ -7,6 +7,8 @@ import Button from "../custom-components/button";
 import { Input } from "../ui/input";
 import { Loader2, TicketPercent, Tag, X } from "lucide-react";
 import useCheckoutStore from "~/hooks/use-checkout-store";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
 type OrderSummaryContainerProps = {
     cartItems: CartItem[];
@@ -15,7 +17,6 @@ type OrderSummaryContainerProps = {
     discountAmount: number;
     total: number;
 };
-
 export default function ({
     cartItems,
     itemsCount,
@@ -28,9 +29,7 @@ export default function ({
 
     const [couponCode, setCouponCode] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
-    // Discount calculation
-
+    const { t } = useTranslation("checkout");
 
     const handleApplyCoupon = async () => {
         if (!couponCode.trim()) return;
@@ -41,20 +40,20 @@ export default function ({
             const coupon = res.data?.coupon;
 
             if (!coupon || !coupon.is_active) {
-                toast.error("Invalid or inactive coupon code.");
+                toast.error(t('checkout:invalidInactiveCoupon'));
             } else if (subtotal < coupon.min_order_value) {
                 toast.error(
-                    `Minimum order value for this coupon is ${formatMoney(
-                        coupon.min_order_value
-                    )}`
+                    t('checkout:minOrderValue', {
+                        amount: formatMoney(coupon.min_order_value)
+                    })
                 );
             } else {
                 setAppliedCoupon(coupon);
-                toast.success(`Coupon "${coupon.code}" applied!`);
+                toast.success(t('checkout:couponApplied', { code: coupon.code }));
                 setCouponCode("");
             }
         } catch {
-            toast.error("Failed to fetch coupon. Please try again.");
+            toast.error(t('checkout:failedFetchCoupon'));
         } finally {
             setIsLoading(false);
         }
@@ -62,7 +61,7 @@ export default function ({
 
     const removeCoupon = () => {
         setAppliedCoupon(null);
-        toast.info("Coupon removed.");
+        toast.info(t('checkout:couponRemoved'));
     };
 
     useEffect(() => {
@@ -76,17 +75,17 @@ export default function ({
             setAppliedCoupon(null);
 
             toast.warning(
-                `Coupon "${appliedCoupon.code}" was removed because your order no longer meets the minimum value of ${formatMoney(
-                    appliedCoupon.min_order_value
-                )}.`
+                t('checkout:couponRemovedMinValue', {
+                    code: appliedCoupon.code,
+                    amount: formatMoney(appliedCoupon.min_order_value)
+                })
             );
         }
-    }, [subtotal, appliedCoupon, setAppliedCoupon]);
+    }, [subtotal, appliedCoupon, setAppliedCoupon, t]);
 
 
     return (
         <OrderSummary
-            cartItems={cartItems}
             itemsCount={itemsCount}
             subtotal={subtotal}
             total={total}
@@ -97,13 +96,13 @@ export default function ({
             onCouponCodeChange={setCouponCode}
             onApplyCoupon={handleApplyCoupon}
             onRemoveCoupon={removeCoupon}
+            t={t}
         />
     );
 }
 
 
 type OrderSummaryViewProps = {
-    cartItems: CartItem[];
     itemsCount: number;
     subtotal: number;
     total: number;
@@ -116,10 +115,10 @@ type OrderSummaryViewProps = {
     onCouponCodeChange: (value: string) => void;
     onApplyCoupon: () => void;
     onRemoveCoupon: () => void;
+    t: TFunction;
 };
 
 export function OrderSummary({
-    cartItems,
     itemsCount,
     subtotal,
     total,
@@ -130,18 +129,19 @@ export function OrderSummary({
     onCouponCodeChange,
     onApplyCoupon,
     onRemoveCoupon,
+    t
 }: OrderSummaryViewProps) {
     return (
         <Card className="sticky top-20 p-6 bg-muted/30 border-dashed space-y-6">
             <div>
                 <h3 className="font-semibold mb-4 flex items-center gap-2">
-                    Order Summary
+                    {t('checkout:orderSummary')}
                 </h3>
 
                 <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
                         <span className="text-muted-foreground">
-                            Items ({itemsCount} qty)
+                            {t('checkout:items', { count: itemsCount })}
                         </span>
                         <span>{formatMoney(subtotal)}</span>
                     </div>
@@ -150,14 +150,14 @@ export function OrderSummary({
                         <div className="flex justify-between text-emerald-600 animate-in fade-in slide-in-from-right-1">
                             <span className="flex items-center gap-1">
                                 <TicketPercent className="w-4 h-4" />
-                                Discount ({appliedCoupon.code})
+                                {t('checkout:discount', { code: appliedCoupon.code })}
                             </span>
                             <span>-{formatMoney(discountAmount)}</span>
                         </div>
                     )}
 
                     <div className="flex justify-between font-bold text-lg pt-4 border-t border-muted">
-                        <span>Total</span>
+                        <span>{t('checkout:total')}</span>
                         <span className="text-primary">{formatMoney(total)}</span>
                     </div>
                 </div>
@@ -166,13 +166,13 @@ export function OrderSummary({
             {/* Coupon Section */}
             <div className="space-y-3">
                 <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                    Have a coupon?
+                    {t('checkout:haveCoupon')}
                 </p>
 
                 {!appliedCoupon ? (
                     <div className="flex gap-2">
                         <Input
-                            placeholder="Enter code"
+                            placeholder={t('checkout:enterCode')}
                             value={couponCode}
                             onChange={(e) =>
                                 onCouponCodeChange(e.target.value.toUpperCase())
@@ -191,7 +191,7 @@ export function OrderSummary({
                             {isLoading ? (
                                 <Loader2 className="w-4 h-4 animate-spin" />
                             ) : (
-                                "Apply"
+                                t('checkout:apply')
                             )}
                         </Button>
                     </div>

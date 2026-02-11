@@ -1,7 +1,6 @@
 // routes/frontoffice/search-results.tsx
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router';
-import { Card, CardContent, CardFooter } from '~/components/ui/card';
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import { Badge } from '~/components/ui/badge';
@@ -37,7 +36,7 @@ import { ScrollArea } from '~/components/ui/scroll-area';
 import { Filter, Search, Grid, List, X, ChevronDown } from 'lucide-react';
 import { getCategories, getProducts } from '~/api/http-requests';
 import type { ProductQueryParams } from '~/lib/serialize-product-params';
-import { ProductCard } from '~/components/products/product-card';
+import  ProductCard  from '~/components/products/product-card';
 import { ProductGridSkeleton } from '../../components/product-grid-skeleton';
 import { CategoryRadioItem } from '~/components/category-radio-item';
 import { ProductListItem } from '~/components/product-list-item';

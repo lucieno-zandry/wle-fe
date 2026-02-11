@@ -6,41 +6,18 @@ import { Button } from "../ui/button"; // Added Button for an Action
 import { MapPinOff } from "lucide-react"; // Added an icon for the empty state
 import { cn } from "~/lib/utils";
 import { AddressListSkeleton } from "../addresses/address-list-skeleton";
+import AddressesEmpty from "./addresses-empty";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
-export function AddressList({
-    addresses,
-    selectedId,
-    onSelect,
-    onAddNewClick
-}: {
-    addresses: Address[] | null;
+type AddressListProps = {
+    addresses: Address[];
     selectedId: number | null;
     onSelect: (id: number) => void;
-    onAddNewClick: () => void;
-}) {
-    // 1. Loading State
-    if (!addresses) return <AddressListSkeleton />;
+    t: TFunction
+};
 
-    // 2. Empty State
-    if (addresses.length === 0) {
-        return (
-            <div className="flex min-h-[300px] flex-col items-center justify-center rounded-md border border-dashed p-8 text-center animate-in fade-in-50">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-                    <MapPinOff className="h-10 w-10 text-muted-foreground" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold">No addresses found</h3>
-                <p className="mb-4 mt-2 text-sm text-muted-foreground">
-                    You haven't added any shipping addresses yet.
-                </p>
-                {/* Optional: Add a trigger here to open your "Add Address" modal/form */}
-                <Button variant="outline" size="sm" type="button" onClick={onAddNewClick}>
-                    Add New Address
-                </Button>
-            </div>
-        );
-    }
-
-    // 3. Data State
+export function AddressList({ addresses, selectedId, onSelect, t }: AddressListProps) {
     return (
         <RadioGroup
             value={selectedId?.toString()}
@@ -73,7 +50,7 @@ export function AddressList({
                                     <p className="font-semibold leading-none">{addr.fullname}</p>
                                     {addr.is_default && (
                                         <Badge variant="secondary" className="text-[10px] uppercase">
-                                            Default
+                                            {t('addresses:default')}
                                         </Badge>
                                     )}
                                 </div>
@@ -95,4 +72,33 @@ export function AddressList({
             })}
         </RadioGroup>
     );
+}
+
+export default function ({
+    addresses,
+    selectedId,
+    onSelect,
+    onAddNewClick
+}: {
+    addresses: Address[] | null;
+    selectedId: number | null;
+    onSelect: (id: number) => void;
+    onAddNewClick: () => void;
+}) {
+    const { t } = useTranslation("addresses");
+
+    // 1. Loading State
+    if (!addresses) return <AddressListSkeleton />;
+
+    // 2. Empty State
+    if (addresses.length === 0) {
+        return <AddressesEmpty onAddNewClick={onAddNewClick} />;
+    }
+
+    // 3. Data State
+    return <AddressList
+        addresses={addresses}
+        selectedId={selectedId}
+        onSelect={onSelect}
+        t={t} />;
 }
