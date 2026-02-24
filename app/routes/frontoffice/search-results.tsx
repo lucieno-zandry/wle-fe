@@ -36,7 +36,7 @@ import { ScrollArea } from '~/components/ui/scroll-area';
 import { Filter, Search, Grid, List, X, ChevronDown } from 'lucide-react';
 import { getCategories, getProducts } from '~/api/http-requests';
 import type { ProductQueryParams } from '~/lib/serialize-product-params';
-import  ProductCard  from '~/components/products/product-card';
+import ProductCard from '~/components/products/product-card';
 import { ProductGridSkeleton } from '../../components/product-grid-skeleton';
 import { CategoryRadioItem } from '~/components/category-radio-item';
 import { ProductListItem } from '~/components/product-list-item';
@@ -200,7 +200,7 @@ export default function () {
         categories.forEach(category => {
             const categoryWithChildren = categoryMap.get(category.id)!;
 
-            if (category.parent_id === null) {
+            if (!category.parent_id) {
                 rootCategories.push(categoryWithChildren);
             } else {
                 const parent = categoryMap.get(category.parent_id);

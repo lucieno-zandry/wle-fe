@@ -114,7 +114,7 @@ export default function () {
         <div className="flex items-center">
           <FieldLabel htmlFor="password">Password</FieldLabel>
           <Link
-            to={`/${lang}/auth/password-forgotten`}
+            to={`/${lang}/auth/password-forgotten?email=${email}`}
             className="ml-auto text-sm underline-offset-2 hover:underline"
           >
             Forgot your password?

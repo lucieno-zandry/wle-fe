@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import buildQuery from "~/lib/build-query";
 import executeRequest from "~/lib/execute-request";
 import isCsr from "~/lib/is-csr";
@@ -33,6 +34,7 @@ export interface FormatedResponse<T> {
 const defaultHeaders = (): HeadersInit => {
     const headers: HeadersInit = {
         'Accept': 'application/json',
+        'Accept-Language': i18next.language || 'en',
     }
 
     if (isCsr()) {

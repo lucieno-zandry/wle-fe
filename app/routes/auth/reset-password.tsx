@@ -50,12 +50,16 @@ export default function () {
     const token = useLoaderData<string>();
     const canSubmit = useMemo(() => !formValidationErrors, [formValidationErrors]);
     const isLoading = useMemo(() => navigation.state === "loading", [navigation]);
-    
+
     const error = useActionData();
 
     useEffect(() => {
         if (!error) return;
         if (error instanceof ValidationException) {
+            if (error.errors.token) {
+                toast.error(error.errors.token);
+            }
+
             setFormValidationErrors(error.errors);
         } else {
             toast.error(`Failed to reset password with status : ${error.status}!`)

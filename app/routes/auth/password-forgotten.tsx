@@ -2,7 +2,7 @@ import Button from "~/components/custom-components/button";
 import { Field, FieldGroup } from "~/components/ui/field";
 import type { Route } from "./+types";
 import { sendPasswordResetLink } from "~/api/http-requests";
-import { Form, useActionData, useNavigation } from "react-router";
+import { Form, useActionData, useLoaderData, useNavigation, type LoaderFunctionArgs } from "react-router";
 import React from "react";
 import CustomField from "~/components/custom-components/field";
 import z from "zod";
@@ -11,6 +11,15 @@ import { toast } from "sonner";
 import BackButton from "~/components/back-button";
 
 const emailFormat = z.email();
+
+export function loader({ request }: LoaderFunctionArgs) {
+    const url = new URL(request.url);
+    const email = url.searchParams.get('email') || "";
+
+    return {
+        email,
+    };
+}
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
     let formData = await request.formData();
@@ -31,6 +40,7 @@ export default function () {
     const actionData = useActionData<any>();
     const navigation = useNavigation();
     const isLoading = React.useMemo(() => navigation.state === "submitting", [navigation.state]);
+    const { email } = useLoaderData<typeof loader>();
 
     const [state, setState] = React.useState({
         data: {
@@ -57,7 +67,7 @@ export default function () {
 
     return <Form className="p-6 md:p-8" method="post">
         <BackButton />
-    
+
         <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Reset your password</h1>
@@ -75,6 +85,7 @@ export default function () {
                 placeholder="username@example.com"
                 dataFormat={emailFormat}
                 onValidationErrorsChange={handleValidationErrorsChange}
+                defaultValue={email}
                 required />
 
             <Field>
