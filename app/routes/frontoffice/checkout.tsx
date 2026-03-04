@@ -70,6 +70,7 @@ type CheckoutProps = {
     discountAmount: number;
     total: number;
     t: TFunction;
+    promotionDiscount: number;
 };
 
 export function Checkout({
@@ -84,7 +85,8 @@ export function Checkout({
     subtotal,
     discountAmount,
     total,
-    t
+    t,
+    promotionDiscount
 }: CheckoutProps) {
     return (
         <div className="container max-w-4xl mx-auto p-4 md:p-8">
@@ -146,6 +148,7 @@ export function Checkout({
                             subtotal={subtotal}
                             discountAmount={discountAmount}
                             total={total}
+                            promotionDiscount={promotionDiscount}
                         />
                     </div>
                 )}
@@ -191,6 +194,10 @@ export default function () {
     const itemsCount = useMemo(() => {
         if (!cartItems || cartItems.length === 0) return 0;
         return cartItems.reduce((sum, it) => sum + (it.count || 0), 0);
+    }, [cartItems]);
+
+    const promotionDiscount = useMemo(() => {
+        return cartItems.reduce((sum, item) => sum + (item.promotion_discount_applied || 0), 0);
     }, [cartItems]);
 
     const handleStepComplete = (current: Step, next: Step) => {
@@ -262,5 +269,6 @@ export default function () {
         subtotal={subtotal}
         total={total}
         t={t}
+        promotionDiscount={promotionDiscount}
     />
 }

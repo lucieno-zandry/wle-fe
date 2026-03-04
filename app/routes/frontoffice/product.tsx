@@ -3,7 +3,6 @@ import {
     useLoaderData,
     useNavigation,
     useFetcher,
-    useSearchParams,
     type LoaderFunctionArgs,
     redirect,
     type ActionFunctionArgs,
@@ -55,7 +54,6 @@ export default function ProductPage() {
     const { t } = useTranslation("product");
     const { user } = useUserStore();
     const product = useLoaderData<Product | null>();
-    const [searchParams, setSearchParams] = useSearchParams();
 
     const [selectedOptions, setSelectedOptions] = useState<Record<number, number>>({});
     const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
@@ -83,6 +81,8 @@ export default function ProductPage() {
     // Initialize from URL or default to first variant
     useEffect(() => {
         if (!product) return;
+
+        const { searchParams } = new URL(location.href);
 
         const variantIdParam = searchParams.get("variant");
         let initialVariant: Variant | null = null;
@@ -114,16 +114,17 @@ export default function ProductPage() {
             setSelectedVariant(null);
             setSelectedOptions({});
         }
-    }, [product, searchParams]);
+    }, [product]);
 
     // Update URL when selectedVariant changes (user selects a different variant)
     useEffect(() => {
         if (!selectedVariant) return;
-        const currentVariantId = searchParams.get("variant");
-        if (currentVariantId !== String(selectedVariant.id)) {
-            setSearchParams({ variant: String(selectedVariant.id) }, { replace: true });
-        }
-    }, [selectedVariant, setSearchParams, searchParams]);
+
+        const url = new URL(location.href);
+        url.searchParams.set("variant", String(selectedVariant.id));
+        history.replaceState({}, "", url);
+
+    }, [selectedVariant]);
 
     // Use effective_price from variant if available, otherwise fallback to price
     const unitPrice = selectedVariant?.effective_price ?? selectedVariant?.price ?? 0;
@@ -204,7 +205,6 @@ export default function ProductPage() {
                                 disabled={!selectedVariant}
                                 t={t}
                             />
-
                             <CartActions
                                 selectedVariant={selectedVariant}
                                 quantity={count}
@@ -212,6 +212,7 @@ export default function ProductPage() {
                                 isSubmitting={isSubmitting}
                                 onBuyNow={onBuyNow}
                                 t={t}
+                                fetcher={fetcher}   // <-- add this line
                             />
 
                             <TrustBadges t={t} />

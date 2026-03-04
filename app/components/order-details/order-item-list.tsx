@@ -1,7 +1,8 @@
-import { Package } from "lucide-react";
+import { Package, Tag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Link } from "react-router";
 import formatMoney from "~/lib/format-money";
+import { Badge } from "../ui/badge"; // assuming you have a Badge component
 
 function OrderItemList({ items, lang }: { items: CartItem[], lang: string }) {
     return (
@@ -42,6 +43,22 @@ function OrderItemList({ items, lang }: { items: CartItem[], lang: string }) {
                                     </span>
                                 ))}
                             </div>
+
+                            {/* Promotion badges */}
+                            {item.applied_promotions_snapshot && item.applied_promotions_snapshot.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                    {item.applied_promotions_snapshot.map((promo) => (
+                                        <Badge
+                                            key={promo.id}
+                                            variant="secondary"
+                                            className="text-[10px] px-1.5 py-0 h-4 font-mono"
+                                        >
+                                            <Tag className="w-3 h-3 mr-1 inline" />
+                                            {promo.badge || promo.name}
+                                        </Badge>
+                                    ))}
+                                </div>
+                            )}
 
                             <div className="flex items-center justify-between mt-4">
                                 <p className="text-sm text-muted-foreground">

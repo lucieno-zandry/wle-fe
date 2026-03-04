@@ -22,6 +22,7 @@ export function VariantSelector({ groups, selectedOptions, onOptionSelect }: Pro
                             <button
                                 key={option.id}
                                 onClick={() => onOptionSelect(group.id, option.id)}
+                                type="button"
                                 className={cn(
                                     "px-6 py-3 rounded-xl border-2 text-sm font-semibold transition-all duration-200",
                                     selectedOptions[group.id] === option.id

@@ -16,13 +16,16 @@ type OrderSummaryContainerProps = {
     subtotal: number;
     discountAmount: number;
     total: number;
+    promotionDiscount: number;
 };
+
 export default function ({
     cartItems,
     itemsCount,
     subtotal,
     discountAmount,
-    total
+    total,
+    promotionDiscount
 }: OrderSummaryContainerProps) {
 
     const { appliedCoupon, setAppliedCoupon } = useCheckoutStore();
@@ -97,6 +100,7 @@ export default function ({
             onApplyCoupon={handleApplyCoupon}
             onRemoveCoupon={removeCoupon}
             t={t}
+            promotionDiscount={promotionDiscount}
         />
     );
 }
@@ -116,6 +120,7 @@ type OrderSummaryViewProps = {
     onApplyCoupon: () => void;
     onRemoveCoupon: () => void;
     t: TFunction;
+    promotionDiscount: number;
 };
 
 export function OrderSummary({
@@ -129,7 +134,8 @@ export function OrderSummary({
     onCouponCodeChange,
     onApplyCoupon,
     onRemoveCoupon,
-    t
+    t,
+    promotionDiscount
 }: OrderSummaryViewProps) {
     return (
         <Card className="sticky top-20 p-6 bg-muted/30 border-dashed space-y-6">
@@ -211,6 +217,16 @@ export function OrderSummary({
                         >
                             <X className="w-3 h-3" />
                         </Button>
+                    </div>
+                )}
+
+                {promotionDiscount > 0 && (
+                    <div className="flex justify-between text-sm text-green-600">
+                        <span className="flex items-center gap-1">
+                            <Tag className="w-4 h-4" />
+                            Promotion savings
+                        </span>
+                        <span>-{formatMoney(promotionDiscount)}</span>
                     </div>
                 )}
             </div>

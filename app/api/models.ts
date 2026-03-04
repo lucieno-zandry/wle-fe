@@ -17,7 +17,7 @@ type User = {
   };
 
   avatar_image?: AppImage;
-}
+};
 
 type Product = {
   id: number;
@@ -96,6 +96,8 @@ type Promotion = {
   start_date: string;
   end_date: string;
   is_active: boolean;
+  name: string;                      // e.g. "Partner Discount"
+  badge?: string;
 
   // New fields for eligibility and stacking
   applies_to: "all" | "client_code_only" | "regular_only";
@@ -116,7 +118,7 @@ type AppliedPromotion = {
 
 type CartItem = {
   id: number;
-  order_uuid: number | null;
+  order_uuid: string | null;
 
   user_id: number;
   product_id: number;
@@ -128,9 +130,11 @@ type CartItem = {
   promotion_discount_applied: number;   // total discount applied
   total: number;                        // final total (count * unit_price - discounts)
 
+  // Snapshots
   product_snapshot: ProductSnapshot;
   variant_snapshot: VariantSnapshot;
   variant_options_snapshot: VariantOptionsSnapshot;
+  applied_promotions_snapshot?: AppliedPromotion[]; // promotions that contributed to the final price
 
   created_at: string;
   updated_at: string;
@@ -152,7 +156,7 @@ type ProductSnapshot = {
 type VariantSnapshot = {
   id: number;
   sku: string;
-  price: number;                      // price at time of addition (already discounted)
+  price: number;                      // base price at time of addition (before promotions)
   image: string | null;
 };
 
