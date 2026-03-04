@@ -24,12 +24,10 @@ export function ProductImageGallery({
   const images = useMemo(() => {
     const result: { url: string }[] = [];
 
-    // Add variant image if available
     if (selectedVariant?.image?.url) {
       result.push(selectedVariant.image);
     }
 
-    // Add product images, avoiding duplicates and respecting the 4‑thumbnail limit
     if (product.images?.length) {
       for (const img of product.images) {
         if (result.length >= 4) break;
@@ -39,7 +37,6 @@ export function ProductImageGallery({
       }
     }
 
-    // Fallback to placeholder if no images
     if (result.length === 0) {
       result.push({ url: placeholderImage });
     }
@@ -49,16 +46,18 @@ export function ProductImageGallery({
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Reset selected image when variant changes (new image becomes first)
   useEffect(() => {
     setSelectedIndex(0);
   }, [selectedVariant?.id]);
 
   const selectedImage = images[selectedIndex];
 
+  // Check if current variant has a discount for this user
+  const hasDiscount = selectedVariant && 
+    (selectedVariant.effective_price ?? selectedVariant.price) < selectedVariant.price;
+
   return (
     <div className="space-y-4">
-      {/* MAIN IMAGE */}
       <div className="relative aspect-square overflow-hidden rounded-3xl bg-muted border border-gray-100">
         <AnimatePresence mode="wait">
           <motion.img
@@ -73,14 +72,13 @@ export function ProductImageGallery({
           />
         </AnimatePresence>
 
-        {canSeeSpecial && selectedVariant?.special_price && (
+        {canSeeSpecial && hasDiscount && (
           <Badge className="absolute top-6 left-6 bg-green-600 text-white border-none px-4 py-1.5 text-sm font-bold shadow-lg">
             {t("partnerPricing")}
           </Badge>
         )}
       </div>
 
-      {/* THUMBNAILS */}
       {images.length > 1 && (
         <div className="grid grid-cols-4 gap-3">
           {images.map((image, index) => (

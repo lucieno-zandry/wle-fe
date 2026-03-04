@@ -1,29 +1,28 @@
 import { Link } from "react-router";
-import { Card } from "./ui/card";
+import { Card } from "../ui/card";
 import formatMoney from "~/lib/format-money";
-import { Badge } from "./ui/badge";
-import Button from "./custom-components/button";
-import { useUserStore } from "~/hooks/use-user"; // Import your user store
+import { Badge } from "../ui/badge";
+import Button from "../custom-components/button";
+import { useUserStore } from "~/hooks/use-user";
 import useRouterStore from "~/hooks/use-router-store";
 
 export function ProductListItem({ product }: { product: Product }) {
     const { user } = useUserStore();
     const { lang } = useRouterStore();
 
-    // Check if the user has permission to see special prices
+    // Check if the user has permission to see special prices (still used for badge logic)
     const canSeeSpecial = user?.permissions?.can_use_special_prices ?? false;
 
-    // Calculate the lowest price based on user permissions
+    // Calculate the lowest price based on effective_price (if available)
     const lowestPrice = product.variants?.reduce((min, variant) => {
-        const effectivePrice = (canSeeSpecial && variant.special_price !== null)
-            ? variant.special_price
-            : variant.price;
-
-        return effectivePrice < min ? effectivePrice : min;
+        const effective = variant.effective_price ?? variant.price;
+        return effective < min ? effective : min;
     }, product.variants[0]?.price || 0);
 
-    // To show a "strike-through" original price if they are getting a deal
-    const hasDiscount = canSeeSpecial && product.variants?.some(v => v.special_price !== null);
+    // Determine if any variant has a discount (effective_price < price)
+    const hasDiscount = canSeeSpecial && product.variants?.some(v =>
+        (v.effective_price ?? v.price) < v.price
+    );
 
     const mainImage = product.images?.[0]?.url;
 
@@ -63,10 +62,10 @@ export function ProductListItem({ product }: { product: Product }) {
                                     <span className="font-bold text-xl text-primary">
                                         {formatMoney(lowestPrice)}
                                     </span>
-                                    {/* Optional: Show original price crossed out if they have a special price */}
-                                    {(hasDiscount && !!product.variants) && (
+                                    {/* Show original price crossed out if discounted */}
+                                    {hasDiscount && product.variants?.[0] && (
                                         <span className="text-xs text-muted-foreground line-through">
-                                            {formatMoney(product.variants[0]?.price)}
+                                            {formatMoney(product.variants[0].price)}
                                         </span>
                                     )}
                                 </div>

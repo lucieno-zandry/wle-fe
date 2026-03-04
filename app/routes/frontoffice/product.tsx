@@ -125,17 +125,8 @@ export default function ProductPage() {
         }
     }, [selectedVariant, setSearchParams, searchParams]);
 
-    const getEffectivePrice = (variant: Variant | null) => {
-        if (!variant) return 0;
-        return canSeeSpecial && variant.special_price !== null
-            ? variant.special_price
-            : variant.price;
-    };
-
-    const unitPrice = useMemo(
-        () => getEffectivePrice(selectedVariant),
-        [selectedVariant, canSeeSpecial]
-    );
+    // Use effective_price from variant if available, otherwise fallback to price
+    const unitPrice = selectedVariant?.effective_price ?? selectedVariant?.price ?? 0;
     const subtotal = useMemo(() => unitPrice * count, [unitPrice, count]);
 
     const handleOptionSelect = (groupId: number, optionId: number) => {

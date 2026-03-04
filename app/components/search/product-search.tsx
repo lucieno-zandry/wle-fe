@@ -18,6 +18,8 @@ import { getProducts } from "~/api/http-requests";
 import useRouterStore from "~/hooks/use-router-store";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
+import formatMoney from "~/lib/format-money"; // added import
+import Highlight from "./highlight";
 
 export type SearchDialogProps = {
     open: boolean;
@@ -89,8 +91,9 @@ export function SearchDialog({
                                 <CommandGroup heading={t('common:quickResults')}>
                                     {products.slice(0, 5).map((product) => {
                                         const mainVariant = product.variants?.[0];
-                                        const price = mainVariant?.price;
-                                        const hasDiscount = !!mainVariant?.special_price;
+                                        const price = mainVariant?.price ?? 0;
+                                        const effectivePrice = mainVariant?.effective_price ?? price;
+                                        const hasDiscount = effectivePrice < price;
 
                                         return (
                                             <CommandItem
@@ -118,11 +121,11 @@ export function SearchDialog({
                                                         <div className="flex items-center gap-2">
                                                             {hasDiscount && (
                                                                 <span className="text-xs text-muted-foreground line-through">
-                                                                    ${price}
+                                                                    {formatMoney(price)}
                                                                 </span>
                                                             )}
                                                             <span className="font-bold text-primary">
-                                                                ${mainVariant?.special_price ?? price}
+                                                                {formatMoney(effectivePrice)}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -169,25 +172,6 @@ export function SearchDialog({
     );
 }
 
-
-const Highlight = ({ text, query }: { text: string; query: string }) => {
-    if (!query) return <span>{text}</span>;
-    const parts = text.split(new RegExp(`(${query})`, "gi"));
-    return (
-        <span>
-            {parts.map((part, i) =>
-                part.toLowerCase() === query.toLowerCase() ? (
-                    <span key={i} className="text-primary font-bold underline decoration-primary/30">
-                        {part}
-                    </span>
-                ) : (
-                    part
-                )
-            )}
-        </span>
-    );
-};
-
 export default function () {
     const [open, setOpen] = React.useState(false);
     const [query, setQuery] = React.useState("");
@@ -203,7 +187,6 @@ export default function () {
                 e.preventDefault();
                 setOpen((open) => !open);
             }
-            // Allow Enter to go to search results page
             if (e.key === "Enter" && open && query.trim() && !isLoading) {
                 e.preventDefault();
                 navigateToSearchResults();

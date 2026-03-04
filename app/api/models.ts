@@ -47,14 +47,17 @@ type Variant = {
   updated_at: string;
   product_id: number;
   sku: string;
-  price: number;
-  special_price: number | null;
+  price: number;                     // base price (before any discounts)
   stock: number;
   image_id: string | null;
 
+  // Computed fields (added via accessors)
+  effective_price?: number;           // final price after promotions (if user eligible)
+  applied_promotions?: AppliedPromotion[]; // list of promotions that contributed to the discount
+
   product?: Product;
   variant_options?: VariantOption[];
-  promotions?: Promotion[];
+  promotions?: Promotion[];          // all active promotions linked to this variant
   image?: AppImage;
 };
 
@@ -68,11 +71,11 @@ type VariantGroup = {
 };
 
 type AppImage = {
-  id: number,
-  url: string,
-  width: number,
-  height: number
-}
+  id: number;
+  url: string;
+  width: number;
+  height: number;
+};
 
 type VariantOption = {
   id: number;
@@ -82,46 +85,56 @@ type VariantOption = {
   variant_group_id: number;
   variants?: Variant[];
   variant_group?: VariantGroup;
-}
+};
 
 type Promotion = {
   id: number;
   created_at: string;
   updated_at: string;
-  discount: number;
+  discount: number;                  // amount (percentage or fixed)
   type: "PERCENTAGE" | "FIXED_AMOUNT";
   start_date: string;
   end_date: string;
   is_active: boolean;
-}
+
+  // New fields for eligibility and stacking
+  applies_to: "all" | "client_code_only" | "regular_only";
+  stackable: boolean;
+  priority: number;                  // lower = higher priority (used when stackable = false)
+  apply_order?: "percentage_first" | "fixed_first"; // order when stacking
+  max_discount?: number;              // optional absolute cap
+};
+
+// Simplified version of a promotion for display in badges
+type AppliedPromotion = {
+  id: number;
+  name: string;                      // e.g. "Partner Discount"
+  badge?: string;                     // e.g. "PARTNER", "SALE" – used to style the badge
+  discount: number;                   // amount applied (for tooltips etc.)
+  type: "PERCENTAGE" | "FIXED_AMOUNT";
+};
 
 type CartItem = {
   id: number;
   order_uuid: number | null;
 
-  // Foreign keys (for integrity & backend analytics)
   user_id: number;
   product_id: number;
   variant_id: number;
 
-  // Quantity
   count: number;
 
-  // Pricing (stable at time of adding to cart)
-  unit_price: number;                     // price per item at that time
-  promotion_discount_applied: number;     // total discount applied
-  total: number;                          // final total (count * unit_price - discounts)
+  unit_price: number;                  // price per item at time of addition (after promotions)
+  promotion_discount_applied: number;   // total discount applied
+  total: number;                        // final total (count * unit_price - discounts)
 
-  // Snapshots (used by frontend — always reliable)
-  product_snapshot: ProductSnapshot //ProductSnapshot JSON
-  variant_snapshot: VariantSnapshot //VariantSnapshot JSON
-  variant_options_snapshot: VariantOptionsSnapshot //VariantOptionsSnapshot JSON
+  product_snapshot: ProductSnapshot;
+  variant_snapshot: VariantSnapshot;
+  variant_options_snapshot: VariantOptionsSnapshot;
 
-  // Meta
-  created_at: string; // ISO timestamp
-  updated_at: string; // ISO timestamp
+  created_at: string;
+  updated_at: string;
 
-  // Optional hydrated relations
   variant?: Variant;
   product?: Product;
   user?: User;
@@ -139,8 +152,7 @@ type ProductSnapshot = {
 type VariantSnapshot = {
   id: number;
   sku: string;
-  price: number;
-  special_price: number | null;
+  price: number;                      // price at time of addition (already discounted)
   image: string | null;
 };
 
@@ -149,50 +161,50 @@ type VariantOptionsSnapshot = {
 };
 
 type Address = {
-  id: number,
-  fullname: string,
-  line1: string,
-  line2: string | null,
-  line3: string | null,
-  phone_number: string,
-  user_id: number,
-  created_at: string,
-  updated_at: string,
-  is_default: boolean,
-}
+  id: number;
+  fullname: string;
+  line1: string;
+  line2: string | null;
+  line3: string | null;
+  phone_number: string;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+  is_default: boolean;
+};
 
 type Order = {
-  uuid: string,
-  created_at: string,
-  updated_at: string,
-  total: number,
-  user_id: number,
-  address_id: number,
-  coupon_id: number | null,
-  coupon_discount_applied: number,
-  deleted_at: string | null,
+  uuid: string;
+  created_at: string;
+  updated_at: string;
+  total: number;
+  user_id: number;
+  address_id: number;
+  coupon_id: number | null;
+  coupon_discount_applied: number;
+  deleted_at: string | null;
 
-  address_snapshot: Address,
-  coupon_snapshot?: Pick<Coupon, "id" | "code" | "type" | "discount" | "min_order_value">,
-  cart_items?: CartItem[],
-  shipments?: Shipment[],
-  transactions?: Transaction[],
-}
+  address_snapshot: Address;
+  coupon_snapshot?: Pick<Coupon, "id" | "code" | "type" | "discount" | "min_order_value">;
+  cart_items?: CartItem[];
+  shipments?: Shipment[];
+  transactions?: Transaction[];
+};
 
 type Coupon = {
-  id: number,
-  created_at: string,
-  updated_at: string,
-  code: string,
-  type: "FIXED_AMOUNT" | "PERCENTAGE",
-  discount: number,
-  min_order_value: number,
-  max_uses: number,
-  uses_count: number,
-  start_date: string,
-  end_date: string,
-  is_active: boolean,
-}
+  id: number;
+  created_at: string;
+  updated_at: string;
+  code: string;
+  type: "FIXED_AMOUNT" | "PERCENTAGE";
+  discount: number;
+  min_order_value: number;
+  max_uses: number;
+  uses_count: number;
+  start_date: string;
+  end_date: string;
+  is_active: boolean;
+};
 
 type Shipment = {
   id: number;
@@ -203,7 +215,7 @@ type Shipment = {
   order_uuid: string;
 
   order?: Order;
-}
+};
 
 type ShipmentData = {
   carrier?: string;
@@ -213,20 +225,20 @@ type ShipmentData = {
 };
 
 type Transaction = {
-  id: number,
-  created_at: string,
-  updated_at: string,
-  status: 'FAILED' | 'PENDING' | 'SUCCESS',
-  informations: Object,
-  user_id: number,
-  order_uuid: string,
-  deleted_at: string | null,
-  method: 'VISA' | 'MASTERCARD' | 'ORANGEMONEY' | 'AIRTELMONEY' | 'MVOLA' | 'PAYPAL',
-  payment_url: string | null,
-  user?: User,
-  order?: Order,
-  amount: number,
-}
+  id: number;
+  created_at: string;
+  updated_at: string;
+  status: "FAILED" | "PENDING" | "SUCCESS";
+  informations: Record<string, any>;
+  user_id: number;
+  order_uuid: string;
+  deleted_at: string | null;
+  method: "VISA" | "MASTERCARD" | "ORANGEMONEY" | "AIRTELMONEY" | "MVOLA" | "PAYPAL";
+  payment_url: string | null;
+  user?: User;
+  order?: Order;
+  amount: number;
+};
 
 type TransactionNotificationData = {
   notification_type: "transaction";
@@ -239,16 +251,26 @@ type TransactionNotificationData = {
   order_total: number;
 };
 
+type ShipmentNotificationData = {
+  notification_type: "shipment";
+  shipment_id: number;
+  order_uuid: string;
+  status: "PROCESSING" | "SHIPPED" | "DELIVERED";
+  message: string;
+  shipment_data?: {
+    carrier?: string;
+    tracking_number?: string;
+    estimated_delivery?: string;
+  };
+};
+
 type OtherNotificationData = {
   notification_type: "system";
   title: string;
   message: string;
 };
 
-type NotificationData =
-  | TransactionNotificationData
-  | ShipmentNotificationData
-  | OtherNotificationData;
+type NotificationData = TransactionNotificationData | ShipmentNotificationData | OtherNotificationData;
 
 type AppNotification = {
   id: string;
@@ -259,23 +281,10 @@ type AppNotification = {
   updated_at: string;
 };
 
-type ShipmentNotificationData = {
-  notification_type: "shipment";
-  shipment_id: number;
-  order_uuid: string;
-  status: 'PROCESSING' | 'SHIPPED' | 'DELIVERED';
-  message: string;
-  shipment_data?: {
-    carrier?: string;
-    tracking_number?: string;
-    estimated_delivery?: string;
-  };
-};
-
 type ClientCode = {
   id: number;
-  code: string;       // e.g., "PARTNER2026"
+  code: string;
   is_active: boolean;
-  max_uses?: number;   // Optional: how many users can use this code
+  max_uses?: number;
   created_at: string;
 };

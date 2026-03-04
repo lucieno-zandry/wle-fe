@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 import formatMoney from "~/lib/format-money";
 import Button from "../custom-components/button";
 import { Badge } from "../ui/badge";
-import { useUserStore } from "~/hooks/use-user"; // Import the store
+import { useUserStore } from "~/hooks/use-user";
 import useRouterStore from "~/hooks/use-router-store";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
@@ -110,33 +110,35 @@ export default function ({ product }: { product: Product }) {
     const { lang } = useRouterStore();
     const { t } = useTranslation("products");
 
-    // 1. Check permission from the updated User model
     const canSeeSpecial = user?.permissions?.can_use_special_prices ?? false;
 
-    // 2. Calculate the lowest price based on permission
+    // Calculate lowest price using effective_price if available
     const lowestPrice = product.variants?.reduce((min, variant) => {
-        const effectivePrice = (canSeeSpecial && variant.special_price !== null)
-            ? variant.special_price
-            : variant.price;
-        return effectivePrice < min ? effectivePrice : min;
+        const effective = variant.effective_price ?? variant.price;
+        return effective < min ? effective : min;
     }, product.variants?.[0]?.price || 0);
 
     const originalPrice = product.variants?.[0]?.price;
 
-    // 3. Determine if we show the discount (only if they have permission)
-    const showsSpecialPrice = canSeeSpecial && product.variants?.some(v => v.special_price !== null);
-    const hasDiscount = originalPrice && lowestPrice && lowestPrice < originalPrice;
+    // Determine if any variant has a discount for this user
+    const hasDiscount = canSeeSpecial && product.variants?.some(v =>
+        (v.effective_price ?? v.price) < v.price
+    );
+    const showsSpecialPrice = hasDiscount; // we can show the badge if any discount exists
 
     const mainImage = product.images?.[0]?.url;
 
-    return <ProductCard
-        formatMoney={formatMoney}
-        lang={lang}
-        product={product}
-        mainImage={mainImage}
-        lowestPrice={lowestPrice}
-        originalPrice={originalPrice}
-        showsSpecialPrice={showsSpecialPrice}
-        hasDiscount={!!hasDiscount}
-        t={t} />;
+    return (
+        <ProductCard
+            formatMoney={formatMoney}
+            lang={lang}
+            product={product}
+            mainImage={mainImage}
+            lowestPrice={lowestPrice}
+            originalPrice={originalPrice}
+            showsSpecialPrice={showsSpecialPrice}
+            hasDiscount={hasDiscount}
+            t={t}
+        />
+    );
 }

@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import ProductCard from '~/components/products/product-card';
 import { ProductGridSkeleton } from '~/components/product/product-grid-skeleton';
-import { ProductListItem } from '~/components/product-list-item';
+import { ProductListItem } from '~/components/search/product-list-item';
 import { useSearchResults } from '~/hooks/use-search-results';
 import { organizeCategories } from '~/lib/organize-categories';
 import { ActiveFilters } from '~/components/search/active-filters';

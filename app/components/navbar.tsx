@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import UserDropdown from "./user-dropdown";
 import Cart from "./cart/cart";
 import Notifications from "./notifications/notifications";
-import ProductSearch from "./product-search";
+import ProductSearch from "./search/product-search";
 import { LanguageSwitcher } from "~/components/i18n/language-switcher";
 import useRouterStore from "~/hooks/use-router-store";
 import { useTranslation } from "react-i18next";
