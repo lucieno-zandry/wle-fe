@@ -26,5 +26,17 @@
   "add_new": "Add new address",
   "noAddressesFound": "No addresses found",
   "noAddressesDescription": "You haven't added any shipping addresses yet.",
-  "addNewAddress": "Add New Address"
+  "addNewAddress": "Add New Address",
+  "recipient_name": "Recipient name",
+  "phone": "Phone",
+  "phone_alt": "Alternate phone",
+  "label": "Label (e.g., Home, Work)",
+  "city": "City",
+  "state": "State / Province",
+  "postal_code": "Postal code",
+  "country": "Country (ISO code)",
+  "address_type": "Address type",
+  "shipping": "Shipping",
+  "billing": "Billing",
+  "both": "Both"
 }

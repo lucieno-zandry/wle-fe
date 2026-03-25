@@ -2,6 +2,17 @@ import { MapPin, Phone } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 
 export function ShippingAddress({ address }: { address: Address }) {
+    const fullAddress = [
+        address.line1,
+        address.line2,
+        address.city,
+        address.state,
+        address.postal_code,
+        address.country
+    ]
+        .filter(Boolean)
+        .join(", ");
+
     return (
         <Card>
             <CardHeader>
@@ -11,15 +22,14 @@ export function ShippingAddress({ address }: { address: Address }) {
                 </CardTitle>
             </CardHeader>
             <CardContent className="text-sm space-y-2">
-                <p className="font-bold text-base">{address.fullname}</p>
+                <p className="font-bold text-base">{address.recipient_name}</p>
                 <div className="text-muted-foreground leading-relaxed">
-                    <p>{address.line1}</p>
-                    {address.line2 && <p>{address.line2}</p>}
-                    {address.line3 && <p>{address.line3}</p>}
+                    <p>{fullAddress}</p>
                 </div>
                 <div className="flex items-center gap-2 pt-2 text-foreground/80">
                     <Phone className="w-3.5 h-3.5" />
-                    {address.phone_number}
+                    {address.phone}
+                    {address.phone_alt && ` (alt: ${address.phone_alt})`}
                 </div>
             </CardContent>
         </Card>

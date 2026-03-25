@@ -55,7 +55,8 @@ export function AccountDetailsTab({ user, t }: AccountDetailsTabProps) {
                             <CheckCircle2 className="h-4 w-4" />
                             {t('settings:approvedAt')}
                         </div>
-                        <p className="font-medium">{formatDate(user.approved_at)}</p>
+                        {user.status &&
+                            <p className="font-medium">{formatDate(user.status.created_at)}</p>}
                     </div>
                     <div className="space-y-1">
                         <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -64,12 +65,6 @@ export function AccountDetailsTab({ user, t }: AccountDetailsTabProps) {
                         </div>
                         <p className="font-medium">{formatDate(user.updated_at)}</p>
                     </div>
-                    {user.address_id && (
-                        <div className="space-y-1">
-                            <div className="text-sm text-gray-500">{t('settings:addressId')}</div>
-                            <p className="font-medium">{user.address_id}</p>
-                        </div>
-                    )}
                     {user.client_code_id && (
                         <div className="space-y-1">
                             <div className="text-sm text-gray-500">{t('settings:clientCodeId')}</div>

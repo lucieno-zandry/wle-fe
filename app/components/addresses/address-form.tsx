@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import { Card } from "../ui/card";
 import Button from "../custom-components/button";
 import AddressList from "../checkout/address-list";
-import AddressDialog from "./address-dialog"; // The component we just updated
+import AddressDialog from "./address-dialog";
 import { getAuthAddresses } from "~/api/http-requests";
-import { Plus } from "lucide-react"; // If you use lucide-icons
+import { Plus, MapPin } from "lucide-react";
 import useAddressStore from "~/hooks/use-address-store";
 import { useUserStore } from "~/hooks/use-user";
 import { useActionData } from "react-router";
@@ -37,45 +37,68 @@ export function ShippingAddressSection({
 }: ShippingAddressProps) {
     return (
         <div className="space-y-6">
-            <Card className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 className="text-xl font-bold tracking-tight">{t('checkout:shippingAddress')}</h2>
+            <Card className="p-6 md:p-8 overflow-hidden shadow-sm border-muted/60">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                    <div className="space-y-1">
+                        <h2 className="text-2xl font-semibold tracking-tight">{t('checkout:shippingAddress')}</h2>
                         <p className="text-sm text-muted-foreground">
                             {t('checkout:selectDeliveryLocation')}
                         </p>
                     </div>
-                    <Button
-                        onClick={onAddNewClick}
-                        variant="outline"
-                        size="sm"
-                        className="gap-2"
-                    >
-                        <Plus className="h-4 w-4" />
-                        {t('checkout:addNew')}
-                    </Button>
+                    {authAddresses.length > 0 && (
+                        <Button
+                            onClick={onAddNewClick}
+                            variant="secondary"
+                            size="sm"
+                            className="gap-2 shrink-0"
+                        >
+                            <Plus className="h-4 w-4" />
+                            {t('checkout:addNew')}
+                        </Button>
+                    )}
                 </div>
 
-                <AddressList
-                    addresses={authAddresses}
-                    selectedId={selectedAddressId}
-                    onSelect={setSelectedAddressId}
-                    onAddNewClick={onAddNewClick}
-                />
+                {authAddresses.length === 0 ? (
+                    <div className="text-center py-12 px-4 rounded-xl border border-dashed border-muted-foreground/25 bg-muted/10">
+                        <div className="mx-auto bg-muted/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                            <MapPin className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                        <h3 className="text-lg font-medium mb-1">No addresses found</h3>
+                        <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
+                            Please add a shipping address to proceed with your checkout.
+                        </p>
+                        <Button onClick={onAddNewClick} className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            {t('checkout:addNew')}
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="bg-muted/5 rounded-xl p-1">
+                        <AddressList
+                            addresses={authAddresses}
+                            selectedId={selectedAddressId}
+                            onSelect={setSelectedAddressId}
+                            onAddNewClick={onAddNewClick}
+                        />
+                    </div>
+                )}
 
-                <div className="mt-8 border-t pt-6 flex justify-end">
-                    <Button onClick={handleNext} disabled={!canNext} className="px-8">
+                <div className="mt-10 border-t pt-6 flex justify-end">
+                    <Button
+                        onClick={handleNext}
+                        disabled={!canNext}
+                        size="lg"
+                        className="w-full sm:w-auto px-10 shadow-sm"
+                    >
                         {t('checkout:proceedToPayment')}
                     </Button>
                 </div>
             </Card>
 
-            {/* Dialog stays separate so it doesn't hide the list */}
             <AddressDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
         </div>
     );
 }
-
 
 export default function ({ onNext }: { onNext: () => void }) {
     const { authAddresses, setAuthAddresses, selectedAddressId, setSelectedAddressId } = useAddressStore();
@@ -87,24 +110,18 @@ export default function ({ onNext }: { onNext: () => void }) {
     const canNext = useMemo(() => !(!selectedAddressId || !authAddresses || authAddresses.length === 0), [selectedAddressId, authAddresses]);
 
     useEffect(() => {
-        if (authAddresses) return; // Prevent refetching if already loaded
+        if (authAddresses) return;
 
         getAuthAddresses().then(res => {
             if (res.data?.addresses) {
                 const list = res.data.addresses;
                 setAuthAddresses(list);
 
-                // Auto-select default or the first one found
-                setSelectedAddressId(user?.address_id ?? list[0]?.id ?? null);
+                const defaultAddr = list.find(addr => addr.is_default);
+                setSelectedAddressId(defaultAddr?.id ?? list[0]?.id ?? null);
             }
         });
-    }, [authAddresses]);
-
-    useEffect(() => {
-        if (selectedAddressId || !user?.address_id) return;
-        setSelectedAddressId(user.address_id)
-    }, [selectedAddressId, user]);
-
+    }, [authAddresses, setAuthAddresses, setSelectedAddressId]);
 
     useEffect(() => {
         if (!actionData?.address || !actionData?.user) return;
@@ -115,8 +132,11 @@ export default function ({ onNext }: { onNext: () => void }) {
             return [...prev, actionData.address];
         });
 
+        if (actionData.address.is_default) {
+            setSelectedAddressId(actionData.address.id);
+        }
+
         setUser(actionData.user);
-        setSelectedAddressId(actionData.address.id);
         setIsDialogOpen(false);
 
         toast.success(t('addresses:notifications.created'));
@@ -125,11 +145,9 @@ export default function ({ onNext }: { onNext: () => void }) {
     const handleNext = () => {
         if (!canNext) return;
         onNext();
-    }
+    };
 
-    const onAddNewClick = () => {
-        setIsDialogOpen(true)
-    }
+    const onAddNewClick = () => setIsDialogOpen(true);
 
     return <ShippingAddressSection
         authAddresses={authAddresses || []}
@@ -141,5 +159,5 @@ export default function ({ onNext }: { onNext: () => void }) {
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
         t={t}
-    />
+    />;
 }

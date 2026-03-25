@@ -18,6 +18,17 @@ type AddressListProps = {
 };
 
 export function AddressList({ addresses, selectedId, onSelect, t }: AddressListProps) {
+    // Format address for display (line1, line2, city, etc.)
+    const formatAddress = (addr: Address) => {
+        const parts = [addr.line1];
+        if (addr.line2) parts.push(addr.line2);
+        parts.push(addr.city);
+        if (addr.state) parts.push(addr.state);
+        parts.push(addr.postal_code);
+        parts.push(addr.country);
+        return parts.filter(Boolean).join(", ");
+    };
+
     return (
         <RadioGroup
             value={selectedId?.toString()}
@@ -47,7 +58,7 @@ export function AddressList({ addresses, selectedId, onSelect, t }: AddressListP
 
                             <div className="flex-1 space-y-1">
                                 <div className="flex items-center justify-between">
-                                    <p className="font-semibold leading-none">{addr.fullname}</p>
+                                    <p className="font-semibold leading-none">{addr.recipient_name}</p>
                                     {addr.is_default && (
                                         <Badge variant="secondary" className="text-[10px] uppercase">
                                             {t('addresses:default')}
@@ -56,14 +67,12 @@ export function AddressList({ addresses, selectedId, onSelect, t }: AddressListP
                                 </div>
 
                                 <div className="text-sm text-muted-foreground">
-                                    <p>{addr.line1}</p>
-                                    {(addr.line2 || addr.line3) && (
-                                        <p>{[addr.line2, addr.line3].filter(Boolean).join(", ")}</p>
-                                    )}
+                                    <p>{formatAddress(addr)}</p>
                                 </div>
 
                                 <p className="text-sm font-medium text-foreground/80 pt-1">
-                                    {addr.phone_number}
+                                    {addr.phone}
+                                    {addr.phone_alt && ` | ${addr.phone_alt}`}
                                 </p>
                             </div>
                         </Label>
@@ -87,15 +96,12 @@ export default function ({
 }) {
     const { t } = useTranslation("addresses");
 
-    // 1. Loading State
     if (!addresses) return <AddressListSkeleton />;
 
-    // 2. Empty State
     if (addresses.length === 0) {
         return <AddressesEmpty onAddNewClick={onAddNewClick} />;
     }
 
-    // 3. Data State
     return <AddressList
         addresses={addresses}
         selectedId={selectedId}

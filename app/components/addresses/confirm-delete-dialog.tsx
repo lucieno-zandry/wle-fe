@@ -10,6 +10,7 @@ import {
     DialogClose,
 } from "~/components/ui/dialog";
 import Button from "../custom-components/button";
+import { AlertTriangle } from "lucide-react";
 
 type ConfirmDeleteDialogProps = {
     ids: number[];
@@ -31,18 +32,29 @@ export default function ConfirmDeleteDialog({
     onOpenChange
 }: ConfirmDeleteDialogProps) {
     const intent = ids.length > 1 ? "bulk-delete" : "delete";
+    const itemCount = ids.length;
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>{trigger}</DialogTrigger>
 
-            <DialogContent aria-describedby={title}>
-                <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>{description}</DialogDescription>
+            <DialogContent aria-describedby="delete-dialog-description" className="sm:max-w-[425px]">
+                <DialogHeader className="gap-2 sm:text-left">
+                    <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 mb-2">
+                        <AlertTriangle className="h-6 w-6 text-destructive" />
+                    </div>
+                    <DialogTitle className="text-xl">{title}</DialogTitle>
+                    <DialogDescription id="delete-dialog-description" className="text-base">
+                        {description}
+                        {itemCount > 1 && (
+                            <span className="block mt-2 font-medium text-foreground">
+                                You are about to delete {itemCount} addresses.
+                            </span>
+                        )}
+                    </DialogDescription>
                 </DialogHeader>
 
-                <Form method="post">
+                <Form method="post" className="mt-2">
                     <input type="hidden" name="_intent" value={intent} />
 
                     {ids.length === 1 ? (
@@ -53,13 +65,18 @@ export default function ConfirmDeleteDialog({
                         ))
                     )}
 
-                    <DialogFooter>
+                    <DialogFooter className="gap-2 sm:gap-0 mt-4">
                         <DialogClose asChild>
-                            <Button variant="outline">Cancel</Button>
+                            <Button variant="ghost" className="w-full sm:w-auto">Cancel</Button>
                         </DialogClose>
 
-                        <Button type="submit" variant="destructive" isLoading={isLoading}>
-                            Delete
+                        <Button
+                            type="submit"
+                            variant="destructive"
+                            isLoading={isLoading}
+                            className="w-full sm:w-auto"
+                        >
+                            {isLoading ? "Deleting..." : "Yes, delete"}
                         </Button>
                     </DialogFooter>
                 </Form>

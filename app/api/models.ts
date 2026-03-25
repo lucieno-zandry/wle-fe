@@ -9,7 +9,6 @@ type User = {
   email_verified_at: string;
   role: "admin" | "manager" | "client";
   avatar_image_id?: number;
-  address_id?: number;
   created_at: string;
   updated_at: string;
   client_code_id?: number;
@@ -17,11 +16,9 @@ type User = {
   deleted_at?: string;
   status: UserStatus | null, // computed from the api
 
-
   permissions?: {
     can_use_effective_prices: boolean;
   };
-
 
   // relations
   avatar_image?: AppImage;
@@ -35,6 +32,7 @@ type User = {
   performed_transaction_audit_logs?: TransactionAuditLog[],
   reviewed_transactions?: Transaction[],
   statuses?: UserStatus[],
+  set_statuses?: UserStatus[],
 };
 
 type UserStatus = {
@@ -45,6 +43,9 @@ type UserStatus = {
   set_by?: number;
   created_at: string;
   expires_at?: string;
+
+  user?: User;
+  set_by_user?: User;
 };
 
 type Product = {
@@ -131,6 +132,7 @@ type Promotion = {
   priority: number;
   apply_order?: "percentage_first" | "fixed_first";
   max_discount?: number;
+  variants?: Variant[];
 };
 
 type AppliedPromotion = {
@@ -188,19 +190,26 @@ type VariantOptionsSnapshot = {
   [group: string]: string;
 };
 
+// Updated Address type
 type Address = {
   id: number;
-  fullname: string;
-  line1: string;
-  line2: string | null;
-  line3: string | null;
-  phone_number: string;
   user_id: number;
+  label?: string;               // e.g., "Home", "Work"
+  recipient_name: string;       // instead of fullname
+  phone: string;                // primary phone
+  phone_alt?: string;           // secondary phone
+  line1: string;                // street address
+  line2?: string;               // apartment, suite, etc.
+  city: string;
+  state?: string;               // state/province/region
+  postal_code: string;          // postal code
+  country: string;              // ISO 3166-1 alpha-2 code
+  address_type?: "billing" | "shipping" | "both";
+  is_default: boolean;
   created_at: string;
   updated_at: string;
-  is_default: boolean;
 
-  user?: User,
+  user?: User;
 };
 
 type Order = {
@@ -221,6 +230,7 @@ type Order = {
   transactions?: Transaction[];
   user?: User;
   refund_requests?: RefundRequest[],
+  coupon?: Coupon;
 };
 
 type Coupon = {
@@ -236,6 +246,8 @@ type Coupon = {
   start_date: string;
   end_date: string;
   is_active: boolean;
+
+  orders?: Order[],
 };
 
 type Shipment = {
@@ -406,6 +418,18 @@ type DisputeNotificationData = {
   message: string;
 };
 
+type ClientCodeNotificationData = {
+  notification_type: "client_code";
+  action: "attach" | "detach";
+  user_id: number;
+  user_name: string;
+  client_code: string;
+  performed_by?: number;
+  performed_by_name?: string;
+  message: string;
+};
+
+
 type OtherNotificationData = {
   notification_type: "system";
   title: string;
@@ -417,7 +441,8 @@ type NotificationData =
   | ShipmentNotificationData
   | RefundNotificationData
   | DisputeNotificationData
-  | OtherNotificationData;
+  | OtherNotificationData
+  | ClientCodeNotificationData;
 
 type AppNotification = {
   id: string;
@@ -437,4 +462,7 @@ type ClientCode = {
   is_active: boolean;
   max_uses?: number;
   created_at: string;
+
+  // Joined relationships
+  users?: User[],
 };
