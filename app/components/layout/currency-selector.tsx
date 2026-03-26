@@ -6,22 +6,23 @@ import {
     SelectTrigger,
     SelectValue,
 } from '~/components/ui/select';
-
 import { usePreferencesStore } from '~/hooks/use-user-preference-store';
 import { useUserStore } from '~/hooks/use-user';
+import { CircleDollarSign } from 'lucide-react';
 
 // List of supported currencies (ISO 4217 codes)
 const CURRENCIES = [
-    { code: 'USD', label: 'USD - US Dollar' },
-    { code: 'EUR', label: 'EUR - Euro' },
-    { code: 'GBP', label: 'GBP - British Pound' },
-    { code: 'JPY', label: 'JPY - Japanese Yen' },
-    { code: 'CAD', label: 'CAD - Canadian Dollar' },
-    { code: 'AUD', label: 'AUD - Australian Dollar' },
-    { code: 'CHF', label: 'CHF - Swiss Franc' },
-    { code: 'CNY', label: 'CNY - Chinese Yuan' },
-    { code: 'INR', label: 'INR - Indian Rupee' },
-    { code: 'BRL', label: 'BRL - Brazilian Real' },
+    { code: 'USD', label: 'US Dollar' },
+    { code: 'EUR', label: 'Euro' },
+    { code: 'GBP', label: 'British Pound' },
+    { code: 'JPY', label: 'Japanese Yen' },
+    { code: 'CAD', label: 'Canadian Dollar' },
+    { code: 'AUD', label: 'Australian Dollar' },
+    { code: 'CHF', label: 'Swiss Franc' },
+    { code: 'CNY', label: 'Chinese Yuan' },
+    { code: 'INR', label: 'Indian Rupee' },
+    { code: 'BRL', label: 'Brazilian Real' },
+    { code: 'MGA', label: 'Ariary' }
 ];
 
 // Dumb presentational component
@@ -33,13 +34,19 @@ interface CurrencySelectProps {
 
 const CurrencySelect = ({ value, onChange, disabled }: CurrencySelectProps) => (
     <Select value={value} onValueChange={onChange} disabled={disabled}>
-        <SelectTrigger className="w-[140px]">
+        <SelectTrigger className="w-[80px] sm:w-[110px] h-9 flex items-center gap-2 bg-transparent">
+            <CircleDollarSign className="w-4 h-4 text-muted-foreground hidden sm:block shrink-0" />
             <SelectValue placeholder="Currency" />
         </SelectTrigger>
         <SelectContent>
             {CURRENCIES.map((curr) => (
                 <SelectItem key={curr.code} value={curr.code}>
-                    {curr.label}
+                    <div className="flex items-center gap-2">
+                        <span className="font-semibold">{curr.code}</span>
+                        <span className="text-muted-foreground text-xs hidden sm:inline-block">
+                            - {curr.label}
+                        </span>
+                    </div>
                 </SelectItem>
             ))}
         </SelectContent>
@@ -48,15 +55,8 @@ const CurrencySelect = ({ value, onChange, disabled }: CurrencySelectProps) => (
 
 // Smart component that chooses the right store based on auth status
 export const CurrencySelector = () => {
-    const { user } = useUserStore();
-    const { preferences, updatePreferences, fetchPreferences } = usePreferencesStore();
-
-    // When user logs in, fetch preferencess
-    useEffect(() => {
-        if (user) {
-            fetchPreferences();
-        }
-    }, [user, fetchPreferences]);
+    const { authStatus } = useUserStore();
+    const { preferences, updatePreferences } = usePreferencesStore();
 
     const handleCurrencyChange = (newCurrency: string) => {
         updatePreferences({ currency: newCurrency });
@@ -66,7 +66,7 @@ export const CurrencySelector = () => {
         <CurrencySelect
             value={preferences?.currency || 'USD'}
             onChange={handleCurrencyChange}
-            disabled={user ? !preferences : false} // Disabled while loading for authenticated user
+            disabled={authStatus === 'unknown'} // Disabled while loading for authenticated user
         />
     );
 };

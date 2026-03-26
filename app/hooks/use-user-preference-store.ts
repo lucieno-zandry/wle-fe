@@ -40,7 +40,8 @@ export const usePreferencesStore = create<PreferencesState>()(
                 set({ isLoading: true, error: null });
                 try {
                     const response = await fetchUserPreferences();
-                    set({ preferences: response.data!.preferences, isLoading: false });
+
+                    set({ preferences: response.data?.preferences || defaultPreference, isLoading: false });
                 } catch (err: any) {
                     set({ error: err.response?.data?.message || 'Failed to load preferences', isLoading: false });
                 }

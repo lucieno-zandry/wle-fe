@@ -8,9 +8,12 @@ import { useRefreshCart } from "~/hooks/use-cart";
 import { useUserStore } from "~/hooks/use-user";
 import handleHttpExceptionError from "~/lib/handle-http-exception-error";
 import { ClientCodeDialog } from "../../components/layout/client-code-dialog";
+import { usePreferencesStore } from "~/hooks/use-user-preference-store";
 
 export default function () {
     const { setUser, clearUser } = useUserStore();
+    const { fetchPreferences } = usePreferencesStore();
+
     const refreshCart = useRefreshCart();
     const navigate = useNavigate();
 
@@ -20,6 +23,7 @@ export default function () {
                 if (response.data?.user) {
                     setUser(response.data.user);
                     refreshCart();
+                    fetchPreferences();
                 }
 
             }).catch((error) => {
