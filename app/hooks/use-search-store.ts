@@ -30,13 +30,20 @@ export interface SearchFilters {
     min_price: number | undefined;
     max_price: number | undefined;
     variant_option_ids: number[];
-    sortIndex: number; // index into SORT_OPTIONS
+    sortIndex: number;
 }
 
 export interface SearchState {
     // UI state
     viewMode: ViewMode;
     isSidebarOpen: boolean;
+
+    /**
+     * True once useSearchUrlSync has finished reading the URL and writing
+     * the initial filters into the store. ProductGrid must not fetch before
+     * this is true, otherwise it fires with default (empty) filters.
+     */
+    urlHydrated: boolean;
 
     // Price range meta (from API)
     priceRangeMeta: PriceRange | null;
@@ -66,6 +73,7 @@ export interface SearchState {
     setPriceRangeLoading: (loading: boolean) => void;
     setFilter: <K extends keyof SearchFilters>(key: K, value: SearchFilters[K]) => void;
     resetFilters: () => void;
+    setUrlHydrated: (hydrated: boolean) => void;
     setProducts: (products: Product[], page: number, lastPage: number, total: number) => void;
     appendProducts: (products: Product[], page: number, lastPage: number) => void;
     setProductsLoading: (loading: boolean) => void;
@@ -91,18 +99,15 @@ const DEFAULT_FILTERS: SearchFilters = {
 export const useSearchStore = create<SearchState>()(
     devtools(
         (set, get) => ({
-            // ── UI ──────────────────────────────────────────────────────────────────
             viewMode: "grid",
             isSidebarOpen: false,
+            urlHydrated: false,
 
-            // ── Price range ─────────────────────────────────────────────────────────
             priceRangeMeta: null,
             priceRangeLoading: false,
 
-            // ── Filters ─────────────────────────────────────────────────────────────
             filters: { ...DEFAULT_FILTERS },
 
-            // ── Products ────────────────────────────────────────────────────────────
             products: [],
             currentPage: 1,
             lastPage: 1,
@@ -112,13 +117,12 @@ export const useSearchStore = create<SearchState>()(
             productsError: null,
             hasMore: false,
 
-            // ── Categories ──────────────────────────────────────────────────────────
             categories: [],
             categoriesLoading: false,
 
-            // ── Actions ─────────────────────────────────────────────────────────────
             setViewMode: (mode) => set({ viewMode: mode }),
             setIsSidebarOpen: (open) => set({ isSidebarOpen: open }),
+            setUrlHydrated: (hydrated) => set({ urlHydrated: hydrated }),
 
             setPriceRangeMeta: (range) => set({ priceRangeMeta: range }),
             setPriceRangeLoading: (loading) => set({ priceRangeLoading: loading }),
@@ -126,7 +130,7 @@ export const useSearchStore = create<SearchState>()(
             setFilter: (key, value) =>
                 set((s) => ({ filters: { ...s.filters, [key]: value } })),
 
-            resetFilters: () => set({ filters: { ...DEFAULT_FILTERS } }),
+            resetFilters: () => set({ filters: { ...DEFAULT_FILTERS }, urlHydrated: false }),
 
             setProducts: (products, page, lastPage, total) =>
                 set({
@@ -153,7 +157,6 @@ export const useSearchStore = create<SearchState>()(
             setCategories: (categories) => set({ categories }),
             setCategoriesLoading: (loading) => set({ categoriesLoading: loading }),
 
-            // ── Computed ────────────────────────────────────────────────────────────
             getActiveFiltersCount: () => {
                 const { filters } = get();
                 let count = 0;

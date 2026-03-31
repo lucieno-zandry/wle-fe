@@ -1,30 +1,20 @@
-// ~/hooks/use-search-url-sync.ts
-// Syncs the Zustand search store ↔ the URL.
-//
-// URL shape:
-//   /:lang/search/:query   ← keyword in path param (empty keyword = "all")
-//   ?category=5&min_price=10&max_price=200&sort=1
-//
-// Rules:
-//   • On mount  → read URL → write store (hydrate)
-//   • On store change → write URL (replace, no history push)
-
 import { useEffect, useRef } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useSearchStore } from "./use-search-store";
+import appPathname from "~/lib/app-pathname";
 
-const QUERY_PLACEHOLDER = "all"; // path segment when no keyword
+export const QUERY_PLACEHOLDER = "all"; // path segment when no keyword
 
 export function useSearchUrlSync() {
     const navigate = useNavigate();
-    const { lang, query: urlQuery } = useParams<{ lang: string; query: string }>();
+    const { query: urlQuery } = useParams<{ query: string }>();
     const [searchParams] = useSearchParams();
 
     const filters = useSearchStore((s) => s.filters);
     const setFilter = useSearchStore((s) => s.setFilter);
     const resetFilters = useSearchStore((s) => s.resetFilters);
+    const setUrlHydrated = useSearchStore((s) => s.setUrlHydrated);
 
-    // Guard: skip the first store→URL write right after we hydrate from URL
     const hydratedRef = useRef(false);
     const isFirstRender = useRef(true);
 
@@ -47,13 +37,14 @@ export function useSearchUrlSync() {
         const sort = searchParams.get("sort");
         if (sort) setFilter("sortIndex", Number(sort));
 
+        // ← Signal ProductGrid that it's now safe to fetch with correct filters
+        setUrlHydrated(true);
         hydratedRef.current = true;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // intentionally only on mount
 
     // ── 2. Push store → URL whenever filters change ──────────────────────────
     useEffect(() => {
-        // Skip the very first render (before hydration completes)
         if (isFirstRender.current) {
             isFirstRender.current = false;
             return;
@@ -75,8 +66,8 @@ export function useSearchUrlSync() {
             params.set("sort", String(filters.sortIndex));
 
         const qs = params.toString();
-        const newPath = `/${lang}/search/${keyword}${qs ? `?${qs}` : ""}`;
+        const newPath = appPathname(`/search/${keyword}${qs ? `?${qs}` : ""}`);
 
         navigate(newPath, { replace: true });
-    }, [filters]);
+    }, [filters, hydratedRef]);
 }

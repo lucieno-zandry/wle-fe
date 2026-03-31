@@ -1,6 +1,5 @@
-import { ChevronDown, RotateCcw, SlidersHorizontal } from "lucide-react";
-import { useState } from "react";
-import { SORT_OPTIONS, useSearchStore, type PriceRange, type SearchFilters, type SortOption } from "~/hooks/use-search-store";
+import { RotateCcw, SlidersHorizontal } from "lucide-react";
+import { useSearchStore, type PriceRange, type SearchFilters, type SortOption, SORT_OPTIONS } from "~/hooks/use-search-store";
 import { cn } from "~/lib/utils";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -8,7 +7,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Slider } from "../ui/slider";
 import { getCurrencySymbol } from "~/lib/format-money";
-
+import { FilterSection } from "./filter-section";
 
 export interface FilterSidebarViewProps {
     filters: SearchFilters;
@@ -26,37 +25,6 @@ export interface FilterSidebarViewProps {
     currencySymbol: string;
 }
 
-// ─── Section wrapper with collapse ───────────────────────────────────────────
-function FilterSection({
-    title,
-    children,
-    defaultOpen = true,
-}: {
-    title: string;
-    children: React.ReactNode;
-    defaultOpen?: boolean;
-}) {
-    const [open, setOpen] = useState(defaultOpen);
-    return (
-        <div className="py-1">
-            <button
-                onClick={() => setOpen((o) => !o)}
-                className="flex w-full items-center justify-between py-2 text-sm font-semibold text-foreground hover:text-primary transition-colors"
-            >
-                {title}
-                <ChevronDown
-                    className={cn(
-                        "size-4 text-muted-foreground transition-transform duration-200",
-                        open && "rotate-180"
-                    )}
-                />
-            </button>
-            {open && <div className="pb-3 pt-1">{children}</div>}
-        </div>
-    );
-}
-
-// ─── Main component ───────────────────────────────────────────────────────────
 export function FilterSidebarView({
     filters,
     priceRangeMeta,
@@ -76,7 +44,6 @@ export function FilterSidebarView({
 
     return (
         <aside className="flex h-full flex-col bg-card border-r border-border/60">
-            {/* Header */}
             <div className="flex items-center justify-between border-b border-border/60 px-5 py-4">
                 <div className="flex items-center gap-2">
                     <SlidersHorizontal className="size-4 text-primary" />
@@ -103,7 +70,6 @@ export function FilterSidebarView({
             <ScrollArea className="flex-1 px-5">
                 <div className="divide-y divide-border/40 py-2">
 
-                    {/* Sort */}
                     <FilterSection title="Sort by">
                         <Select
                             value={String(filters.sortIndex)}
@@ -122,7 +88,6 @@ export function FilterSidebarView({
                         </Select>
                     </FilterSection>
 
-                    {/* Category */}
                     <FilterSection title="Category">
                         {categoriesLoading ? (
                             <div className="space-y-2">
@@ -167,7 +132,6 @@ export function FilterSidebarView({
                         )}
                     </FilterSection>
 
-                    {/* Price range */}
                     <FilterSection title="Price range">
                         {priceRangeLoading ? (
                             <div className="h-10 animate-pulse rounded-md bg-muted" />
@@ -206,7 +170,6 @@ export function FilterSidebarView({
         </aside>
     );
 }
-
 
 export function FilterSidebar() {
     const filters = useSearchStore((s) => s.filters);

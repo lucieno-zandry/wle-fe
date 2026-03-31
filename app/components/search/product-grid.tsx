@@ -1,13 +1,13 @@
-import { Loader2, PackageSearch } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
-import { toast } from "sonner";
-import { addVariantToCart, getProducts } from "~/api/http-requests";
+import { getProducts } from "~/api/http-requests";
 import { useSearchStore } from "~/hooks/use-search-store";
-import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
-import { ProductCardView } from "./product-card";
-import { Link } from "react-router";
-import appPathname from "~/lib/app-pathname";
+import { ProductCard } from "./product-card";
+import { SkeletonCard } from "./skeleton-card";
+import { EmptyState } from "./empty-state";
+import { ErrorState } from "./error-state";
+import { useLocation, useParams } from "react-router";
 
 export function ProductGrid() {
     const products = useSearchStore((s) => s.products);
@@ -25,11 +25,16 @@ export function ProductGrid() {
     const appendProducts = useSearchStore((s) => s.appendProducts);
     const buildQueryParams = useSearchStore((s) => s.buildQueryParams);
     const filters = useSearchStore((s) => s.filters);
+    // ← Gate: don't fetch until the URL has been read into the store
+    const urlHydrated = useSearchStore((s) => s.urlHydrated);
+
+    const { search } = useLocation();
+    const { query = '' } = useParams();
 
     const sentinelRef = useRef<HTMLDivElement>(null);
     const isFetchingRef = useRef(false);
 
-    // ── Initial / filter-change fetch ──────────────────────────────────────────
+    // ── Initial / filter-change fetch ─────────────────────────────────────────
     const fetchInitial = useCallback(async () => {
         if (isFetchingRef.current) return;
         isFetchingRef.current = true;
@@ -47,11 +52,13 @@ export function ProductGrid() {
 
         setProductsLoading(false);
         isFetchingRef.current = false;
-    }, [filters]); // re-run whenever filters change
+    }, [filters, query, search]);
 
+    // Only start fetching once the URL params have been written to the store
     useEffect(() => {
+        if (!urlHydrated) return;
         fetchInitial();
-    }, [fetchInitial]);
+    }, [fetchInitial, urlHydrated]);
 
     // ── Load more ─────────────────────────────────────────────────────────────
     const fetchMore = useCallback(async () => {
@@ -89,32 +96,20 @@ export function ProductGrid() {
         return () => observer.disconnect();
     }, [fetchMore]);
 
-    // ── Cart handler ──────────────────────────────────────────────────────────
-    const handleAddToCart = async (variantId: number) => {
-        const { error } = await addVariantToCart({ variant_id: variantId, count: 1 });
-        if (error) {
-            toast.error("Couldn't add to cart. Please try again.");
-        } else {
-            toast.success("Added to cart!");
-        }
-    };
-
     return (
         <ProductGridView
             products={products}
             viewMode={viewMode}
-            loading={loading}
+            loading={loading || !urlHydrated}
             loadingMore={loadingMore}
             error={error}
             hasMore={hasMore}
             totalProducts={totalProducts}
             sentinelRef={sentinelRef}
-            onAddToCart={handleAddToCart}
             onRetry={fetchInitial}
         />
     );
 }
-
 
 export interface ProductGridViewProps {
     products: Product[];
@@ -125,77 +120,9 @@ export interface ProductGridViewProps {
     hasMore: boolean;
     totalProducts: number;
     sentinelRef: React.RefObject<HTMLDivElement | null>;
-    onAddToCart?: (variantId: number) => void;
     onRetry?: () => void;
 }
 
-// ─── Skeleton card ────────────────────────────────────────────────────────────
-function SkeletonCard({ mode }: { mode: "grid" | "list" }) {
-    if (mode === "list") {
-        return (
-            <div className="flex h-[140px] animate-pulse overflow-hidden rounded-xl border border-border/50 bg-card">
-                <div className="h-full w-36 shrink-0 bg-muted" />
-                <div className="flex flex-1 flex-col justify-between p-4">
-                    <div className="space-y-2">
-                        <div className="h-4 w-3/4 rounded bg-muted" />
-                        <div className="h-3 w-full rounded bg-muted" />
-                        <div className="h-3 w-2/3 rounded bg-muted" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <div className="h-5 w-20 rounded bg-muted" />
-                        <div className="h-8 w-24 rounded-md bg-muted" />
-                    </div>
-                </div>
-            </div>
-        );
-    }
-    return (
-        <div className="animate-pulse overflow-hidden rounded-xl border border-border/50 bg-card">
-            <div className="h-44 bg-muted" />
-            <div className="space-y-3 p-4">
-                <div className="h-4 w-3/4 rounded bg-muted" />
-                <div className="h-3 w-full rounded bg-muted" />
-                <div className="flex items-center justify-between pt-1">
-                    <div className="h-5 w-16 rounded bg-muted" />
-                    <div className="h-8 w-16 rounded-md bg-muted" />
-                </div>
-            </div>
-        </div>
-    );
-}
-
-// ─── Empty state ──────────────────────────────────────────────────────────────
-function EmptyState({ hasFilters }: { hasFilters: boolean }) {
-    return (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="mb-4 rounded-full bg-muted p-6">
-                <PackageSearch className="size-10 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold text-foreground">No products found</h3>
-            <p className="mt-1 text-sm text-muted-foreground max-w-sm">
-                {hasFilters
-                    ? "Try adjusting or clearing your filters to see more results."
-                    : "There are no products available at this time."}
-            </p>
-        </div>
-    );
-}
-
-// ─── Error state ──────────────────────────────────────────────────────────────
-function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
-    return (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-            <p className="text-sm text-destructive">{message}</p>
-            {onRetry && (
-                <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
-                    Try again
-                </Button>
-            )}
-        </div>
-    );
-}
-
-// ─── Main component ───────────────────────────────────────────────────────────
 export function ProductGridView({
     products,
     viewMode,
@@ -205,7 +132,6 @@ export function ProductGridView({
     hasMore,
     totalProducts,
     sentinelRef,
-    onAddToCart,
     onRetry,
 }: ProductGridViewProps) {
     if (loading) {
@@ -234,12 +160,10 @@ export function ProductGridView({
 
     return (
         <div>
-            {/* Result count */}
             <p className="mb-4 text-sm text-muted-foreground">
                 {totalProducts} product{totalProducts !== 1 ? "s" : ""} found
             </p>
 
-            {/* Product items */}
             <div
                 className={cn(
                     viewMode === "grid"
@@ -248,18 +172,10 @@ export function ProductGridView({
                 )}
             >
                 {products.map((product) => (
-                    <Link to={appPathname(`/product/${product.slug}`)}>
-                        <ProductCardView
-                            key={product.id}
-                            product={product}
-                            viewMode={viewMode}
-                            onAddToCart={onAddToCart}
-                        />
-                    </Link>
+                    <ProductCard key={product.id} product={product} />
                 ))}
             </div>
 
-            {/* Infinite scroll sentinel */}
             <div ref={sentinelRef} className="mt-8 flex items-center justify-center h-8">
                 {loadingMore && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">

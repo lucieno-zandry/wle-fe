@@ -72,7 +72,6 @@ export function SearchPage() {
     const setCategories = useSearchStore((s) => s.setCategories);
     const setCategoriesLoading = useSearchStore((s) => s.setCategoriesLoading);
 
-    // ← NEW: keep URL and store in sync
     useSearchUrlSync();
 
     useEffect(() => {

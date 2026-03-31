@@ -1,8 +1,3 @@
-// components/search-bar.tsx
-// The in-page search bar (inside the search results page header).
-// Unchanged API from before — but now the URL sync hook in SearchPage
-// means writing to the store automatically updates the URL.
-
 import { Search, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useSearchStore } from "~/hooks/use-search-store";
@@ -49,12 +44,10 @@ export function SearchBar({ className }: { className?: string }) {
 
     const [localValue, setLocalValue] = useState(storeSearch);
 
-    // Keep local in sync when store changes (e.g. URL hydration on mount, or reset)
     useEffect(() => {
         setLocalValue(storeSearch);
     }, [storeSearch]);
 
-    // Debounce write to store → store change triggers URL update via useSearchUrlSync
     useEffect(() => {
         const id = setTimeout(() => {
             if (localValue !== storeSearch) {

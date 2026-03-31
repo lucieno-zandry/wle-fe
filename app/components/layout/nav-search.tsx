@@ -438,7 +438,7 @@ export function NavSearch() {
         setLoading(true);
         debounceRef.current = setTimeout(() => {
             fetchSuggestions(v);
-        }, 280);
+        }, 500);
     }, [fetchSuggestions]);
 
     // ── Navigate to search page ─────────────────────────────────────────────

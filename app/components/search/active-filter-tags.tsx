@@ -37,7 +37,6 @@ export function ActiveFilterTagsView({ tags }: ActiveFilterTagsViewProps) {
     );
 }
 
-
 export function ActiveFilterTags() {
     const filters = useSearchStore((s) => s.filters);
     const categories = useSearchStore((s) => s.categories);
