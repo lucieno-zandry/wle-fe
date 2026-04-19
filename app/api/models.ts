@@ -17,7 +17,7 @@ type User = {
   status: UserStatus | null; // computed from the api
 
   permissions?: {
-    can_use_effective_prices: boolean;
+    can_use_special_prices: boolean;
   };
 
   // relations

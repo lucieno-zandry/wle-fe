@@ -17,7 +17,7 @@ export function PartnerCodeSettings() {
     }
 
     // 1. Logic for Active Partner
-    if (user?.permissions?.can_use_effective_prices && user.client_code) {
+    if (user?.permissions?.can_use_special_prices && user.client_code) {
         return (
             <Card className="border-green-100 bg-green-50/30">
                 <CardHeader className="flex flex-row items-center gap-4 space-y-0">

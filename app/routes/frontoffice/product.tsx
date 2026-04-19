@@ -64,7 +64,7 @@ export default function ProductPage() {
     const refreshCart = useRefreshCart();
 
     const isSubmitting = fetcher.state !== "idle" || navigation.state !== "idle";
-    const canSeeSpecial = user?.permissions?.can_use_effective_prices ?? false;
+    const canSeeSpecial = user?.permissions?.can_use_special_prices ?? false;
 
     // Toast notifications for add-to-cart
     useEffect(() => {

@@ -37,7 +37,7 @@ export function ClientCodeDialog() {
 
     useEffect(() => {
         const hasDeclined = sessionStorage.getItem("declined_client_code");
-        if (user?.permissions?.can_use_effective_prices || hasDeclined) return;
+        if (user?.permissions?.can_use_special_prices || hasDeclined) return;
 
         const timeoutId = setTimeout(() => {
             setIsOpen(true);
@@ -50,7 +50,7 @@ export function ClientCodeDialog() {
     useEffect(() => {
         const storedClientCodeId = localStorage.getItem("client_code_id_to_apply");
 
-        if (storedClientCodeId && !user?.permissions?.can_use_effective_prices) {
+        if (storedClientCodeId && !user?.permissions?.can_use_special_prices) {
             const clientCodeId = parseInt(storedClientCodeId, 10);
 
             handleApply(clientCodeId)

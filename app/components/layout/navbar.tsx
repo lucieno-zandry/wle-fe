@@ -5,7 +5,6 @@ import { useUserStore } from "~/hooks/use-user"
 import { Button } from "../ui/button";
 import UserDropdown from "./user-dropdown";
 import Cart from "../cart/cart";
-import Notifications from "../notifications/notifications";
 import { LanguageSwitcher } from "~/components/layout/language-switcher";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
@@ -14,6 +13,7 @@ import appPathname from "~/lib/app-pathname";
 import { ThemeSelector } from "./theme-selector";
 import { useMemo } from "react";
 import { NavSearch } from "./nav-search";
+import { NotificationsPopover } from "../notifications/notifications-popover";
 
 type NavbarProps = {
     isUnAuthenticated: boolean,
@@ -64,7 +64,7 @@ export function NavbarView({ isAuthenticated, isUnAuthenticated, t, navbarSearch
                 {isAuthenticated && (
                     <div className="flex gap-3 sm:gap-4 items-center">
                         <Cart />
-                        <Notifications />
+                        <NotificationsPopover />
                         <UserDropdown />
                     </div>
                 )}

@@ -132,3 +132,36 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+
+  /* Targeted class for your sidebar and main content */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    /* Very thin for a sleek look */
+    height: 5px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    /* Makes the track invisible */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: theme('colors.zinc.800');
+    /* Matches your border colors */
+    border-radius: 10px;
+    transition: background 0.2s ease;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.zinc.700');
+    /* Brightens slightly on hover */
+  }
+
+  /* Firefox support */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.zinc.800') transparent;
+  }
+}

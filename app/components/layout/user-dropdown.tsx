@@ -92,7 +92,7 @@ export function UserDropdown({ user, setIsOpen, setLogoutOpen, logoutOpen, t }: 
                     <DropdownMenuSeparator />
 
                     {/* Unlock partner prices */}
-                    {!user.permissions?.can_use_effective_prices && (
+                    {!user.permissions?.can_use_special_prices && (
                         <DropdownMenuItem
                             onClick={() => setIsOpen(true)}
                             className="text-primary focus:text-primary focus:bg-primary/5 cursor-pointer font-medium"

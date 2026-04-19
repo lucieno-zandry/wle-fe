@@ -8,7 +8,7 @@ type ShipmentStatusProps = {
 export default function ShipmentStatus({ shipments }: ShipmentStatusProps) {
   // Get the most recent shipment
   const latestShipment = shipments.sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.updated_at).getTime()
+    (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
   )[0];
 
   const getStatusConfig = (status: Shipment['status']) => {

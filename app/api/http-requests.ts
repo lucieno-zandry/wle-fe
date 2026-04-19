@@ -1,6 +1,7 @@
 import { serializeProductParams, type ProductQueryParams } from "~/lib/serialize-product-params";
 import appFetch, { type PaginatedResponse } from "./app-fetch";
 import buildWhereParam, { type WhereConditions, type WhereInConditions } from "~/lib/build-where-param";
+import type { NotificationsQueryParams } from "~/components/notifications/types/notifications-query-params";
 
 export function getEmailInfo(email: string) {
     return appFetch.post<{ is_taken: boolean }>('/auth/email/info', { email });
@@ -30,7 +31,7 @@ export function registerUser(data: {
 }
 
 export function getAuthUser() {
-    return appFetch.get<{ user: User }>('/auth/user/get?with=preferences');
+    return appFetch.get<{ user: User }>('/auth/user/get?with=preferences,client_code');
 }
 
 export function updateAuthUser(payload: {
@@ -146,17 +147,28 @@ export function createTransaction(data: Pick<Transaction, 'method' | 'order_uuid
     return appFetch.post<{ transaction: Transaction }>('/transactions', data)
 }
 
-export function getNotifications() {
+export function getNotifications(params: NotificationsQueryParams) {
+    const searchParams = new URLSearchParams();
+
+    if (params.page) searchParams.set('page', String(params.page));
+
+    if (params.per_page) searchParams.set('per_page', String(params.per_page));
+
     return appFetch.get<{
-        notifications: AppNotification[],
-        unread: AppNotification[],
+        notifications: PaginatedResponse<AppNotification>,
         unread_count: number,
     }>('/notifications');
 }
 
-export function getUnreadNotifications() {
+export function getUnreadNotifications(params: NotificationsQueryParams) {
+    const searchParams = new URLSearchParams();
+
+    if (params.page) searchParams.set('page', String(params.page));
+
+    if (params.per_page) searchParams.set('per_page', String(params.per_page));
+
     return appFetch.get<{
-        notifications: AppNotification[],
+        notifications: PaginatedResponse<AppNotification>,
         count: number,
     }>('/notifications/unread');
 }
