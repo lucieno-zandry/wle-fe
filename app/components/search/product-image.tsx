@@ -34,8 +34,8 @@ export function ProductImage({
 
             {promotions.length > 0 && (
                 <div className="absolute left-2 top-2 flex flex-wrap gap-1">
-                    {promotions.slice(0, 3).map((p) => (
-                        <PromotionPill key={p.id} promotion={p} />
+                    {promotions.slice(0, 3).map((p, k) => (
+                        <PromotionPill key={`${k}${p.id}`} promotion={p} />
                     ))}
                 </div>
             )}

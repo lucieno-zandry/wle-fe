@@ -15,7 +15,7 @@ function setLastSeen(value: string): void {
     localStorage.setItem(LAST_SEEN_KEY, value);
 }
 
-export function NotificationBell() {
+export function NotificationBell({ onOpen }: { onOpen: () => void }) {
     const { notifications } = useNotifications();
 
     const [lastSeen, setLastSeenState] = useState<string | null>(getLastSeen());
@@ -31,6 +31,7 @@ export function NotificationBell() {
         const now = new Date().toISOString();
         setLastSeen(now);
         setLastSeenState(now);
+        onOpen();
     };
 
     const hasUnread = unreadCount > 0;

@@ -2,7 +2,7 @@ import { Outlet, useParams, type LoaderFunctionArgs } from "react-router";
 import i18n from "~/i18n/i18n";
 import { useEffect } from "react";
 import { usePreferencesStore } from "~/hooks/use-user-preference-store";
-import { getPreferencesFromLoaderFunctionArgs } from "~/lib/app-pathname";
+import appPathname, { getPreferencesFromLoaderFunctionArgs } from "~/lib/app-pathname";
 
 export async function loader(args: LoaderFunctionArgs) {
   const preferences = getPreferencesFromLoaderFunctionArgs(args);

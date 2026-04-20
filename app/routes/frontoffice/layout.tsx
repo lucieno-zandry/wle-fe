@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { Outlet, useNavigate, type LoaderFunctionArgs } from "react-router";
 import { HttpException } from "~/api/app-fetch";
 import { getAuthUser } from "~/api/http-requests";
 import Footer from "~/components/layout/footer";

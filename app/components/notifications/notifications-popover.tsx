@@ -11,6 +11,7 @@ import {
 } from "~/components/ui/popover";
 
 import { NotificationBell } from "./components/notification-bell";
+import { useState } from "react";
 
 /**
  * Notifications Popover
@@ -18,11 +19,14 @@ import { NotificationBell } from "./components/notification-bell";
  * Same orchestration logic, but rendered inside a popover.
  */
 export function NotificationsPopover() {
+
+    const [open, setOpen] = useState(false);
+
     return (
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
             {/* ── Trigger ───────────────────────────────────────────── */}
-            <PopoverTrigger>
-                <NotificationBell />
+            <PopoverTrigger asChild>
+                <NotificationBell onOpen={() =>setOpen(true)}/>
             </PopoverTrigger>
 
             {/* ── Content ───────────────────────────────────────────── */}

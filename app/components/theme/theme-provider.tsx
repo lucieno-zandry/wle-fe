@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { usePreferencesStore } from '~/hooks/use-user-preference-store';
 
 export const ThemeProvider = () => {
-    const { theme } = usePreferencesStore().preferences;
+    const { theme} = usePreferencesStore().preferences;
 
     useEffect(() => {
         const root = document.documentElement;
