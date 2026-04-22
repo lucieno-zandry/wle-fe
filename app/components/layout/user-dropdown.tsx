@@ -73,7 +73,6 @@ export function UserDropdown({ user, setIsOpen, setLogoutOpen, logoutOpen, t }: 
 
                     <DropdownMenuSeparator />
 
-                    {/* Preferences Section - prevents menu closure on click */}
                     <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                         {t('common:preferences')}
                     </div>
@@ -91,7 +90,6 @@ export function UserDropdown({ user, setIsOpen, setLogoutOpen, logoutOpen, t }: 
 
                     <DropdownMenuSeparator />
 
-                    {/* Unlock partner prices */}
                     {!user.permissions?.can_use_special_prices && (
                         <DropdownMenuItem
                             onClick={() => setIsOpen(true)}
@@ -106,10 +104,10 @@ export function UserDropdown({ user, setIsOpen, setLogoutOpen, logoutOpen, t }: 
                         <LifeBuoy className="mr-2 h-4 w-4" />
                         <span>{t('common:support')}</span>
                     </DropdownMenuItem>
-                    
+
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                        variant="destructive" 
+                    <DropdownMenuItem
+                        variant="destructive"
                         onSelect={() => setLogoutOpen(true)}
                         className="cursor-pointer"
                     >
@@ -124,7 +122,7 @@ export function UserDropdown({ user, setIsOpen, setLogoutOpen, logoutOpen, t }: 
     );
 }
 
-export default function () {
+export default function UserDropdownWrapper() {
     const { user } = useUserStore();
     const { setIsOpen } = useClientCodeDialogStore();
     const { t } = useTranslation();

@@ -125,16 +125,7 @@ export function Checkout({
                         isCompleted={completed.review}
                     >
                         {cartItems && (
-                            <OrderReview>
-                                <Button
-                                    className="w-full h-12 text-lg"
-                                    type="button"
-                                    isLoading={loading}
-                                    onClick={handlePlaceOrder}
-                                >
-                                    {t('checkout:placeOrder')}
-                                </Button>
-                            </OrderReview>
+                            <OrderReview />
                         )}
                     </StepWrapper>
                 </div>
@@ -149,6 +140,8 @@ export function Checkout({
                             discountAmount={discountAmount}
                             total={total}
                             promotionDiscount={promotionDiscount}
+                            loading={loading}
+                            onPlaceOrder={handlePlaceOrder}
                         />
                     </div>
                 )}

@@ -28,9 +28,7 @@ export function ClientCodeDialog() {
     const [isLoading, setIsLoading] = useState(false);
     const [formValidationErrors, setFormValidationErrors] = useState<{ code?: string[] } | null>(null);
     const { user, setUser, authStatus } = useUserStore();
-
     const { isOpen, setIsOpen } = useClientCodeDialogStore();
-
     const revalidator = useRevalidator();
 
     const canSubmit = useMemo(() => !formValidationErrors, [formValidationErrors]);
@@ -45,7 +43,6 @@ export function ClientCodeDialog() {
 
         return () => clearTimeout(timeoutId);
     }, [user]);
-
 
     useEffect(() => {
         const storedClientCodeId = localStorage.getItem("client_code_id_to_apply");
@@ -86,7 +83,6 @@ export function ClientCodeDialog() {
             name: e.target.name as "code",
             validationErrors
         });
-
         setFormValidationErrors(updatedFormValidationErrors);
     };
 
@@ -107,7 +103,6 @@ export function ClientCodeDialog() {
                         localStorage.setItem("client_code_id_to_apply", response.data.client_code.id.toString());
                         toast.success("Client code saved! It will be applied when you log in.");
                     }
-
                     setIsOpen(false);
                 } else {
                     setFormValidationErrors({ code: ["Invalid client code"] });
@@ -117,7 +112,6 @@ export function ClientCodeDialog() {
                 if (error instanceof ValidationException) {
                     return setFormValidationErrors(error.errors);
                 }
-
                 toast.error(`Failed to apply client code: ${error.status}`, {
                     description: error.data?.message || "Please check your code and try again."
                 });

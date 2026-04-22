@@ -1,12 +1,11 @@
 import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 
-// Loading Skeleton - Same as before
 export function ProductGridSkeleton({ count }: { count: number }) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {Array.from({ length: count }).map((_, i) => (
-                <Card key={i} className="overflow-hidden">
+                <Card key={i} className="overflow-hidden border-border/60">
                     <Skeleton className="aspect-square w-full" />
                     <CardContent className="p-4">
                         <Skeleton className="h-4 w-1/3 mb-2" />

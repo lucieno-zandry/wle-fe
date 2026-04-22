@@ -23,34 +23,31 @@ export function NotificationsPopover() {
     const [open, setOpen] = useState(false);
 
     return (
-        <Popover open={open} onOpenChange={setOpen}>
-            {/* ── Trigger ───────────────────────────────────────────── */}
-            <PopoverTrigger asChild>
-                <NotificationBell onOpen={() =>setOpen(true)}/>
-            </PopoverTrigger>
+        <>
+            <NotificationBell onOpen={() => setOpen(true)} />
+            <Popover open={open} onOpenChange={setOpen}>
+                <PopoverContent
+                    align="end"
+                    className="w-[380px] p-0 shadow-lg"
+                >
+                    <div className="flex max-h-[500px] flex-col overflow-hidden rounded-xl border bg-card">
 
-            {/* ── Content ───────────────────────────────────────────── */}
-            <PopoverContent
-                align="end"
-                className="w-[380px] p-0 shadow-lg"
-            >
-                <div className="flex max-h-[500px] flex-col overflow-hidden rounded-xl border bg-card">
+                        {/* Header */}
+                        <NotificationsHeader />
 
-                    {/* Header */}
-                    <NotificationsHeader />
+                        {/* Tabs */}
+                        <NotificationFilterTabs />
 
-                    {/* Tabs */}
-                    <NotificationFilterTabs />
+                        {/* Bulk actions */}
+                        <BulkActionsBar />
 
-                    {/* Bulk actions */}
-                    <BulkActionsBar />
-
-                    {/* Scrollable list */}
-                    <div className="overflow-y-auto ">
-                        <NotificationList />
+                        {/* Scrollable list */}
+                        <div className="overflow-y-auto ">
+                            <NotificationList />
+                        </div>
                     </div>
-                </div>
-            </PopoverContent>
-        </Popover>
+                </PopoverContent>
+            </Popover>
+        </>
     );
 }

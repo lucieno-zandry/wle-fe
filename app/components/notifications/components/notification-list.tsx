@@ -139,11 +139,11 @@ export function NotificationListView({
 
     return (
         <div>
-            {groups.map((group) => (
-                <div key={group.label}>
+            {groups.map((group, key) => (
+                <div key={`${group.label}-${key}`}>
                     <DateGroupHeader label={group.label} />
-                    {group.items.map((notification) => (
-                        <NotificationItem key={notification.id} notification={notification} />
+                    {group.items.map((notification, key) => (
+                        <NotificationItem key={`${notification.id}-${key}`} notification={notification} />
                     ))}
                 </div>
             ))}

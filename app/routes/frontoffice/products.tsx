@@ -8,7 +8,7 @@ import { ProductGrid } from "~/components/products/product-grid";
 import { useEffect, useRef, useState } from "react";
 import useDebounce from "~/hooks/use-debounce";
 import { LoadMoreButton } from "~/components/custom-components/load-more-button";
-import { ProductGridSkeleton } from "~/components/product/product-grid-skeleton";
+import { ProductGridSkeleton } from "~/components/products/product-grid-skeleton";
 import { getPreferencesFromLoaderFunctionArgs } from "~/lib/app-pathname";
 
 export const loader = async (args: LoaderFunctionArgs) => {

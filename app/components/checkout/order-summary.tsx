@@ -20,6 +20,8 @@ type OrderSummaryContainerProps = {
     discountAmount: number;
     total: number; // this is subtotal - discount (pre‑shipping)
     promotionDiscount: number;
+    loading: boolean,
+    onPlaceOrder: () => void;
 };
 
 export default function ({
@@ -28,7 +30,8 @@ export default function ({
     subtotal,
     discountAmount,
     total,
-    promotionDiscount
+    promotionDiscount,
+    ...props
 }: OrderSummaryContainerProps) {
 
     const { appliedCoupon, setAppliedCoupon, selectedShipping, setSelectedShipping } = useCheckoutStore();
@@ -154,6 +157,7 @@ export default function ({
             isLoadingShipping={isLoadingShipping}
             onSelectShipping={setSelectedShipping}
             formatMoney={formatMoney}
+            {...props}
         />
     );
 }
@@ -177,7 +181,9 @@ type OrderSummaryViewProps = {
     selectedShipping: { method: ShippingMethod; cost: number } | null;
     isLoadingShipping: boolean;
     onSelectShipping: (option: { method: ShippingMethod; cost: number }) => void;
-    formatMoney: ReturnType<typeof useFormatMoney>
+    formatMoney: ReturnType<typeof useFormatMoney>;
+    loading: boolean,
+    onPlaceOrder: () => void;
 };
 
 export function OrderSummary({
@@ -197,7 +203,9 @@ export function OrderSummary({
     selectedShipping,
     isLoadingShipping,
     onSelectShipping,
-    formatMoney
+    formatMoney,
+    loading,
+    onPlaceOrder
 }: OrderSummaryViewProps) {
     return (
         <Card className="sticky top-20 p-6 bg-muted/30 border-dashed space-y-6">
@@ -328,6 +336,15 @@ export function OrderSummary({
                         <span>-{formatMoney(promotionDiscount)}</span>
                     </div>
                 )}
+
+                <Button
+                    className="w-full"
+                    type="button"
+                    isLoading={loading}
+                    onClick={onPlaceOrder}
+                >
+                    {t('checkout:placeOrder')}
+                </Button>
             </div>
         </Card>
     );

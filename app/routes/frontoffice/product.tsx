@@ -91,7 +91,6 @@ export default function ProductPage() {
     const isSubmitting = fetcher.state !== "idle" || navigation.state !== "idle";
     const canSeeSpecial = user?.permissions?.can_use_special_prices ?? false;
 
-    // Toast notifications for add-to-cart
     useEffect(() => {
         if (fetcher.data && fetcher.state === "idle") {
             if (fetcher.data.success) {
@@ -103,7 +102,6 @@ export default function ProductPage() {
         }
     }, [fetcher.data, fetcher.state, t, refreshCart]);
 
-    // Initialize from URL or default to first variant
     useEffect(() => {
         if (!product) return;
 
@@ -124,7 +122,6 @@ export default function ProductPage() {
         if (initialVariant) {
             setSelectedVariant(initialVariant);
 
-            // Build selectedOptions from the variant's options
             const options: Record<number, number> = {};
             initialVariant.variant_options?.forEach((opt) => {
                 const group = product.variant_groups?.find((g) =>
@@ -141,17 +138,14 @@ export default function ProductPage() {
         }
     }, [product]);
 
-    // Update URL when selectedVariant changes (user selects a different variant)
     useEffect(() => {
         if (!selectedVariant) return;
 
         const url = new URL(location.href);
         url.searchParams.set("variant", String(selectedVariant.id));
         history.replaceState({}, "", url);
-
     }, [selectedVariant]);
 
-    // Use effective_price from variant if available, otherwise fallback to price
     const unitPrice = selectedVariant?.effective_price ?? selectedVariant?.price ?? 0;
     const subtotal = useMemo(() => unitPrice * count, [unitPrice, count]);
 
@@ -181,7 +175,7 @@ export default function ProductPage() {
     if (!product) return <NotFound />;
 
     return (
-        <div className="min-h-screen bg-white pb-20">
+        <div className="min-h-screen bg-background pb-20">
             <div className="container mx-auto px-4 md:px-6 lg:px-8 pt-10">
                 <div className="grid lg:grid-cols-2 gap-12 xl:gap-20">
                     {/* Left Column: Image Gallery */}
@@ -193,8 +187,8 @@ export default function ProductPage() {
                             placeholderImage={placeholderImage}
                             t={t}
                         />
-                        <div className="hidden lg:block space-y-4 pt-8 border-t">
-                            <h2 className="text-xl font-bold tracking-tight text-gray-900">
+                        <div className="hidden lg:block space-y-4 pt-8 border-t border-border">
+                            <h2 className="text-xl font-bold tracking-tight text-foreground">
                                 {t("aboutProduct")}
                             </h2>
                             <p className="text-muted-foreground leading-relaxed text-lg whitespace-pre-line">
@@ -212,7 +206,7 @@ export default function ProductPage() {
                                 unitPrice={unitPrice}
                                 originalPrice={selectedVariant?.price}
                                 stock={selectedVariant?.stock ?? 0}
-                                appliedPromotions={selectedVariant?.applied_promotions}  // <-- add this
+                                appliedPromotions={selectedVariant?.applied_promotions}
                                 t={t}
                                 formatMoney={formatMoney}
                             />

@@ -1,10 +1,10 @@
 import { Card } from "~/components/ui/card";
 import { ScrollArea } from "../ui/scroll-area";
-import { useCallback, type PropsWithChildren } from "react";
+import { useCallback } from "react";
 import CartSheetItem from "../cart/cart-sheet-item";
 import useCheckoutStore, { useRefreshCartItems } from "~/hooks/use-checkout-store";
 
-export function OrderReview({ children }: PropsWithChildren) {
+export function OrderReview() {
     const { cartItems, setCartItems } = useCheckoutStore();
     const refreshCartItems = useRefreshCartItems();
 
@@ -14,7 +14,7 @@ export function OrderReview({ children }: PropsWithChildren) {
 
     return (
         <Card className="p-4 space-y-4">
-            <ScrollArea className="h-[70vh] pr-2 mt-4">
+            <ScrollArea className="pr-2 mt-4">
                 <div className="flex flex-col gap-4">
                     {cartItems.map((item, key) => <CartSheetItem
                         refreshCart={refreshCartItems}
@@ -23,7 +23,6 @@ export function OrderReview({ children }: PropsWithChildren) {
                         item={item} />)}
                 </div>
             </ScrollArea>
-            {children}
         </Card>
     );
 }

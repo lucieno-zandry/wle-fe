@@ -20,7 +20,6 @@ export function ProductImageGallery({
   placeholderImage,
   t,
 }: Props) {
-  // Build image list: variant image first (if any), then product images, up to 4 total
   const images = useMemo(() => {
     const result: { url: string }[] = [];
 
@@ -52,13 +51,12 @@ export function ProductImageGallery({
 
   const selectedImage = images[selectedIndex];
 
-  // Check if current variant has a discount for this user
-  const hasDiscount = selectedVariant && 
+  const hasDiscount = selectedVariant &&
     (selectedVariant.effective_price ?? selectedVariant.price) < selectedVariant.price;
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-square overflow-hidden rounded-3xl bg-muted border border-gray-100">
+      <div className="relative aspect-square overflow-hidden rounded-3xl bg-muted border border-border">
         <AnimatePresence mode="wait">
           <motion.img
             key={selectedImage?.url}
@@ -89,7 +87,7 @@ export function ProductImageGallery({
                 "relative aspect-square overflow-hidden rounded-xl border transition-all duration-200",
                 selectedIndex === index
                   ? "border-primary ring-2 ring-primary/40"
-                  : "border-gray-200 hover:border-gray-400"
+                  : "border-border hover:border-foreground/40"
               )}
             >
               <img

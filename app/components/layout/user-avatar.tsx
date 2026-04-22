@@ -5,9 +5,11 @@ type AvatarProps = {
     avatarFallBack: string,
 }
 
-export default function ({ avatarFallBack, avatarImageUrl }: AvatarProps) {
-    return <Avatar>
-        <AvatarImage src={avatarImageUrl} />
-        <AvatarFallback>{avatarFallBack}</AvatarFallback>
-    </Avatar>
+export default function UserAvatar({ avatarFallBack, avatarImageUrl }: AvatarProps) {
+    return (
+        <Avatar>
+            <AvatarImage src={avatarImageUrl} />
+            <AvatarFallback>{avatarFallBack}</AvatarFallback>
+        </Avatar>
+    );
 }

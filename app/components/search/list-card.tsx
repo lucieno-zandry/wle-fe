@@ -51,8 +51,8 @@ export function ListCard({
 
                 {uniquePromotions.length > 0 && (
                     <div className="flex flex-wrap gap-1">
-                        {uniquePromotions.map((p) => (
-                            <PromotionPill key={p.id} promotion={p} />
+                        {uniquePromotions.map((p, key) => (
+                            <PromotionPill key={`${p.id}-${key}`} promotion={p} />
                         ))}
                     </div>
                 )}
@@ -60,7 +60,7 @@ export function ListCard({
                 <div className="flex items-center justify-between gap-4">
                     <div>
                         {defaultVariant ? (
-                            <PriceDisplay variant={defaultVariant} formatMoney={formatMoney}/>
+                            <PriceDisplay variant={defaultVariant} formatMoney={formatMoney} />
                         ) : (
                             <span className="text-sm text-muted-foreground">No variants</span>
                         )}

@@ -1,5 +1,4 @@
-// app/components/product/cart-actions.tsx
-import { useFetcher } from "react-router"; // keep import for type
+import { useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Loader2, ShoppingCart } from "lucide-react";
 
@@ -32,15 +31,14 @@ export function CartActions({
     const hasDiscount = selectedVariant && effectivePrice < selectedVariant.price;
 
     return (
-        <div className="p-6 rounded-[2.5rem] border border-gray-100 bg-gray-50/50 space-y-6">
+        <div className="p-6 rounded-[2.5rem] border border-border bg-card/50 space-y-6">
             <div className="space-y-3">
-                {/* Use fetcher.Form so the parent can listen to the result */}
                 <fetcher.Form method="post">
                     <input type="hidden" name="variant_id" value={selectedVariant?.id || ""} />
                     <input type="hidden" name="count" value={quantity} />
                     <Button
                         type="submit"
-                        className="w-full h-16 rounded-2xl text-lg font-bold shadow-lg bg-black text-white hover:bg-gray-800 transition-all"
+                        className="w-full h-16 rounded-2xl text-lg font-bold shadow-lg bg-foreground text-background hover:bg-foreground/90 transition-all"
                         disabled={!inStock || isSubmitting}
                     >
                         {isSubmitting ? (
@@ -60,7 +58,7 @@ export function CartActions({
                 <Button
                     variant="outline"
                     onClick={onBuyNow}
-                    className="w-full h-16 rounded-2xl text-lg font-bold border-2 border-gray-200 hover:border-black transition-all"
+                    className="w-full h-16 rounded-2xl text-lg font-bold border-2 border-border hover:border-foreground transition-all"
                     disabled={!inStock || isSubmitting}
                 >
                     {t("buyNow")}
@@ -68,7 +66,7 @@ export function CartActions({
             </div>
 
             {hasDiscount && (
-                <p className="text-center text-xs text-green-600 font-medium italic">
+                <p className="text-center text-xs text-green-600 dark:text-green-400 font-medium italic">
                     {t("partnerDiscount", {
                         amount: formatMoney(selectedVariant.price - effectivePrice),
                     })}

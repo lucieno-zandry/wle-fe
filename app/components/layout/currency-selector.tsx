@@ -10,7 +10,6 @@ import { defaultPreference, usePreferencesStore } from '~/hooks/use-user-prefere
 import { useUserStore } from '~/hooks/use-user';
 import { CircleDollarSign } from 'lucide-react';
 
-// List of supported currencies (ISO 4217 codes)
 const CURRENCIES = [
     { code: 'USD', label: 'US Dollar' },
     { code: 'EUR', label: 'Euro' },
@@ -25,7 +24,6 @@ const CURRENCIES = [
     { code: 'MGA', label: 'Ariary' }
 ];
 
-// Dumb presentational component
 interface CurrencySelectProps {
     value: string;
     onChange: (value: string) => void;
@@ -33,32 +31,34 @@ interface CurrencySelectProps {
 }
 
 const DropdownCurrencySelect = ({ value, onChange, disabled }: CurrencySelectProps) => {
-    return <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-2">
-            <CircleDollarSign className="h-4 w-4" />
-            <span>Currency</span>
+    return (
+        <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+                <CircleDollarSign className="h-4 w-4 text-muted-foreground" />
+                <span>Currency</span>
+            </div>
+            <Select
+                value={value || defaultPreference.currency}
+                onValueChange={onChange}
+                disabled={disabled}
+            >
+                <SelectTrigger className="w-[80px] h-8">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    {CURRENCIES.map((curr) => (
+                        <SelectItem key={curr.code} value={curr.code}>
+                            <span className="font-medium">{curr.code}</span>
+                            <span className="text-muted-foreground text-xs ml-1 hidden sm:inline">
+                                - {curr.label}
+                            </span>
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
         </div>
-        <Select
-            value={value || defaultPreference.currency}
-            onValueChange={onChange}
-            disabled={disabled}
-        >
-            <SelectTrigger className="w-[80px] h-8">
-                <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-                {CURRENCIES.map((curr) => (
-                    <SelectItem key={curr.code} value={curr.code}>
-                        <span className="font-medium">{curr.code}</span>
-                        <span className="text-muted-foreground text-xs ml-1 hidden sm:inline">
-                            - {curr.label}
-                        </span>
-                    </SelectItem>
-                ))}
-            </SelectContent>
-        </Select>
-    </div>
-}
+    );
+};
 
 const CurrencySelect = ({ value, onChange, disabled }: CurrencySelectProps) => (
     <Select value={value} onValueChange={onChange} disabled={disabled}>
@@ -81,7 +81,6 @@ const CurrencySelect = ({ value, onChange, disabled }: CurrencySelectProps) => (
     </Select>
 );
 
-// Smart component that chooses the right store based on auth status
 export const CurrencySelector = ({ type = 'navbar' }: { type?: 'navbar' | 'dropdown' }) => {
     const { authStatus } = useUserStore();
     const { preferences, updatePreferences } = usePreferencesStore();
@@ -96,7 +95,7 @@ export const CurrencySelector = ({ type = 'navbar' }: { type?: 'navbar' | 'dropd
         <Component
             value={preferences.currency}
             onChange={handleCurrencyChange}
-            disabled={authStatus === 'unknown'} // Disabled while loading for authenticated user
+            disabled={authStatus === 'unknown'}
         />
     );
 };

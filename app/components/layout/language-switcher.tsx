@@ -2,14 +2,12 @@ import { useParams, useNavigate, useLocation } from "react-router";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Globe } from "lucide-react";
 
-// Common languages list
 const LANGUAGES = [
     { code: "en", label: "English", native: "English" },
     { code: "fr", label: "Français", native: "Français" },
     { code: "es", label: "Español", native: "Español" },
 ];
 
-// Navbar presentational component
 const NavbarLanguageSelect = ({ value, onChange }: { value: string; onChange: (val: string) => void }) => (
     <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="w-[70px] sm:w-[100px] h-9 flex items-center gap-2 bg-transparent">
@@ -29,11 +27,10 @@ const NavbarLanguageSelect = ({ value, onChange }: { value: string; onChange: (v
     </Select>
 );
 
-// Dropdown presentational component
 const DropdownLanguageSelect = ({ value, onChange }: { value: string; onChange: (val: string) => void }) => (
     <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-2">
-            <Globe className="h-4 w-4" />
+            <Globe className="h-4 w-4 text-muted-foreground" />
             <span>Language</span>
         </div>
         <Select value={value} onValueChange={onChange}>
@@ -51,7 +48,6 @@ const DropdownLanguageSelect = ({ value, onChange }: { value: string; onChange: 
     </div>
 );
 
-// Smart component that handles routing
 export const LanguageSwitcher = ({ type = "navbar" }: { type?: "navbar" | "dropdown" }) => {
     const { lang } = useParams();
     const navigate = useNavigate();

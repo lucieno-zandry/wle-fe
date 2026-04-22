@@ -12,7 +12,7 @@ export default function() {
                             <Outlet />
                             <div className="bg-muted relative hidden md:block">
                                 <img
-                                    src="/placeholder.svg"
+                                    src="https://images.unsplash.com/photo-1575528941322-c74397246f19"
                                     alt="Image"
                                     className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
                                 />
@@ -27,4 +27,11 @@ export default function() {
             </div>
         </div>
     )
+}
+
+export function meta() {
+    return [
+        { title: "Log In or Register" },
+        { name: "description", content: "Use your email and password to authenticate." },
+    ];
 }

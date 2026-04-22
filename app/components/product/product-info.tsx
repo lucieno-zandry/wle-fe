@@ -1,4 +1,3 @@
-// app/components/product/product-info.tsx
 import { Badge } from "~/components/ui/badge";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
@@ -36,30 +35,30 @@ export function ProductInfo({
     return (
         <header className="space-y-4">
             {categoryTitle && (
-                <Badge variant="outline" className="rounded-full px-4 py-1 text-gray-500 border-gray-200">
+                <Badge variant="outline" className="rounded-full px-4 py-1 text-muted-foreground border-border">
                     {categoryTitle}
                 </Badge>
             )}
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
                 {title}
             </h1>
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-gray-900">
+                    <span className="text-3xl font-bold text-foreground">
                         {formatMoney(unitPrice)}
                     </span>
                     {hasDiscount && (
-                        <span className="text-xl text-gray-400 line-through">
+                        <span className="text-xl text-muted-foreground line-through">
                             {formatMoney(originalPrice)}
                         </span>
                     )}
                 </div>
-                <Separator orientation="vertical" className="h-6" />
+                <Separator orientation="vertical" className="h-6 hidden sm:block" />
                 <span
                     className={cn(
                         "text-sm font-semibold flex items-center gap-1.5",
-                        inStock ? "text-emerald-600" : "text-red-500"
+                        inStock ? "text-emerald-600 dark:text-emerald-400" : "text-rose-500 dark:text-rose-400"
                     )}
                 >
                     {inStock ? (
@@ -72,11 +71,10 @@ export function ProductInfo({
                 </span>
             </div>
 
-            {/* Promotion badges */}
             {appliedPromotions.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-2">
                     {hasDiscount && discountPercent > 0 && (
-                        <Badge className="bg-red-500 text-white border-none px-3 py-1 text-sm font-bold">
+                        <Badge className="bg-rose-500 text-white border-none px-3 py-1 text-sm font-bold">
                             -{discountPercent}%
                         </Badge>
                     )}

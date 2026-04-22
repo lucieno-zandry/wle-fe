@@ -11,33 +11,27 @@ export function RouteProgress() {
 
   useEffect(() => {
     if (navigation.state === "idle") {
-      // Finish
       setProgress(100);
       setTimeout(() => {
         setVisible(false);
         setProgress(0);
       }, 300);
     } else {
-      // Start loading
       setVisible(true);
       let value = 10;
-
       const interval = setInterval(() => {
         value = Math.min(value + Math.random() * 15, 90);
         setProgress(value);
       }, 150);
-
       return () => clearInterval(interval);
     }
   }, [navigation.state]);
+
   if (!visible) return null;
 
   return (
     <div className="fixed top-0 left-0 right-0 z-51">
-      <Progress
-        value={progress}
-        className="h-[3px] bg-transparent"
-      />
+      <Progress value={progress} className="h-[3px] bg-transparent" />
     </div>
   );
 }

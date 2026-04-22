@@ -1,6 +1,3 @@
-// ~/components/nav-search/nav-search.tsx
-// Smart component. Handles all logic; renders NavSearchView.
-
 import {
     useCallback,
     useEffect,
@@ -9,9 +6,6 @@ import {
 } from "react";
 import { useParams } from "react-router";
 import { getCategories, getProducts } from "~/api/http-requests";
-// ~/components/nav-search/nav-search-view.tsx
-// Pure presentational. No hooks, no API calls.
-
 import { Search, X, ArrowRight, Tag, Package, Clock, Loader2, TrendingUp } from "lucide-react";
 import { cn } from "~/lib/utils";
 import appNavigate from "~/lib/app-navigate";
@@ -22,7 +16,7 @@ export interface NavSearchViewProps {
     loading: boolean;
     suggestions: SearchSuggestion[];
     recentSearches: string[];
-    activeIndex: number;         // keyboard-highlighted index (-1 = none)
+    activeIndex: number;
     containerRef: React.RefObject<HTMLDivElement | null>;
     inputRef: React.RefObject<HTMLInputElement | null>;
     onChange: (v: string) => void;
@@ -35,8 +29,6 @@ export interface NavSearchViewProps {
     onClear: () => void;
 }
 
-// ─── Individual suggestion row ─────────────────────────────────────────────
-
 function SuggestionRow({
     suggestion,
     active,
@@ -48,17 +40,16 @@ function SuggestionRow({
 }) {
     return (
         <button
-            onMouseDown={(e) => { e.preventDefault(); onSelect(); }} // preventDefault keeps input focused
+            onMouseDown={(e) => { e.preventDefault(); onSelect(); }}
             className={cn(
                 "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
                 active ? "bg-accent text-accent-foreground" : "hover:bg-accent/60"
             )}
         >
-            {/* Icon */}
             <span className={cn(
                 "flex size-7 shrink-0 items-center justify-center rounded-md text-xs",
                 suggestion.type === "category"
-                    ? "bg-violet-500/10 text-violet-500"
+                    ? "bg-violet-500/10 text-violet-500 dark:bg-violet-500/20 dark:text-violet-400"
                     : "bg-primary/10 text-primary"
             )}>
                 {suggestion.type === "category"
@@ -69,7 +60,6 @@ function SuggestionRow({
                 }
             </span>
 
-            {/* Text */}
             <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-foreground">
                     {suggestion.label}
@@ -81,11 +71,10 @@ function SuggestionRow({
                 )}
             </div>
 
-            {/* Type pill */}
             <span className={cn(
                 "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium",
                 suggestion.type === "category"
-                    ? "bg-violet-500/10 text-violet-600 dark:text-violet-400"
+                    ? "bg-violet-500/10 text-violet-600 dark:text-violet-400 dark:bg-violet-500/20"
                     : "bg-primary/10 text-primary"
             )}>
                 {suggestion.type === "category" ? "Category" : "Product"}
@@ -94,8 +83,6 @@ function SuggestionRow({
     );
 }
 
-// ─── Section header ────────────────────────────────────────────────────────
-
 function SectionLabel({ label }: { label: string }) {
     return (
         <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -103,8 +90,6 @@ function SectionLabel({ label }: { label: string }) {
         </p>
     );
 }
-
-// ─── Main view ─────────────────────────────────────────────────────────────
 
 export function NavSearchView({
     value,
@@ -130,15 +115,8 @@ export function NavSearchView({
     const showRecents = !value && recentSearches.length > 0;
     const showPanel = open && (loading || hasAnySuggestions || showRecents || value.length >= 2);
 
-    // Build a flat list for keyboard navigation indices
-    // Order: categories first, then products (matches render order)
-    const flatList: SearchSuggestion[] = [...categorySuggestions, ...productSuggestions];
-    // recentSearches are rendered separately; they come AFTER suggestions in the panel
-    // For simplicity, we only keyboard-navigate suggestions (not recents)
-
     return (
         <div ref={containerRef} className="relative w-full">
-            {/* ── Input row ──────────────────────────────────────────────── */}
             <div className={cn(
                 "flex items-center gap-2 rounded-xl border bg-background/60 px-3 shadow-sm backdrop-blur-sm transition-all duration-200",
                 open
@@ -162,7 +140,6 @@ export function NavSearchView({
                     spellCheck={false}
                 />
 
-                {/* Loading spinner / clear */}
                 {loading && (
                     <Loader2 className="size-3.5 shrink-0 animate-spin text-muted-foreground" />
                 )}
@@ -175,7 +152,6 @@ export function NavSearchView({
                     </button>
                 )}
 
-                {/* Search button */}
                 <button
                     onMouseDown={(e) => { e.preventDefault(); onSubmit(); }}
                     className={cn(
@@ -190,14 +166,11 @@ export function NavSearchView({
                 </button>
             </div>
 
-            {/* ── Dropdown panel ─────────────────────────────────────────── */}
             {showPanel && (
                 <div className={cn(
                     "absolute left-0 right-0 top-[calc(100%+8px)] z-50 overflow-hidden rounded-xl border border-border/60 bg-popover shadow-xl",
                     "animate-in fade-in-0 slide-in-from-top-2 duration-150"
                 )}>
-
-                    {/* Loading skeleton */}
                     {loading && suggestions.length === 0 && (
                         <div className="space-y-1 p-3">
                             {[1, 2, 3].map((i) => (
@@ -212,7 +185,6 @@ export function NavSearchView({
                         </div>
                     )}
 
-                    {/* Suggestions */}
                     {!loading && hasAnySuggestions && (
                         <div className="p-2">
                             {categorySuggestions.length > 0 && (
@@ -244,7 +216,6 @@ export function NavSearchView({
                         </div>
                     )}
 
-                    {/* No results */}
                     {!loading && value.length >= 2 && !hasAnySuggestions && (
                         <div className="flex flex-col items-center gap-1 px-4 py-8 text-center">
                             <Package className="size-8 text-muted-foreground/40" />
@@ -257,7 +228,6 @@ export function NavSearchView({
                         </div>
                     )}
 
-                    {/* Recent searches */}
                     {showRecents && (
                         <>
                             {hasAnySuggestions && <div className="mx-3 my-1 border-t border-border/40" />}
@@ -287,7 +257,6 @@ export function NavSearchView({
                         </>
                     )}
 
-                    {/* Footer hint */}
                     {(hasAnySuggestions || showRecents) && (
                         <div className="border-t border-border/40 px-4 py-2">
                             <p className="text-[10px] text-muted-foreground">
@@ -306,20 +275,15 @@ export function NavSearchView({
     );
 }
 
-
-// ─── Types ─────────────────────────────────────────────────────────────────
-
 export interface SearchSuggestion {
-    id: string;             // unique key
+    id: string;
     type: "product" | "category";
     label: string;
-    sublabel?: string;      // e.g. category name for products, or price
-    slug?: string;          // for product navigation
-    image?: string;         // product thumbnail
-    categoryId?: number;    // for category navigation
+    sublabel?: string;
+    slug?: string;
+    image?: string;
+    categoryId?: number;
 }
-
-// ─── Local storage helpers ─────────────────────────────────────────────────
 
 const RECENTS_KEY = "nav_search_recents";
 const MAX_RECENTS = 5;
@@ -343,8 +307,6 @@ function addRecent(term: string, current: string[]): string[] {
     return deduped.slice(0, MAX_RECENTS);
 }
 
-// ─── Smart component ───────────────────────────────────────────────────────
-
 export function NavSearch() {
     const { lang } = useParams<{ lang: string }>();
 
@@ -360,7 +322,6 @@ export function NavSearch() {
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const abortRef = useRef<AbortController | null>(null);
 
-    // ── Fetch suggestions ───────────────────────────────────────────────────
     const fetchSuggestions = useCallback(async (query: string) => {
         if (query.length < 2) {
             setSuggestions([]);
@@ -368,14 +329,12 @@ export function NavSearch() {
             return;
         }
 
-        // Cancel any in-flight request
         abortRef.current?.abort();
         abortRef.current = new AbortController();
 
         setLoading(true);
 
         try {
-            // Run products search + categories in parallel
             const [productsRes, categoriesRes] = await Promise.all([
                 getProducts({ search: query }),
                 getCategories(),
@@ -383,7 +342,6 @@ export function NavSearch() {
 
             const results: SearchSuggestion[] = [];
 
-            // Categories that match the query
             if (categoriesRes.data?.categories) {
                 const lq = query.toLowerCase();
                 categoriesRes.data.categories
@@ -399,7 +357,6 @@ export function NavSearch() {
                     });
             }
 
-            // Products
             if (productsRes.data?.data) {
                 productsRes.data.data.slice(0, 6).forEach((p) => {
                     const defaultVariant = p.variants?.[0];
@@ -416,13 +373,12 @@ export function NavSearch() {
 
             setSuggestions(results);
         } catch {
-            // Ignore abort errors
+            // ignore
         } finally {
             setLoading(false);
         }
     }, []);
 
-    // ── Debounce input ──────────────────────────────────────────────────────
     const handleChange = useCallback((v: string) => {
         setValue(v);
         setActiveIndex(-1);
@@ -441,7 +397,6 @@ export function NavSearch() {
         }, 500);
     }, [fetchSuggestions]);
 
-    // ── Navigate to search page ─────────────────────────────────────────────
     const goToSearch = useCallback((keyword: string) => {
         const trimmed = keyword.trim();
         if (!trimmed) return;
@@ -458,8 +413,7 @@ export function NavSearch() {
     }, [lang, recentSearches]);
 
     const handleSubmit = useCallback(() => {
-        // If keyboard-navigating to a suggestion, select it
-        const flatList = suggestions; // already sorted: categories first, then products
+        const flatList = suggestions;
         if (activeIndex >= 0 && activeIndex < flatList.length) {
             handleSelectSuggestion(flatList[activeIndex]);
             return;
@@ -467,16 +421,13 @@ export function NavSearch() {
         goToSearch(value);
     }, [value, activeIndex, suggestions, goToSearch]);
 
-    // ── Select a suggestion ─────────────────────────────────────────────────
     const handleSelectSuggestion = useCallback((s: SearchSuggestion) => {
         if (s.type === "product" && s.slug) {
-            // Navigate directly to product page
             setOpen(false);
             setValue("");
             setSuggestions([]);
             appNavigate(`/product/${s.slug}`);
         } else if (s.type === "category" && s.categoryId !== undefined) {
-            // Search with category pre-applied
             setOpen(false);
             setValue("");
             setSuggestions([]);
@@ -502,7 +453,6 @@ export function NavSearch() {
         inputRef.current?.focus();
     }, []);
 
-    // ── Keyboard navigation ─────────────────────────────────────────────────
     const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
         const total = suggestions.length;
 
@@ -521,7 +471,6 @@ export function NavSearch() {
         }
     }, [suggestions.length, handleSubmit]);
 
-    // ── Click outside to close ──────────────────────────────────────────────
     useEffect(() => {
         const handler = (e: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(e.target as Node)) {

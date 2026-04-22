@@ -23,24 +23,23 @@ type NavbarProps = {
 
 export function NavbarView({ isAuthenticated, isUnAuthenticated, t, navbarSearchVisible, appPathname }: NavbarProps) {
     return (
-        <header className="flex flex-wrap justify-between items-center px-4 sm:px-8 py-3 shadow-sm bg-white/95 backdrop-blur-sm sticky top-0 z-50 gap-4 border-b border-gray-100">
+        <header className="flex flex-wrap justify-between items-center px-4 sm:px-8 py-3 shadow-sm bg-background/95 backdrop-blur-sm sticky top-0 z-50 gap-4 border-b border-border">
             <div className="flex items-center gap-4 md:gap-8">
                 <h1>
-                    <Link to={appPathname('/')} className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 transition-colors hover:text-gray-700">
+                    <Link to={appPathname('/')} className="text-xl sm:text-2xl font-bold tracking-tight text-foreground transition-colors hover:text-foreground/80">
                         ShopEase
                     </Link>
                 </h1>
                 <nav className="space-x-6 hidden lg:block">
                     <Link
                         to={appPathname('/products')}
-                        className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+                        className="text-sm font-medium text-foreground/70 transition-colors hover:text-foreground"
                     >
                         {t('common:products')}
                     </Link>
                 </nav>
             </div>
 
-            {/* Middle Search - Hidden on small mobile to avoid layout breaking, expanded on larger screens */}
             {
                 navbarSearchVisible &&
                 <div className="flex-1 max-w-md hidden md:block">
@@ -69,7 +68,6 @@ export function NavbarView({ isAuthenticated, isUnAuthenticated, t, navbarSearch
                 )}
             </div>
 
-            {/* Mobile Search Bar - Shows up as a full-width block under the main header on small screens if needed */}
             {navbarSearchVisible &&
                 <div className="w-full block md:hidden mt-2">
                     <NavSearch />

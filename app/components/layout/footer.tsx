@@ -1,7 +1,7 @@
-export default function () {
+export default function Footer() {
     return (
-        < footer className="bg-gray-900 text-gray-400 py-10 text-center" >
+        <footer className="border-t bg-muted/50 text-muted-foreground dark:bg-muted/30 py-10 text-center">
             <p>© {new Date().getFullYear()} ShopEase. All rights reserved.</p>
-        </footer >
-    )
+        </footer>
+    );
 }
