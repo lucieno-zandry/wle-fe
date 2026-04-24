@@ -632,3 +632,10 @@ type FaqContent = {
     eyebrow?: string;
     items: FaqItem[];
 };
+
+type FeaturedProductsContent = {
+    eyebrow?: string;
+    product_ids: number[];
+    
+    products?: Product[];
+};

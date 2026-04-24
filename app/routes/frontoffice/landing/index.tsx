@@ -36,7 +36,6 @@ import { toast } from "sonner";
 export const loader = async (args: LoaderFunctionArgs) => {
     const { request } = args;
     const { currency } = getPreferencesFromLoaderFunctionArgs(args);
-    let featuredProducts: Product[] = [];
     let landingBlocks: LandingBlock[] = [];
 
     try {
@@ -49,16 +48,9 @@ export const loader = async (args: LoaderFunctionArgs) => {
         // Fetch the top 4 featured/bestseller products for the server render.
         // Add `featured=true` or `sort=best_selling` to your getProducts call
         // once that query param is supported by the Laravel API.
-        const [featuredProductsResponse, landingBlocksResponse] = await Promise.all([
-            getProducts(
-                { page: 1, limit: 4 },
-                { headers }
-            ),
+        const [landingBlocksResponse] = await Promise.all([
             getLandingBlocksPublic({ headers })
         ]);
-
-        if (featuredProductsResponse.data?.data)
-            featuredProducts = featuredProductsResponse.data.data;
 
         if (landingBlocksResponse.data)
             landingBlocks = landingBlocksResponse.data;
@@ -68,19 +60,18 @@ export const loader = async (args: LoaderFunctionArgs) => {
     }
 
     return {
-        featuredProducts,
         landingBlocks
     }
 };
 
 // ─── Page component ───────────────────────────────────────────────────────────
 export default function LandingPage() {
-    const { featuredProducts, error, landingBlocks } = useLoaderData<typeof loader>()
+    const { error, landingBlocks } = useLoaderData<typeof loader>()
 
     useEffect(() => {
         if (error && error instanceof HttpException)
             toast.error(error.data?.message || 'Something went wrong!')
-    }, []);
+    }, [error]);
 
     return (
         <>
@@ -108,7 +99,10 @@ export default function LandingPage() {
                                 return <Comparison block={block as LandingBlock<ComparisonContent>} key={key} />
 
                             case 'faq':
-                                return <Faq block={block as LandingBlock<FaqContent>} />
+                                return <Faq block={block as LandingBlock<FaqContent>} key={key} />;
+
+                            case 'featured_products':
+                                return <FeaturedProducts block={block as LandingBlock<FeaturedProductsContent>} key={key} />
 
                             default:
                                 return null;
@@ -116,15 +110,12 @@ export default function LandingPage() {
                     })
                 }
 
-                {/* 4. Bestseller product grid — SSR data from loader, reuses ProductGrid */}
-                <FeaturedProducts initialProducts={featuredProducts} />
-
                 {/* 5. Brand origin story with SAVA region image */}
                 <Story />
 
                 {/* 7. Verified customer testimonials */}
                 <Testimonials />
-                
+
                 {/* 9. Bottom conversion CTA */}
                 <CtaBanner />
             </main>
