@@ -607,3 +607,17 @@ type CollectionContent = {
   items: CollectionContentItem[],
   eyebrow?: string,
 }
+
+type ComparisonRow = {
+  id: string;               // unique ID for admin editing
+  criteria: string;
+  ours: string | boolean;
+  theirs: string | boolean;
+};
+
+type ComparisonContent = {
+  eyebrow?: string;
+  ourLabel?: string;
+  theirLabel?: string;
+  rows: ComparisonRow[];
+};

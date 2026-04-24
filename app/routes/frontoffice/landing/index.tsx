@@ -104,6 +104,9 @@ export default function LandingPage() {
                             case 'trust_bar':
                                 return <TrustBar block={block} key={key} />
 
+                            case 'comparison':
+                                return <Comparison block={block as LandingBlock<ComparisonContent>} key={key} />
+
                             default:
                                 return null;
                         }
@@ -115,9 +118,6 @@ export default function LandingPage() {
 
                 {/* 5. Brand origin story with SAVA region image */}
                 <Story />
-
-                {/* 6. "Le Goût du Vrai" comparison table */}
-                <Comparison />
 
                 {/* 7. Verified customer testimonials */}
                 <Testimonials />
