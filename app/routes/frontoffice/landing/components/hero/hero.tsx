@@ -24,6 +24,9 @@ interface HeroViewProps {
     onScrollDown: () => void;
     sentinelRef: RefObject<HTMLDivElement | null>;
     formatMoney: typeof formatMoney;
+    eyebrow: string;
+    headlineSuffix: string;
+    trustLine: string;
 }
 
 export function HeroView({
@@ -36,6 +39,10 @@ export function HeroView({
     onAddToCart,
     onScrollDown,
     sentinelRef,
+    eyebrow,
+    formatMoney,
+    headlineSuffix,
+    trustLine
 }: HeroViewProps) {
     const selected = variants.find((v) => v.id === Number(selectedVariantId)) ?? variants[0];
 
@@ -54,11 +61,11 @@ export function HeroView({
             {/* Content */}
             <div className="hero__content">
                 <p className="hero__eyebrow">
-                    <span className="hero__eyebrow-dot" />
-                    Directly from SAVA, Madagascar
+                    <span className="hero__eyebrow-dot" />{eyebrow}
                 </p>
 
-                <h1 className="hero__headline">{headline} <em>Uncompromised.</em></h1>
+                <h1 className="hero__headline">{headline} <em>{headlineSuffix}</em></h1>
+
                 <p className="hero__subline">{subline}</p>
 
                 {/* Variant selector */}
@@ -108,9 +115,7 @@ export function HeroView({
                     </Button>
                 </div>
 
-                <p className="hero__trust-line">
-                    🔒 Secure payment &nbsp;·&nbsp; Free returns &nbsp;·&nbsp; Colissimo tracked
-                </p>
+                <p className="hero__trust-line">{trustLine}</p>
             </div>
 
             <div ref={sentinelRef} className="hero__sentinel" aria-hidden />
@@ -148,6 +153,11 @@ export function Hero({ block }: { block: LandingBlock }) {
     const product = block.landing_able;
     const variants = product.variants ?? [];
 
+    const content = block.content ?? {};
+    const eyebrow = content.eyebrow ?? "Directly from SAVA, Madagascar";
+    const headlineSuffix = content.headlineSuffix ?? "Uncompromised.";
+    const trustLine = content.trustLine ?? "🔒 Secure payment · Free returns · Colissimo tracked";
+
     // Variants already include `applied_promotions` and `effective_price` from backend
     return (
         <HeroView
@@ -161,6 +171,9 @@ export function Hero({ block }: { block: LandingBlock }) {
             onScrollDown={handleScrollDown}
             sentinelRef={sentinelRef}
             formatMoney={formatMoney}
+            eyebrow={eyebrow}
+            headlineSuffix={headlineSuffix}
+            trustLine={trustLine}
         />
     );
 }

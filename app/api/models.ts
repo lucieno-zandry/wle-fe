@@ -569,12 +569,12 @@ type LandingAble =
   | AppImage
   | null;
 
-interface LandingBlock {
+type LandingBlock<Content = unknown> = {
   id: number;
   block_type: 'hero' | 'collection_grid' | 'featured_products' | 'story' | 'comparison' | 'testimonials' | 'faq' | 'cta_banner' | 'trust_bar';
   title: string | null;
   subtitle: string | null;
-  content: Record<string, any> | null;   // JSONB content
+  content: (Record<string, any> & Content) | null;   // JSONB content
   landing_able_type: string | null;      // e.g., 'App\\Models\\Product'
   landing_able_id: number | null;
   image_id: number | null;
@@ -586,4 +586,24 @@ interface LandingBlock {
   // Relations (loaded when requested)
   landing_able?: LandingAble;
   image?: AppImage | null;
+}
+
+type CategoryBlock = Category & {
+  cheapest_variant?: Variant;
+}
+
+type CollectionContentItem = {
+  id: string;          // client-side temporary ID
+  category_id: number;
+  image_id?: number | null;
+  subtitle?: string;
+  display_order: number;
+
+  category?: CategoryBlock;
+  image?: AppImage
+};
+
+type CollectionContent = {
+  items: CollectionContentItem[],
+  eyebrow?: string,
 }

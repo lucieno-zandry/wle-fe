@@ -4,7 +4,6 @@
 // These helpers determine which model is actually used in the polymorphic
 // `landing_able` relation, allowing the UI to render contextual info.
 
-import type { CategoryBlock } from "../types/landing-types";
 
 export function isProduct(able: LandingAble): able is Product {
     if (!able) return false;

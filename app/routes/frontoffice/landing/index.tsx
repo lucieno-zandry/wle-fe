@@ -13,13 +13,12 @@ import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { getLandingBlocksPublic, getProducts } from "~/api/http-requests";
 import { HttpException, type PaginatedResponse } from "~/api/app-fetch";
-import handleHttpExceptionError from "~/lib/handle-http-exception-error";
 import { getPreferencesFromLoaderFunctionArgs } from "~/lib/app-pathname";
 
 // ─── Section components ────────────────────────────────────────────────────────
 import { Hero } from "./components/hero/hero";
 import { StickyCTABar } from "./components/sticky-cta-bar";
-import { TrustBar } from "./components/trust-bar";
+import { TrustBar } from "./components/trust-bar/trust-bar";
 import { Collections } from "./components/collections/collections";
 import { FeaturedProducts } from "./components/featured-product";
 import { Story } from "./components/story";
@@ -83,16 +82,6 @@ export default function LandingPage() {
             toast.error(error.data?.message || 'Something went wrong!')
     }, []);
 
-    const hero = useMemo(() => {
-        const block = landingBlocks?.find(block => block.block_type === 'hero');
-        if (block) return <Hero block={block} />
-    }, [landingBlocks]);
-
-    const collections = useMemo(() => {
-        const blocks = landingBlocks?.filter(block => block.block_type === 'collection_grid');
-        if (blocks) return <Collections blocks={blocks} />
-    }, [landingBlocks]);
-
     return (
         <>
             {/*
@@ -103,14 +92,23 @@ export default function LandingPage() {
             <StickyCTABar />
 
             <main className="landing">
-                {/* 1. Full-bleed hero with variant selector */}
-                {hero}
+                {
+                    landingBlocks?.map((block, key) => {
+                        switch (block.block_type) {
+                            case 'hero':
+                                return <Hero block={block} key={key} />
 
-                {/* 2. Four trust pillars (sourcing, quality, shipping, payment) */}
-                <TrustBar />
+                            case 'collection_grid':
+                                return <Collections block={block as LandingBlock<CollectionContent>} key={key} />
 
-                {/* 3. Three category cards (Vanilla, Pepper, Wild Spices) */}
-                {collections}
+                            case 'trust_bar':
+                                return <TrustBar block={block} key={key} />
+
+                            default:
+                                return null;
+                        }
+                    })
+                }
 
                 {/* 4. Bestseller product grid — SSR data from loader, reuses ProductGrid */}
                 <FeaturedProducts initialProducts={featuredProducts} />

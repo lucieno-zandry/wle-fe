@@ -11,8 +11,8 @@ type CollectionItemViewProps = {
     id: number;                 // category id
     slug: string;              // category slug for the link
     title: string;             // category title
-    subtitle: string | null;   // from block.subtitle
-    imageUrl: string | null;   // from block.image.url
+    subtitle: string | null;   // from item.subtitle
+    imageUrl: string | null;   // from item.image.url
     startingPrice: number;     // cheapest variant's effective price (or price)
     index: number;             // animation delay index
     formatMoney: (value: number) => string;
@@ -70,7 +70,7 @@ export function CollectionItemView({
 
                     <span className="collection-card__cta">
                         Shop{" "}
-                        <ArrowRight className="w-3.5 h-3.5 ml-1 inline-block" />
+                        <ArrowRight className="w-3.5 h-3.5 ml-1 inline-item" />
                     </span>
                 </div>
             </div>
@@ -82,29 +82,28 @@ export function CollectionItemView({
 // Smart Component – connects to the actual LandingBlock
 // ----------------------------------------------------------------------------
 type CollectionItemProps = {
-    block: LandingBlock;   // must be block_type = 'collection_grid'
+    item: CollectionContentItem  // must be item_type = 'collection_grid'
     index: number;
 };
 
-export function CollectionItem({ block, index }: CollectionItemProps) {
+export function CollectionItem({ item, index }: CollectionItemProps) {
     const formatMoney = useFormatMoney();
     const appPathname = useAppPathname();
 
-    // Validate block type and relation
-    if (block.block_type !== 'collection_grid') return null;
-    if (!block.landing_able || !isCategory(block.landing_able)) return null;
+    const category = item.category;
 
-    const category = block.landing_able;
+    if (!category) return null;
+
     const cheapestVariant = category.cheapest_variant;
 
-    // Compute starting price (if no variant, fallback to 0)
     let startingPrice = 0;
+
     if (cheapestVariant) {
         startingPrice = cheapestVariant.effective_price ?? cheapestVariant.price;
     }
 
-    // Subtitle: use block.subtitle, otherwise fallback to a generic text
-    const subtitle = block.subtitle ?? `Discover our ${category.title} collection`;
+    // Subtitle: use item.subtitle, otherwise fallback to a generic text
+    const subtitle = item.subtitle ?? `Discover our ${category?.title} collection`;
 
     return (
         <CollectionItemView
@@ -112,7 +111,7 @@ export function CollectionItem({ block, index }: CollectionItemProps) {
             slug={String(category.id)} // if no slug, use id as fallback
             title={category.title}
             subtitle={subtitle}
-            imageUrl={block.image?.url ?? null}
+            imageUrl={item.image?.url ?? null}
             startingPrice={startingPrice}
             index={index}
             formatMoney={formatMoney}

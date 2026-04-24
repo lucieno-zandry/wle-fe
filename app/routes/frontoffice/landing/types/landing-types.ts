@@ -47,7 +47,3 @@ export interface StorySection {
     image: string; // URL placeholder — SAVA region photo
     imageCaption: string;
 }
-
-export type CategoryBlock = Category & {
-    cheapest_variant?: Variant;
-}
