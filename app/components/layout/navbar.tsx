@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router"
+import { Link, useLoaderData, useLocation } from "react-router"
 import { useUserStore } from "~/hooks/use-user"
 import { Button } from "../ui/button";
 import UserDropdown from "./user-dropdown";
@@ -12,22 +12,24 @@ import { ThemeSelector } from "./theme-selector";
 import { useMemo } from "react";
 import { NavSearch } from "./nav-search";
 import { NotificationsPopover } from "../notifications/notifications-popover";
+import type { loader } from "~/routes/frontoffice/layout";
 
 type NavbarProps = {
     isUnAuthenticated: boolean,
     isAuthenticated: boolean,
     t: TFunction;
     navbarSearchVisible: boolean,
-    appPathname: typeof appPathname
+    appPathname: typeof appPathname,
+    name: string,
 }
 
-export function NavbarView({ isAuthenticated, isUnAuthenticated, t, navbarSearchVisible, appPathname }: NavbarProps) {
+export function NavbarView({ isAuthenticated, isUnAuthenticated, t, navbarSearchVisible, appPathname, name }: NavbarProps) {
     return (
         <header className="flex flex-wrap justify-between items-center px-4 sm:px-8 py-3 shadow-sm bg-background/95 backdrop-blur-sm sticky top-0 z-50 gap-4 border-b border-border">
             <div className="flex items-center gap-4 md:gap-8">
                 <h1>
                     <Link to={appPathname('/')} className="text-xl sm:text-2xl font-bold tracking-tight text-foreground transition-colors hover:text-foreground/80">
-                        Alofo
+                        {name}
                     </Link>
                 </h1>
                 <nav className="space-x-6 hidden lg:block">
@@ -77,10 +79,14 @@ export function NavbarView({ isAuthenticated, isUnAuthenticated, t, navbarSearch
 }
 
 export default function Navbar() {
+    const { settings } = useLoaderData<typeof loader>();
+
     const { authStatus } = useUserStore();
     const { t } = useTranslation();
     const { pathname } = useLocation();
     const appPathname = useAppPathname();
+
+    const name = settings.app_name || 'Alofo';
 
     const isUnAuthenticated = useMemo(() => authStatus === "unauthenticated", [authStatus])
     const isAuthenticated = useMemo(() => authStatus === "authenticated", [authStatus])
@@ -92,5 +98,6 @@ export default function Navbar() {
         isUnAuthenticated={isUnAuthenticated}
         navbarSearchVisible={navbarSearchVisible}
         appPathname={appPathname}
+        name={name}
     />
 }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { Outlet, useNavigate, type LoaderFunctionArgs } from "react-router";
+import { Outlet, useLoaderData, useNavigate, type LoaderFunctionArgs } from "react-router";
 import { HttpException } from "~/api/app-fetch";
-import { getAuthUser } from "~/api/http-requests";
+import { getAuthUser, getSettings } from "~/api/http-requests";
 import Footer from "~/components/layout/footer";
 import Navbar from "~/components/layout/navbar";
 import { useRefreshCart } from "~/hooks/use-cart";
@@ -9,6 +9,23 @@ import { useUserStore } from "~/hooks/use-user";
 import handleHttpExceptionError from "~/lib/handle-http-exception-error";
 import { ClientCodeDialog } from "../../components/layout/client-code-dialog";
 import { usePreferencesStore } from "~/hooks/use-user-preference-store";
+import { toast } from "sonner";
+import defaultSettings from "~/lib/default-settings";
+import { useSettings } from "~/hooks/use-settings";
+
+export async function loader() {
+    try {
+        const response = await getSettings();
+
+        return {
+            settings: response.data!,
+        }
+    } catch (e) {
+        return {
+            settings: defaultSettings
+        }
+    }
+}
 
 export default function () {
     const { setUser, clearUser } = useUserStore();

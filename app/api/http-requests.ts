@@ -251,3 +251,7 @@ export function logout(options?: RequestInit) {
 export function getLandingBlocksPublic(init: RequestInit) {
     return appFetch.get<LandingBlock[]>('/landing-blocks/public', init);
 }
+
+export function getSettings() {
+    return appFetch.get<Record<string, any>>('/settings/public');
+}
