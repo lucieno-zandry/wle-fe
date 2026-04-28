@@ -2,6 +2,7 @@ import { serializeProductParams, type ProductQueryParams } from "~/lib/serialize
 import appFetch, { type PaginatedResponse } from "./app-fetch";
 import buildWhereParam, { type WhereConditions, type WhereInConditions } from "~/lib/build-where-param";
 import type { NotificationsQueryParams } from "~/components/notifications/types/notifications-query-params";
+import type { LandingBlocksRequestParams } from "~/routes/frontoffice/landing/types/landing-blocks-request-types";
 
 export function getEmailInfo(email: string) {
     return appFetch.post<{ is_taken: boolean }>('/auth/email/info', { email });
@@ -57,7 +58,7 @@ export function getProducts(params?: ProductQueryParams, options: RequestInit = 
 
 
 export function getProduct(slug: string, options: RequestInit = {}) {
-    return appFetch.get<{ product: Product }>(`/product/get/${slug}?with=cart_items.order,variant_groups.variant_options,variants.variant_options,variants.image,variants.promotions,images`, { ...options });
+    return appFetch.get<{ product: Product }>(`/product/get/${slug}?with=cart_items.order,variant_groups.variant_options,variants.variant_options,variants.image,variants.promotions,images,category`, { ...options });
 }
 
 export function getPriceRange() {
@@ -123,6 +124,10 @@ export function updateAddress(id: number, payload: FormData) {
 
 export function removeAddresses(ids: number[]) {
     return appFetch.delete<{ deleted: number }>(`/address/delete?address_ids=${ids.join(',')}`);
+}
+
+export function checkout(cart_item_ids: CartItem['id'][]) {
+    return appFetch.post('/order/checkout', cart_item_ids);
 }
 
 export function createOrder(payload: { cart_item_ids: number[], address_id: number, coupon_id?: number, shipping_method_id: number }) {
@@ -236,8 +241,16 @@ export function updateUserPreferences(data: Partial<UserPreference>) {
     return appFetch.put<UserPreference>('/user/preferences', data);
 }
 
-export function fetchAvailableShippingMethods(data: { address_id: number, cart_items: ({ weight: number, quantity: number, price: number })[] }) {
-    return appFetch.post<{ method: ShippingMethod, cost: number }[]>('/shipping-methods/available', data);
+export function fetchAvailableShippingMethods(data: {
+    address_id?: number,
+    cart_items: ({ weight: number, quantity: number, price: number })[],
+}) {
+    return appFetch.post<{
+        available: {
+            method: ShippingMethod, cost: number
+        }[],
+        location: { country: string, city: string }
+    }>('/shipping-methods/available', data);
 }
 
 export function logout(options?: RequestInit) {
@@ -248,7 +261,7 @@ export function logout(options?: RequestInit) {
  * Public endpoint – returns all active landing blocks ordered by display_order.
  * No authentication required.
  */
-export function getLandingBlocksPublic(init: RequestInit) {
+export function getLandingBlocksPublic(init: RequestInit & { params?: LandingBlocksRequestParams }) {
     return appFetch.get<LandingBlock[]>('/landing-blocks/public', init);
 }
 

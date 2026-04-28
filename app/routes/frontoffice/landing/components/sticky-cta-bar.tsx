@@ -1,7 +1,7 @@
 import { ShoppingCart, X } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { useLandingUIStore } from "../stores/use-landing-ui-store";
-import { useAddToCart } from "~/hooks/use-add-to-cart";
+import { useAddToCart } from "~/routes/frontoffice/product-detail/hooks/use-add-to-cart";
 import { useFormatMoney } from "~/lib/format-money";
 
 interface StickyCTABarViewProps {

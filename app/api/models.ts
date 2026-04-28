@@ -102,7 +102,7 @@ type Variant = {
   image_id: string | null;
 
   effective_price?: number;
-  applied_promotions?: AppliedPromotion[];
+  applied_promotions?: Promotion[];
 
   product?: Product;
   variant_options?: VariantOption[];

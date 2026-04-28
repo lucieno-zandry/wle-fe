@@ -219,6 +219,7 @@ export default function () {
                             location.href = transactionResponse.data.transaction.payment_url;
                         }
                     } catch (e) {
+                        console.log(e);
                         if (e instanceof HttpException || e instanceof ValidationException) {
                             // Using interpolation for the status code
                             toast.error(t("errors.transaction_failed", { status: e.status }));

@@ -114,7 +114,7 @@ export default function ({
                     cart_items: shippingCartItems
                 });
                 // response.data is { method: ShippingMethod, cost: number }[]
-                const options = response.data!;
+                const options = response.data!.available;
                 setShippingOptions(options);
                 if (options.length > 0) {
                     setSelectedShipping(options[0]); // auto-select first

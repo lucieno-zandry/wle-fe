@@ -28,7 +28,6 @@ import { useFormatMoney } from "~/lib/format-money";
 
 export const loader = async (args: LoaderFunctionArgs) => {
     const { request, params } = args;
-    const { currency } = getPreferencesFromLoaderFunctionArgs(args);
 
     try {
         const headers: HeadersInit = {};
@@ -38,7 +37,6 @@ export const loader = async (args: LoaderFunctionArgs) => {
             headers['Cookie'] = cookie;
         }
 
-        headers['X-Currency'] = currency;
         headers['Accept'] = 'application/json';
 
         const { slug } = params;

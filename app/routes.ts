@@ -8,7 +8,7 @@ export default [
         route("", "routes/frontoffice/layout.tsx", [
             index("routes/frontoffice/landing/index.tsx"),
             route("products", "routes/frontoffice/products.tsx"),
-            route("product/:slug", "routes/frontoffice/product.tsx"),
+            route("product/:slug", "routes/frontoffice/product-detail/product-detail.tsx"),
             route("settings", "routes/common/settings.tsx"),
             route("addresses", "routes/frontoffice/addresses.tsx"),
             route("checkout", "routes/frontoffice/checkout.tsx"),

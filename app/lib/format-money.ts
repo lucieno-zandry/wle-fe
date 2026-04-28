@@ -50,11 +50,19 @@ export function useFormatMoney() {
     const currency = boundaryData?.preferences.currency || preferenseStore.preferences.currency;
     const language = boundaryData?.preferences.language || preferenseStore.preferences.language;
 
-    return (n?: number, fractionDigits: number = 2) => base(currency, language, n, fractionDigits)
+    const formatMoney: ((n?: number | undefined, fractionDigits?: number) => string) & {
+        currency: string,
+        language: string,
+    } = (n?: number, fractionDigits: number = 2) => base(currency, language, n, fractionDigits)
+
+    formatMoney.currency = currency;
+    formatMoney.language = language;
+
+    return formatMoney;
 }
 
 export function useCurrencySymbol() {
-    const { currency, language } = usePreferencesStore().preferences;
+    const { currency, language } = useFormatMoney();
     return currencySymbol(language, currency);
 }
 

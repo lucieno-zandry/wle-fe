@@ -65,73 +65,134 @@ export const loader = async (args: LoaderFunctionArgs) => {
     }
 };
 
-// ─── Page component ───────────────────────────────────────────────────────────
-export default function LandingPage() {
-    const { error, landingBlocks } = useLoaderData<typeof loader>()
+// landing-page-view.tsx
 
-    useEffect(() => {
-        if (error && error instanceof HttpException)
-            toast.error(error.data?.message || 'Something went wrong!')
-    }, [error]);
+type Props = {
+    landingBlocks?: LandingBlock[];
+    stickyBarProduct: Product | null;
+};
 
-    let stickyBarProduct: Product | null = null;
-
+export function LandingPageView({
+    landingBlocks,
+    stickyBarProduct,
+}: Props) {
     return (
         <>
-            {/*
-        Sticky CTA bar — portal-level, floats above everything.
-        Visibility is controlled by the Zustand store,
-        triggered by IntersectionObserver inside <Hero />.
-      */}
-
             <main className="landing">
-                {
-                    landingBlocks?.map((block, key) => {
-                        switch (block.block_type) {
-                            case 'hero':
+                {landingBlocks?.map((block, key) => {
+                    switch (block.block_type) {
+                        case "hero":
+                            return <Hero block={block} key={key} />;
 
-                                if (!stickyBarProduct && block.landing_able && isProduct(block.landing_able))
-                                    stickyBarProduct = block.landing_able;
+                        case "collection_grid":
+                            return (
+                                <Collections
+                                    block={block as LandingBlock<CollectionContent>}
+                                    key={key}
+                                />
+                            );
 
-                                return <Hero block={block} key={key} />
+                        case "trust_bar":
+                            return <TrustBar block={block} key={key} />;
 
-                            case 'collection_grid':
-                                return <Collections block={block as LandingBlock<CollectionContent>} key={key} />
+                        case "comparison":
+                            return (
+                                <Comparison
+                                    block={block as LandingBlock<ComparisonContent>}
+                                    key={key}
+                                />
+                            );
 
-                            case 'trust_bar':
-                                return <TrustBar block={block} key={key} />
+                        case "faq":
+                            return (
+                                <Faq
+                                    block={block as LandingBlock<FaqContent>}
+                                    key={key}
+                                />
+                            );
 
-                            case 'comparison':
-                                return <Comparison block={block as LandingBlock<ComparisonContent>} key={key} />
+                        case "featured_products":
+                            return (
+                                <FeaturedProducts
+                                    block={block as LandingBlock<FeaturedProductsContent>}
+                                    key={key}
+                                />
+                            );
 
-                            case 'faq':
-                                return <Faq block={block as LandingBlock<FaqContent>} key={key} />;
+                        case "story":
+                            return (
+                                <Story
+                                    block={block as LandingBlock<StoryContent>}
+                                    key={key}
+                                />
+                            );
 
-                            case 'featured_products':
-                                return <FeaturedProducts block={block as LandingBlock<FeaturedProductsContent>} key={key} />
+                        case "testimonials":
+                            return (
+                                <Testimonials
+                                    block={block as LandingBlock<TestimonialsContent>}
+                                    key={key}
+                                />
+                            );
 
-                            case 'story':
-                                return <Story block={block as LandingBlock<StoryContent>} key={key} />;
+                        case "cta_banner":
+                            return (
+                                <CtaBanner
+                                    block={block as LandingBlock<CtaBannerContent>}
+                                    key={key}
+                                />
+                            );
 
-                            case 'testimonials':
-                                return <Testimonials block={block as LandingBlock<TestimonialsContent>} key={key} />;
-
-                            case 'cta_banner':
-
-                                if (!stickyBarProduct && block.landing_able && isProduct(block.landing_able))
-                                    stickyBarProduct = block.landing_able;
-
-                                return <CtaBanner block={block as LandingBlock<CtaBannerContent>} key={key} />
-
-                            default:
-                                return null;
-                        }
-                    })
-                }
+                        default:
+                            return null;
+                    }
+                })}
             </main>
 
-            {stickyBarProduct &&
-                <StickyCTABar product={stickyBarProduct} />}
+            {stickyBarProduct && (
+                <StickyCTABar product={stickyBarProduct} />
+            )}
         </>
+    );
+}
+
+export default function LandingPage() {
+    const { error, landingBlocks } = useLoaderData<typeof loader>();
+
+    // -------------------------
+    // Side effects
+    // -------------------------
+
+    useEffect(() => {
+        if (error && error instanceof HttpException) {
+            toast.error(error.data?.message || "Something went wrong!");
+        }
+    }, [error]);
+
+    // -------------------------
+    // Derived state (FIXED)
+    // -------------------------
+
+    const stickyBarProduct = useMemo(() => {
+        if (!landingBlocks) return null;
+
+        for (const block of landingBlocks) {
+            if (
+                (block.block_type === "hero" || block.block_type === "cta_banner") &&
+                block.landing_able &&
+                isProduct(block.landing_able)
+            ) {
+                return block.landing_able;
+            }
+        }
+
+        return null;
+    }, [landingBlocks]);
+
+    return (
+        <LandingPageView
+            landingBlocks={landingBlocks}
+            stickyBarProduct={stickyBarProduct}
+        />
     );
 }

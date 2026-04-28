@@ -2,7 +2,7 @@ import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import { isCategory, isProduct } from "../../helpers/landing-able-guards";
-import { useAddToCart } from "~/hooks/use-add-to-cart";
+import { useAddToCart } from "~/routes/frontoffice/product-detail/hooks/use-add-to-cart";
 import { useAppPathname } from "~/lib/app-pathname";
 import type { JSX } from "react";
 
