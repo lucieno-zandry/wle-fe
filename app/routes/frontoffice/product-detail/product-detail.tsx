@@ -1,7 +1,6 @@
 import { redirect, useLoaderData } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
 import { getProduct } from "~/api/http-requests";
-import { useUserStore } from "~/hooks/use-user"; // for user-specific features
 import { ProductHeader } from "./components/product-header";
 import { ProductImagesGallery } from "./components/product-images-gallery";
 import { useCategories } from "./hooks/use-categories";
@@ -45,10 +44,8 @@ export const loader = async (args: LoaderFunctionArgs) => {
 
 export default function ProductDetailPage() {
     const product = useLoaderData<Product | null>();
-    const { user } = useUserStore();
     const { categories } = useCategories();
     const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
-
 
     if (!product) return <ProductNotFound />;
 

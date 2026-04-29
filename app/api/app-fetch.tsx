@@ -2,15 +2,17 @@ import i18next from "i18next";
 import buildQuery from "~/lib/build-query";
 import executeRequest from "~/lib/execute-request";
 
-const API_URL = import.meta.env.VITE_API_URL;
+export const API_URL = import.meta.env.VITE_API_URL;
 
 export class ValidationException {
     errors: Record<string, string[]>;
     status: number;
+    message: string;
 
-    constructor(errors: Record<string, string[]>, status: number) {
+    constructor(errors: Record<string, string[]>, status: number, message: string) {
         this.errors = errors;
         this.status = status;
+        this.message = message;
     }
 }
 

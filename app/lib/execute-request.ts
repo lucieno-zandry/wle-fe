@@ -29,7 +29,7 @@ async function executeRequest<T>(request: () => Promise<Response>) {
             if (response.status === STATUS_REDIRECT) {
                 if (isCsr())
                     location.href = response.headers.get('Location') || '';
-                
+
             } else if (response.status >= 400) {
                 // if backend wants to redirect the user
                 if (response.status === STATUS_FORBIDDEN && json.action) {
@@ -50,7 +50,7 @@ async function executeRequest<T>(request: () => Promise<Response>) {
 
     if (formatedResponse.error) {
         if (formatedResponse.error.errors && formatedResponse.status === STATUS_UNPROCESSABLE_CONTENT) {
-            throw new ValidationException(formatedResponse.error.errors, formatedResponse.status);
+            throw new ValidationException(formatedResponse.error.errors, formatedResponse.status, formatedResponse.error.message || "");
         } else {
             throw new HttpException(formatedResponse.status, formatedResponse.error);
         }

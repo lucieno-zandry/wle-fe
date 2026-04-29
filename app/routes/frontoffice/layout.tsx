@@ -8,6 +8,7 @@ import { useRefreshCart } from "~/hooks/use-cart";
 import { useUserStore } from "~/hooks/use-user";
 import handleHttpExceptionError from "~/lib/handle-http-exception-error";
 import { ClientCodeDialog } from "../../components/layout/client-code-dialog";
+import { AuthDialog } from "~/components/layout/auth-dialog";
 
 export default function () {
     const { setUser, clearUser } = useUserStore();
@@ -37,5 +38,6 @@ export default function () {
         </main>
         <Footer />
         <ClientCodeDialog />
+        <AuthDialog />
     </div>
 }

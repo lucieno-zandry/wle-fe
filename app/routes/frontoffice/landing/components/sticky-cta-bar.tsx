@@ -79,7 +79,7 @@ export function StickyCTABar({
   };
 
   const handleAddToCart = () => {
-    addToCart(selectedVariant.id);
+    addToCart({ count: 1, variant_id: selectedVariant.id });
   }
 
   const effectivePrice = selectedVariant.effective_price ?? selectedVariant.price;

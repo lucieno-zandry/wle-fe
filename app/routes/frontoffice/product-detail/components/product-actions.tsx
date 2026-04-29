@@ -97,7 +97,7 @@ export function ProductActions({ variant }: ProductActionsProps) {
     const buyNow = useBuyNow();
 
     const isOutOfStock = variant ? variant.stock <= 0 : false;
-    const isDisabled = !variant || isOutOfStock;
+    const isDisabled = buyNow.loading || !variant || isOutOfStock;
 
     const handleAddToCart = () => {
         if (!variant) return;

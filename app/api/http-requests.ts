@@ -1,5 +1,5 @@
 import { serializeProductParams, type ProductQueryParams } from "~/lib/serialize-product-params";
-import appFetch, { type PaginatedResponse } from "./app-fetch";
+import appFetch, { API_URL, type PaginatedResponse } from "./app-fetch";
 import buildWhereParam, { type WhereConditions, type WhereInConditions } from "~/lib/build-where-param";
 import type { NotificationsQueryParams } from "~/components/notifications/types/notifications-query-params";
 import type { LandingBlocksRequestParams } from "~/routes/frontoffice/landing/types/landing-blocks-request-types";
@@ -11,7 +11,6 @@ export function getEmailInfo(email: string) {
 export function logInWithEmail(data: { email: FormDataEntryValue, password: FormDataEntryValue }) {
     return appFetch.post<{
         auth: User,
-        token: string,
     }>('/auth/login', data);
 }
 
@@ -126,8 +125,18 @@ export function removeAddresses(ids: number[]) {
     return appFetch.delete<{ deleted: number }>(`/address/delete?address_ids=${ids.join(',')}`);
 }
 
-export function checkout(cart_item_ids: CartItem['id'][]) {
-    return appFetch.post('/order/checkout', cart_item_ids);
+export function checkout(payload: {
+    cart_item_ids?: CartItem['id'][],
+    variants?: { variant_id: number, count: number }[],
+}) {
+    return fetch(API_URL + '/order/checkout', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        credentials: 'include',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    });
 }
 
 export function createOrder(payload: { cart_item_ids: number[], address_id: number, coupon_id?: number, shipping_method_id: number }) {

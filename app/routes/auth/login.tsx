@@ -62,11 +62,6 @@ export default function () {
     })
       .then(response => {
         toast.success("Log in success!");
-
-        if (response.data?.token) {
-          localStorage.setItem("token", response.data.token);
-        }
-
         return successRedirect();
       })
       .catch(error => {

@@ -11,7 +11,10 @@ type ActionsViewProps = {
     related?: LandingAble
     isProduct: (able: LandingAble) => able is Product
     isCategory: (able: LandingAble) => able is Category
-    addToCart: (variantId: number) => void;
+    addToCart: (data: {
+        variant_id: number;
+        count: number;
+    }) => void;
 }
 
 export const ActionsView = ({ appPathname, related, addToCart, isCategory, isProduct }: ActionsViewProps) => {
@@ -32,7 +35,7 @@ export const ActionsView = ({ appPathname, related, addToCart, isCategory, isPro
         if (isProduct(related)) {
             const variantId = related.variants?.at(0)?.id;
             if (variantId) {
-                const handleAddToCart = () => { addToCart(variantId); }
+                const handleAddToCart = () => { addToCart({ variant_id: variantId, count: 1 }); }
 
                 primary = <Button
                     className="cta-banner__btn-primary"

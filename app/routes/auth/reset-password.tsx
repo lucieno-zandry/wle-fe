@@ -23,7 +23,10 @@ export const clientAction = async ({ request }: ActionFunctionArgs) => {
     const password = formData.get('password');
     const passwordConfirmation = formData.get('password_confirmation');
 
-    if (password?.toString() !== passwordConfirmation?.toString()) return new ValidationException({ password_confirmation: ["The password confirmation does not match."] }, 422);
+    if (password?.toString() !== passwordConfirmation?.toString()) {
+        const message = "The password confirmation does not match.";
+        return new ValidationException({ password_confirmation: [message] }, 422, message);
+    }
 
     try {
         const response = await resetPassword(formData);
