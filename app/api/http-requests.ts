@@ -128,6 +128,7 @@ export function removeAddresses(ids: number[]) {
 export function checkout(payload: {
     cart_item_ids?: CartItem['id'][],
     variants?: { variant_id: number, count: number }[],
+    coupon_code?: string,
 }) {
     return fetch(API_URL + '/order/checkout', {
         method: "POST",

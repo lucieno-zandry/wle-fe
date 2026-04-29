@@ -7,8 +7,12 @@ import { useAuthDialogStore } from "~/components/stores/use-auth-dialog-store";
 import { useState } from "react";
 
 export type BuyNow = ((data: {
-    variant_id: number;
-    count: number;
+    cart_item_ids?: number[];
+    variants?: {
+        variant_id: number;
+        count: number;
+    }[];
+    coupon_code?: string;
 }) => Promise<void>) & {
     loading: boolean
 }
@@ -21,13 +25,13 @@ export function useBuyNow() {
 
     const { openDialog } = useAuthDialogStore();
 
-    const buyNow: BuyNow = async (cartItemData: { variant_id: number, count: number }) => {
+    const buyNow: BuyNow = async (params) => {
         setLoading(true);
 
         const loadingToast = toast.loading('Preparing checkout page ...');
 
         try {
-            const response = await checkout({ variants: [cartItemData] });
+            const response = await checkout(params);
             const data = await response.json();
             if (!response.ok) throw new HttpException(response.status, data);
 
@@ -38,7 +42,7 @@ export function useBuyNow() {
                     if (e.data.action === "AUTHENTICATE" || e.data.action === "VERIFY_EMAIL") {
                         return openDialog({
                             action: e.data.action,
-                            onSuccessParams: cartItemData,
+                            onSuccessParams: params,
                             successAction: 'BUY_NOW',
                             title: "Sign in to checkout",
                             description: "Please log in to securely complete your purchase and track your order.",

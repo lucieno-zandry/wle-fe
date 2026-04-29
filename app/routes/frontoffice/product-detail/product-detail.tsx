@@ -46,6 +46,7 @@ export default function ProductDetailPage() {
     const product = useLoaderData<Product | null>();
     const { categories } = useCategories();
     const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
+    const [couponCode, setCouponCode] = useState("");
 
     if (!product) return <ProductNotFound />;
 
@@ -57,8 +58,11 @@ export default function ProductDetailPage() {
                     <ProductHeader product={product} categories={categories} />
                     <ProductVariantPicker product={product} onVariantChange={setSelectedVariant} />
                     <ProductStockBadge variant={selectedVariant} />
-                    <ProductPricing variant={selectedVariant} />
-                    <ProductActions variant={selectedVariant} />
+                    <ProductPricing
+                        variant={selectedVariant}
+                        couponCode={couponCode}
+                        setCouponCode={setCouponCode} />
+                    <ProductActions variant={selectedVariant} couponCode={couponCode} />
                 </div>
             </div>
 

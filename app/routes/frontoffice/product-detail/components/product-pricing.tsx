@@ -158,6 +158,8 @@ export function ProductPricingView({
 // ── Smart (Container) ────────────────────────────────────────────────────────
 interface ProductPricingProps {
     variant: Variant | null;
+    couponCode: string;
+    setCouponCode: (coupon: string) => void;
 }
 
 function formatCountdown(endDate: string): string {
@@ -174,9 +176,8 @@ function formatCountdown(endDate: string): string {
     return `${minutes}m`;
 }
 
-export function ProductPricing({ variant }: ProductPricingProps) {
+export function ProductPricing({ variant, couponCode, setCouponCode }: ProductPricingProps) {
     const { t } = useTranslation("product-detail");
-    const [couponCode, setCouponCode] = useState("");
     const [couponError, setCouponError] = useState("");
     const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
     const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);

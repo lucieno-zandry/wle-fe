@@ -88,9 +88,10 @@ export function ProductActionsView({
 // ── Smart (Container) ────────────────────────────────────────────────────────
 interface ProductActionsProps {
     variant: Variant | null;
+    couponCode: string;
 }
 
-export function ProductActions({ variant }: ProductActionsProps) {
+export function ProductActions({ variant, couponCode }: ProductActionsProps) {
     const { t } = useTranslation("product-detail");
     const [quantity, setQuantity] = useState(1);
     const addToCart = useAddToCart();
@@ -106,7 +107,12 @@ export function ProductActions({ variant }: ProductActionsProps) {
 
     const handleBuyNow = () => {
         if (!variant) return;
-        buyNow({ variant_id: variant.id, count: quantity });
+        buyNow({
+            variants: [{
+                variant_id: variant.id,
+                count: quantity
+            }], coupon_code: couponCode
+        });
     };
 
     const increase = () => setQuantity((q) => q + 1);
