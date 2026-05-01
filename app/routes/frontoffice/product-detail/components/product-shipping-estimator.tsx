@@ -58,7 +58,7 @@ export function ProductShippingEstimatorView({
 }: ProductShippingEstimatorViewProps) {
     if (!variant) {
         return (
-            <div className="rounded-2xl border border-dashed border-neutral-200 bg-neutral-50 px-4 py-5 text-sm text-neutral-400 text-center">
+            <div className="rounded-2xl border border-dashed border-border bg-muted/50 px-4 py-5 text-sm text-muted-foreground text-center">
                 {selectVariantMessage}
             </div>
         );
@@ -67,16 +67,16 @@ export function ProductShippingEstimatorView({
     const showNoResults = !options.length && (hasDefaultAddress || (customCountry && customCity));
 
     return (
-        <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-sm">
+        <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-sm">
             {/* Header */}
-            <div className="flex items-center gap-3 px-4 py-3 sm:px-5 border-b border-neutral-100 bg-neutral-50">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-100">
-                    <Truck className="h-4 w-4 text-neutral-500" />
+            <div className="flex items-center gap-3 px-4 py-3 sm:px-5 border-b border-border/50 bg-muted/50">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
+                    <Truck className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div>
-                    <h3 className="text-sm font-semibold text-neutral-800">{shippingTitle}</h3>
+                    <h3 className="text-sm font-semibold text-foreground">{shippingTitle}</h3>
                     {location && (
-                        <p className="text-xs text-neutral-400 flex items-center gap-1 mt-0.5">
+                        <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
                             <MapPin className="h-3 w-3" />
                             {toLocationTemplate
                                 .replace("{{city}}", location.city)
@@ -101,7 +101,7 @@ export function ProductShippingEstimatorView({
                             variant="outline"
                             onClick={onCalculateCustomShipping}
                             disabled={loading || !customCountry || !customCity}
-                            className="w-full rounded-xl border-neutral-200 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700"
+                            className="w-full rounded-xl border-input hover:bg-accent hover:text-accent-foreground"
                         >
                             {loading ? (
                                 <span className="flex items-center gap-2">
@@ -117,11 +117,11 @@ export function ProductShippingEstimatorView({
                 {loading ? (
                     <div className="space-y-2">
                         {[1, 2].map((i) => (
-                            <div key={i} className="h-16 w-full animate-pulse rounded-xl bg-neutral-100" />
+                            <div key={i} className="h-16 w-full animate-pulse rounded-xl bg-muted" />
                         ))}
                     </div>
                 ) : showNoResults ? (
-                    <div className="flex items-center gap-2 rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">
+                    <div className="flex items-center gap-2 rounded-xl bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive">
                         <Package className="h-4 w-4 shrink-0" />
                         {noShippingMessage}
                     </div>
@@ -136,24 +136,24 @@ export function ProductShippingEstimatorView({
                                     key={opt.method.id}
                                     onClick={() => onOptionSelect(opt)}
                                     className={`flex cursor-pointer items-center justify-between gap-3 rounded-xl border-2 p-3 text-sm transition-all duration-150 ${isSelected
-                                        ? "border-amber-500 bg-amber-50"
-                                        : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50"
+                                        ? "border-primary bg-primary/5"
+                                        : "border-border hover:border-border/80 hover:bg-muted/50"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
-                                        <div className={`h-4 w-4 rounded-full border-2 transition-colors ${isSelected ? "border-amber-500 bg-amber-500" : "border-neutral-300"}`}>
-                                            {isSelected && <CheckCircle2 className="h-full w-full text-white" />}
+                                        <div className={`h-4 w-4 rounded-full border-2 transition-colors flex items-center justify-center ${isSelected ? "border-primary bg-primary text-primary-foreground" : "border-input"}`}>
+                                            {isSelected && <CheckCircle2 className="h-full w-full" />}
                                         </div>
                                         <div>
-                                            <span className="font-medium text-neutral-800">{opt.method.name}</span>
-                                            <p className="text-xs text-neutral-400 mt-0.5">
+                                            <span className="font-medium text-foreground">{opt.method.name}</span>
+                                            <p className="text-xs text-muted-foreground mt-0.5">
                                                 {deliveryDaysTemplate
                                                     .replace("{{min}}", String(opt.method.min_delivery_days ?? "?"))
                                                     .replace("{{max}}", String(opt.method.max_delivery_days ?? "?"))}
                                             </p>
                                         </div>
                                     </div>
-                                    <span className={`shrink-0 font-semibold ${isFree ? "text-emerald-600" : "text-neutral-800"}`}>
+                                    <span className={`shrink-0 font-semibold ${isFree ? "text-green-600 dark:text-green-400" : "text-foreground"}`}>
                                         {isFree ? freeLabel : formatMoney(opt.cost)}
                                     </span>
                                 </li>

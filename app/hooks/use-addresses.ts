@@ -65,9 +65,9 @@ export function useAddresses() {
     }, []);
 
     useEffect(() => {
-        if (user?.id && addresses === null)
+        if (user?.id)
             fetchAddresses()
-    }, [user?.id, addresses]);
+    }, [user?.id]);
 
     return {
         addresses,

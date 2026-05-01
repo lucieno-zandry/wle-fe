@@ -6,15 +6,19 @@ import { getCartItems } from '~/api/http-requests'
 // Define the Zustand store type
 export interface CartStore {
     items: CartItem[] | null,
-    setItems: (items: CartStore['items']) => void
+    setItems: (items: CartStore['items']) => void,
+    drawerOpen: boolean,
+    setDrawerOpen: (open: boolean) => void;
 }
 
 // Create the store
 const useCartStore = create<CartStore>(set => ({
     items: null,
+    drawerOpen: false,
+    setDrawerOpen: (drawerOpen) => set({ drawerOpen }),
     setItems: (items) => {
         set({ items })
-    }
+    },
 }))
 
 export const useRefreshCart = () => {
@@ -23,7 +27,7 @@ export const useRefreshCart = () => {
     return () =>
         getCartItems()
             .then((response) => {
-                const cartItems = response.data?.cart_items || null;
+                const cartItems = response.data?.cart_items || [];
                 setItems(cartItems);
             });
 }

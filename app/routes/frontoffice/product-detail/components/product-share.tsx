@@ -1,5 +1,4 @@
 // routes/frontoffice/product-detail/components/product-share.tsx
-
 import { Button } from "~/components/ui/button";
 import { Copy, Share2, Check } from "lucide-react";
 import { toast } from "sonner";
@@ -20,12 +19,12 @@ interface ProductShareViewProps {
 export function ProductShareView({ onShare, onCopyLink, shareLabel, copyLinkLabel, copied }: ProductShareViewProps) {
     return (
         <div className="flex items-center gap-2">
-            <span className="text-xs text-neutral-400 mr-1 uppercase tracking-wide font-medium">Share</span>
+            <span className="text-xs text-muted-foreground mr-1 uppercase tracking-wide font-medium">Share</span>
             <Button
                 variant="outline"
                 size="sm"
                 onClick={onShare}
-                className="h-8 rounded-full border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:text-neutral-700 text-xs gap-1.5 px-3"
+                className="h-8 rounded-full border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground text-xs gap-1.5 px-3"
             >
                 <Share2 className="h-3.5 w-3.5" />
                 {shareLabel}
@@ -35,8 +34,8 @@ export function ProductShareView({ onShare, onCopyLink, shareLabel, copyLinkLabe
                 size="sm"
                 onClick={onCopyLink}
                 className={`h-8 rounded-full text-xs gap-1.5 px-3 transition-all duration-200 ${copied
-                        ? "border-emerald-200 bg-emerald-50 text-emerald-600"
-                        : "border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:text-neutral-700"
+                        ? "border-green-500/20 bg-green-500/10 text-green-600 dark:text-green-400"
+                        : "border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
             >
                 {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}

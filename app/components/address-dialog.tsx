@@ -86,7 +86,7 @@ export function AddressDialog({
                         {isEdit ? t('addresses:edit') : t('addresses:add_new')}
                     </DialogTitle>
                     <DialogDescription id="dialog-description">
-                        {isEdit ? "Update your address details below." : "Enter the details for your new address."}
+                        {isEdit ? t('addresses:dialog.edit_description') : t('addresses:dialog.create_description')}
                     </DialogDescription>
                 </DialogHeader>
                 <FormComponent
@@ -141,7 +141,7 @@ export function AddressDialog({
                         <CustomField
                             name="label"
                             label={t('addresses:label')}
-                            placeholder="e.g., Home, Work, Apartment"
+                            placeholder={t('addresses:label_placeholder')}
                             defaultValue={address?.label ?? ""}
                             dataFormat={addressSchema.label}
                             onValidationErrorsChange={onValidationChange}
@@ -151,7 +151,7 @@ export function AddressDialog({
                         <CustomField
                             name="line1"
                             label={t('addresses:line1')}
-                            placeholder="Street address, P.O. box"
+                            placeholder={t('addresses:line1_placeholder')}
                             defaultValue={address?.line1}
                             dataFormat={addressSchema.line1}
                             onValidationErrorsChange={onValidationChange}
@@ -162,7 +162,7 @@ export function AddressDialog({
                         <CustomField
                             name="line2"
                             label={t('addresses:line2_optional')}
-                            placeholder="Apt, suite, unit, building, floor"
+                            placeholder={t('addresses:line2_placeholder')}
                             defaultValue={address?.line2 ?? ""}
                             dataFormat={addressSchema.line2}
                             onValidationErrorsChange={onValidationChange}
@@ -182,7 +182,7 @@ export function AddressDialog({
                             <CustomField
                                 name="state"
                                 label={t('addresses:state')}
-                                placeholder="State/Province"
+                                placeholder={t('addresses:state_placeholder')}
                                 defaultValue={address?.state ?? ""}
                                 dataFormat={addressSchema.state}
                                 onValidationErrorsChange={onValidationChange}
@@ -203,7 +203,7 @@ export function AddressDialog({
                             <CustomField
                                 name="country"
                                 label={t('addresses:country')}
-                                placeholder="ISO code (e.g., US)"
+                                placeholder={t('addresses:country_placeholder')}
                                 defaultValue={address?.country}
                                 dataFormat={addressSchema.country}
                                 onValidationErrorsChange={onValidationChange}
@@ -222,12 +222,14 @@ export function AddressDialog({
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectLabel>Types</SelectLabel>
+                                        <SelectLabel>{t('addresses:types')}</SelectLabel>
                                         {[
-                                            { value: "shipping", label: "Shipping" },
-                                            { value: "billing", label: "Billing" },
-                                            { value: "both", label: "Both" },
-                                        ].map(({ label, value }, key) => <SelectItem key={key} value={value}>{label}</SelectItem>)}
+                                            { value: "shipping", label: t('addresses:shipping') },
+                                            { value: "billing", label: t('addresses:billing') },
+                                            { value: "both", label: t('addresses:both') },
+                                        ].map(({ label, value }, key) => (
+                                            <SelectItem key={key} value={value}>{label}</SelectItem>
+                                        ))}
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>

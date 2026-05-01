@@ -6,14 +6,14 @@ import { Checkbox } from "~/components/ui/checkbox";
 import CartEmpty from "./cart-empty";
 import CartSheetItem from "./cart-sheet-item";
 
-import { Form, useNavigate } from "react-router";
+import { Form } from "react-router";
 import { toast } from "sonner";
 import { removeCartItem } from "~/api/http-requests";
 import { useRefreshCart } from "~/hooks/use-cart";
-import navigateToCheckout from "~/lib/navigate-to-checkout";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { useFormatMoney } from "~/lib/format-money";
+import { useBuyNow } from "~/routes/frontoffice/product-detail/hooks/use-buy-now";
 
 type CartSheetProps = {
     open: boolean;
@@ -146,7 +146,8 @@ export function CartSheet({
 
 export default function ({ items, open, setOpen }: Pick<CartSheetProps, 'items' | 'open' | 'setOpen'>) {
     const refreshCart = useRefreshCart();
-    const navigate = useNavigate();
+    const buyNow = useBuyNow();
+
     const { t } = useTranslation();
     const formatMoney = useFormatMoney();
 
@@ -165,7 +166,7 @@ export default function ({ items, open, setOpen }: Pick<CartSheetProps, 'items' 
     useEffect(() => {
         setCheckedIds((prev) => {
             const validIds = new Set(items.map((item) => item.id));
-            return new Set([...prev].filter((id) => validIds.has(id)));
+            return validIds;
         });
     }, [items]);
 
@@ -195,7 +196,7 @@ export default function ({ items, open, setOpen }: Pick<CartSheetProps, 'items' 
 
     const handleCheckout = useCallback(() => {
         setOpen(false);
-        navigateToCheckout(Array.from(checkedIds), navigate);
+        buyNow({ cart_items_ids: Array.from(checkedIds) })
     }, [checkedIds, setOpen]);
 
     const onRemove = useCallback((itemId: number) => {

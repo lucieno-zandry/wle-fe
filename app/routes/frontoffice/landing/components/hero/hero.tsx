@@ -8,6 +8,8 @@ import { useStickyCtaTrigger } from "../../hooks/use-sticky-cta-trigger";
 import { isProduct } from "../../helpers/landing-able-guards";
 import formatMoney, { useFormatMoney } from "~/lib/format-money";
 import { getEffectivePrice, getOriginalPrice, getPromotionBadge, getVariantLabel } from "./helpers";
+import { toast } from "sonner";
+import { useAddToCart } from "~/routes/frontoffice/product-detail/hooks/use-add-to-cart";
 
 
 // ----------------------------------------------------------------------------
@@ -86,7 +88,7 @@ export function HeroView({
                             );
                         })}
                     </div>
-                )}  
+                )}
 
                 {/* Price + CTA */}
                 <div className="hero__cta-row">
@@ -139,11 +141,6 @@ export function Hero({ block }: { block: LandingBlock }) {
         trustBar?.scrollIntoView({ behavior: "smooth" });
     };
 
-    const handleAddToCart = () => {
-        console.info("[Hero] Add to cart variant:", selectedHeroVariantId);
-        // TODO: dispatch to cart store
-    };
-
     const backgroundImageUrl = block.image?.url ?? null;
     const headline = block.title ?? "Default Headline";
     const subline = block.subtitle ?? "Default subline";
@@ -152,6 +149,13 @@ export function Hero({ block }: { block: LandingBlock }) {
 
     const product = block.landing_able;
     const variants = product.variants ?? [];
+    const addToCart = useAddToCart();
+
+    const handleAddToCart = () => {
+        const variant = variants.at(0);
+        if (!variant) return toast.error("There's nothing to add to the cart");
+        addToCart({ count: 1, variant_id: variant.id });
+    };
 
     const content = block.content ?? {};
     const eyebrow = content.eyebrow ?? "Directly from SAVA, Madagascar";

@@ -1,7 +1,6 @@
 // routes/frontoffice/product-detail/components/product-header.tsx
-
 import { Link } from "react-router";
-import { useAppPathname } from "~/lib/app-pathname";
+import appPathname from "~/lib/app-pathname";
 import { useTranslation } from "react-i18next";
 import { ChevronRight, Tag } from "lucide-react";
 
@@ -21,26 +20,24 @@ export function ProductHeaderView({
     category,
     seeMoreLabel,
 }: ProductHeaderViewProps) {
-    const appPath = useAppPathname();
-
     return (
         <div className="space-y-4">
             {/* Breadcrumb */}
-            <nav className="flex flex-wrap items-center gap-1 text-xs text-neutral-400">
+            <nav className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
                 {breadcrumbs.map((crumb, idx) => (
                     <span key={idx} className="inline-flex items-center gap-1">
                         {crumb.href ? (
                             <Link
                                 to={crumb.href}
-                                className="hover:text-neutral-700 transition-colors duration-150"
+                                className="hover:text-foreground transition-colors duration-150"
                             >
                                 {crumb.label}
                             </Link>
                         ) : (
-                            <span className="text-neutral-600 font-medium">{crumb.label}</span>
+                            <span className="text-foreground font-medium">{crumb.label}</span>
                         )}
                         {idx < breadcrumbs.length - 1 && (
-                            <ChevronRight className="h-3 w-3 text-neutral-300" />
+                            <ChevronRight className="h-3 w-3 text-muted-foreground/50" />
                         )}
                     </span>
                 ))}
@@ -48,7 +45,7 @@ export function ProductHeaderView({
 
             {/* Title */}
             <h1
-                className="text-3xl font-bold leading-tight tracking-tight text-neutral-900 sm:text-4xl"
+                className="text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl"
                 style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
             >
                 {title}
@@ -57,8 +54,8 @@ export function ProductHeaderView({
             {/* Description */}
             {description && (
                 <div
-                    className="prose prose-sm max-w-none text-neutral-500 sm:prose-base leading-relaxed
-                        prose-p:my-2 prose-headings:text-neutral-700 prose-a:text-amber-600 prose-a:no-underline hover:prose-a:underline"
+                    className="prose prose-sm max-w-none text-muted-foreground sm:prose-base leading-relaxed
+                        prose-p:my-2 prose-headings:text-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline"
                     dangerouslySetInnerHTML={{ __html: description }}
                 />
             )}
@@ -66,8 +63,8 @@ export function ProductHeaderView({
             {/* Category link */}
             {category && (
                 <Link
-                    to={appPath(`/products?category_id=${category.id}`)}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 hover:bg-amber-100 transition-colors duration-150"
+                    to={appPathname(`/search/${category.title.toLowerCase()}`)}
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-3 py-1 hover:bg-primary/20 transition-colors duration-150"
                 >
                     <Tag className="h-3 w-3" />
                     {seeMoreLabel.replace("{{category}}", category.title)}
@@ -106,7 +103,7 @@ function buildBreadcrumbs(params: {
     const { allCategories = [], t, category } = params;
 
     const crumbs: { label: string; href?: string }[] = [
-        { label: t("header.home"), href: "/" },
+        { label: t("header.home"), href: appPathname('/') },
     ];
 
     if (!category) {
@@ -124,7 +121,7 @@ function buildBreadcrumbs(params: {
     path.forEach((cat) => {
         crumbs.push({
             label: cat.title,
-            href: `/products?category_id=${cat.id}`,
+            href: appPathname(`/search/${cat.title.toLowerCase()}`),
         });
     });
 

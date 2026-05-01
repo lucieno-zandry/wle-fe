@@ -21,7 +21,7 @@ type AddressCardProps = {
 export default function AddressCard({ address, onEdit }: AddressCardProps) {
     const navigation = useNavigation();
     const isSubmitting = navigation.state === "submitting";
-    const { t } = useTranslation();
+    const { t } = useTranslation("addresses");
 
     const selectedAddresses = useAddressStore((s) => s.selectedAddresses);
     const setSelectedAddresses = useAddressStore((s) => s.setSelectedAddresses);
@@ -68,7 +68,11 @@ export default function AddressCard({ address, onEdit }: AddressCardProps) {
                     <div className="space-y-1.5">
                         <div className="flex items-center gap-2 flex-wrap">
                             <CardTitle className="text-base flex items-center gap-2">
-                                {address.address_type === 'billing' ? <Building2 className="w-4 h-4 text-muted-foreground" /> : <MapPin className="w-4 h-4 text-muted-foreground" />}
+                                {address.address_type === 'billing' ? (
+                                    <Building2 className="w-4 h-4 text-muted-foreground" />
+                                ) : (
+                                    <MapPin className="w-4 h-4 text-muted-foreground" />
+                                )}
                                 {address.recipient_name}
                             </CardTitle>
 
@@ -80,7 +84,7 @@ export default function AddressCard({ address, onEdit }: AddressCardProps) {
 
                             {address.is_default && (
                                 <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-                                    {t('addresses:default')}
+                                    {t('default')}
                                 </span>
                             )}
                         </div>
@@ -90,13 +94,13 @@ export default function AddressCard({ address, onEdit }: AddressCardProps) {
                     </div>
                 </div>
 
-                <div className="flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity absolute right-4 top-4 sm:relative sm:right-auto sm:top-auto">
+                <div className="flex gap-2 transition-opacity absolute right-4 top-4 sm:relative sm:right-auto sm:top-auto">
                     <Button
                         size="icon"
                         variant="ghost"
                         className="h-8 w-8 text-muted-foreground hover:text-primary"
                         onClick={() => onEdit(address)}
-                        title={t('common:edit')}
+                        title={t('edit')}
                     >
                         <Pencil className="h-4 w-4" />
                     </Button>
@@ -110,7 +114,7 @@ export default function AddressCard({ address, onEdit }: AddressCardProps) {
                                 variant="ghost"
                                 className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                                 disabled={isSubmitting}
-                                title={t('common:delete')}
+                                title={t('delete')}
                             >
                                 <Trash2 className="h-4 w-4" />
                             </Button>
@@ -128,7 +132,7 @@ export default function AddressCard({ address, onEdit }: AddressCardProps) {
                     {address.phone_alt && (
                         <div className="flex items-center gap-1.5">
                             <Phone className="w-3.5 h-3.5" />
-                            <span>{address.phone_alt} (Alt)</span>
+                            <span>{address.phone_alt} {t('alt_phone_suffix')}</span>
                         </div>
                     )}
                 </div>

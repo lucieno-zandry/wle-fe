@@ -120,7 +120,7 @@ export default function AddressesPage() {
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight">{t("addresses:title")}</h1>
-                        <p className="text-muted-foreground mt-1">Manage your saved billing and shipping locations.</p>
+                        <p className="text-muted-foreground mt-1">{t("addresses:page_subtitle")}</p>
                     </div>
                     {addresses.length > 0 && (
                         <Button
@@ -144,7 +144,7 @@ export default function AddressesPage() {
                         </div>
                         <h3 className="text-xl font-semibold mb-2">{t("addresses:no_addresses")}</h3>
                         <p className="text-muted-foreground max-w-sm mb-8">
-                            You haven't added any addresses yet. Add one now to speed up your future checkouts.
+                            {t("addresses:empty_description")}
                         </p>
                         <Button
                             size="lg"
@@ -162,8 +162,8 @@ export default function AddressesPage() {
                     <div className="space-y-4">
                         {/* Contextual Bulk Action Bar */}
                         <div className={`flex items-center justify-between gap-4 p-3 rounded-lg border transition-all duration-300 ${selectedAddresses.length > 0
-                            ? "bg-muted/40 opacity-100 translate-y-0"
-                            : "opacity-0 -translate-y-2 pointer-events-none hidden"
+                                ? "bg-muted/40 opacity-100 translate-y-0"
+                                : "opacity-0 -translate-y-2 pointer-events-none hidden"
                             }`}>
                             <div className="flex items-center gap-3 px-2">
                                 <Checkbox
@@ -174,7 +174,7 @@ export default function AddressesPage() {
                                     id="select-all-addresses"
                                 />
                                 <label htmlFor="select-all-addresses" className="text-sm font-medium cursor-pointer">
-                                    {selectedAddresses.length} {selectedAddresses.length === 1 ? 'address' : 'addresses'} selected
+                                    {t("addresses:selected_count", { count: selectedAddresses.length })}
                                 </label>
                             </div>
 

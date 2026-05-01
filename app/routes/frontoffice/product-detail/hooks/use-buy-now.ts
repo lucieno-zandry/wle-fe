@@ -7,7 +7,7 @@ import { useAuthDialogStore } from "~/components/stores/use-auth-dialog-store";
 import { useState } from "react";
 
 export type BuyNow = ((data: {
-    cart_item_ids?: number[];
+    cart_items_ids?: number[];
     variants?: {
         variant_id: number;
         count: number;

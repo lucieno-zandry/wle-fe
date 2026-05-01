@@ -1,5 +1,4 @@
 // routes/frontoffice/product-detail/components/product-variant-picker.tsx
-
 import { useSyncVariantToUrl } from "../hooks/use-sync-variant-to-url";
 import { useState, useEffect } from "react";
 
@@ -22,11 +21,11 @@ export function ProductVariantPickerView({
             {variantGroups.map((group) => (
                 <div key={group.id}>
                     <div className="flex items-center justify-between mb-2.5">
-                        <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">
+                        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
                             {group.name}
                         </h3>
                         {selectedOptions[group.id] !== undefined && (
-                            <span className="text-xs text-neutral-400">
+                            <span className="text-xs text-muted-foreground">
                                 {group.variant_options?.find((o) => o.id === selectedOptions[group.id])?.value}
                             </span>
                         )}
@@ -40,13 +39,13 @@ export function ProductVariantPickerView({
                                     type="button"
                                     onClick={() => onOptionSelect(group.id, option.id)}
                                     className={`relative min-h-10 rounded-xl border-2 px-4 py-2 text-sm font-medium transition-all duration-150 ${isSelected
-                                            ? "border-amber-500 bg-amber-500 text-white shadow-sm shadow-amber-200"
-                                            : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300 hover:bg-neutral-50"
+                                            ? "border-primary bg-primary text-primary-foreground shadow-sm shadow-primary/30"
+                                            : "border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
                                         }`}
                                 >
                                     {option.value}
                                     {isSelected && (
-                                        <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-amber-500 border-2 border-white" />
+                                        <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-primary border-2 border-background" />
                                     )}
                                 </button>
                             );

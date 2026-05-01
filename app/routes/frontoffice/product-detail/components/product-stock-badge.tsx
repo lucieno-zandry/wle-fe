@@ -1,5 +1,4 @@
 // routes/frontoffice/product-detail/components/product-stock-badge.tsx
-
 import { useTranslation } from "react-i18next";
 import { AlertTriangle, CheckCircle2, XCircle, Package } from "lucide-react";
 
@@ -25,8 +24,8 @@ export function ProductStockBadgeView({
 }: ProductStockBadgeViewProps) {
     if (isOutOfStock) {
         return (
-            <div className="flex items-center gap-2 rounded-lg bg-red-50 border border-red-100 px-3 py-2 text-sm text-red-700 w-fit">
-                <XCircle className="h-4 w-4 text-red-500 shrink-0" />
+            <div className="flex items-center gap-2 rounded-lg bg-destructive/10 border border-destructive/20 px-3 py-2 text-sm text-destructive w-fit">
+                <XCircle className="h-4 w-4 shrink-0" />
                 <span className="font-medium">{outOfStockLabel}</span>
             </div>
         );
@@ -34,20 +33,20 @@ export function ProductStockBadgeView({
 
     if (isLowStock) {
         return (
-            <div className="flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-100 px-3 py-2 text-sm text-amber-800 w-fit">
-                <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
+            <div className="flex items-center gap-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 px-3 py-2 text-sm text-yellow-600 dark:text-yellow-400 w-fit">
+                <AlertTriangle className="h-4 w-4 shrink-0" />
                 <span>
                     <span className="font-semibold">{onlyLeftTemplate.replace("{{stock}}", String(stock))}</span>
                     {" "}
-                    <span className="text-amber-600">{lowStockMessage}</span>
+                    <span className="opacity-90">{lowStockMessage}</span>
                 </span>
             </div>
         );
     }
 
     return (
-        <div className="flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-100 px-3 py-2 text-sm text-emerald-800 w-fit">
-            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+        <div className="flex items-center gap-2 rounded-lg bg-green-500/10 border border-green-500/20 px-3 py-2 text-sm text-green-600 dark:text-green-400 w-fit">
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
             <span className="font-medium">{inStockTemplate.replace("{{stock}}", String(stock))}</span>
         </div>
     );

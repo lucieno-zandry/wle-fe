@@ -1,5 +1,4 @@
 // routes/frontoffice/product-detail/components/product-related-landing.tsx
-
 import { useEffect, useState } from "react";
 import { getLandingBlocksPublic } from "~/api/http-requests";
 import { LandingPageView } from "../../landing";

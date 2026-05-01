@@ -1,5 +1,4 @@
 // routes/frontoffice/product-detail/components/product-images-gallery.tsx
-
 import { useState, useRef, useCallback } from "react";
 import { ImageIcon, ZoomIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -27,7 +26,7 @@ function ZoomableImage({ src, alt }: { src: string; alt?: string }) {
     return (
         <div
             ref={containerRef}
-            className="relative flex-1 overflow-hidden rounded-2xl bg-neutral-50 border border-neutral-100"
+            className="relative flex-1 overflow-hidden rounded-2xl bg-muted/30 border border-border"
             style={{ cursor: isZoomed ? "zoom-out" : "zoom-in" }}
             onMouseEnter={() => setIsZoomed(true)}
             onMouseLeave={() => {
@@ -49,7 +48,7 @@ function ZoomableImage({ src, alt }: { src: string; alt?: string }) {
                 }}
             />
             {!isZoomed && (
-                <div className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full bg-white/80 backdrop-blur-sm px-2.5 py-1.5 text-xs text-neutral-500 shadow-sm border border-neutral-100 pointer-events-none">
+                <div className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full bg-background/80 backdrop-blur-sm px-2.5 py-1.5 text-xs text-muted-foreground shadow-sm border border-border pointer-events-none">
                     <ZoomIn className="h-3 w-3" />
                     <span>Hover to zoom</span>
                 </div>
@@ -80,8 +79,8 @@ export function ProductImagesGalleryView({
 }: ProductImagesGalleryViewProps) {
     if (!images || images.length === 0) {
         return (
-            <div className="flex aspect-square w-full items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-neutral-50">
-                <div className="flex flex-col items-center gap-3 text-neutral-400">
+            <div className="flex aspect-square w-full items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/30">
+                <div className="flex flex-col items-center gap-3 text-muted-foreground">
                     <ImageIcon className="h-12 w-12 opacity-30" />
                     <p className="text-sm font-medium">{noImagesLabel}</p>
                 </div>
@@ -106,8 +105,8 @@ export function ProductImagesGalleryView({
                                 aria-label={selectImageLabel.replace("{{index}}", String(i + 1))}
                                 className={`relative h-[60px] w-[60px] shrink-0 overflow-hidden rounded-xl border-2 transition-all duration-200 ${
                                     isSelected
-                                        ? "border-amber-500 ring-2 ring-amber-200 opacity-100"
-                                        : "border-neutral-200 opacity-50 hover:opacity-80 hover:border-neutral-300"
+                                        ? "border-primary ring-2 ring-primary/30 opacity-100"
+                                        : "border-border opacity-50 hover:opacity-80 hover:border-muted-foreground/30"
                                 }`}
                             >
                                 <img

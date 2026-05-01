@@ -6,8 +6,7 @@ import CartSheet from "./cart-sheet";
 import React from "react";
 
 export default React.memo(function () {
-    const { items } = useCartStore();
-    const [open, setOpen] = React.useState(false);
+    const { items, drawerOpen: open, setDrawerOpen: setOpen } = useCartStore();
 
     return <>
         <CartButton count={items?.length || 0} onClick={() => { setOpen(true) }} />

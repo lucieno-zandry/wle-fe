@@ -53,11 +53,10 @@ export default function ProductDetailPage() {
     return (
         <>
             <div
-                className="min-h-screen bg-[#FAFAF8]"
+                className="min-h-screen bg-background text-foreground transition-colors duration-300"
                 style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
             >
                 <div className="container mx-auto max-w-7xl px-4 py-6 sm:py-8 lg:py-10">
-
                     {/* ── Main product grid ── */}
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_420px] lg:items-start lg:gap-10">
 
@@ -69,7 +68,7 @@ export default function ProductDetailPage() {
                             <ProductHeader product={product} categories={categories} />
 
                             {/* Divider */}
-                            <div className="h-px bg-neutral-100" />
+                            <div className="h-px w-full bg-border" />
 
                             <ProductVariantPicker
                                 product={product}
@@ -94,7 +93,7 @@ export default function ProductDetailPage() {
                             />
 
                             {/* Divider */}
-                            <div className="h-px bg-neutral-100" />
+                            <div className="h-px w-full bg-border" />
 
                             <ProductShare product={product} />
                         </div>
@@ -116,7 +115,7 @@ export default function ProductDetailPage() {
                         )}
 
                         {/* Cross-sell */}
-                        <div className="border-t border-neutral-100 pt-10">
+                        <div className="border-t border-border pt-10">
                             <ProductCrossSell product={product} />
                         </div>
 

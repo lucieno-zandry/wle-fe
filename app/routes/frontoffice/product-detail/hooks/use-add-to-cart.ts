@@ -1,10 +1,11 @@
 import { toast } from "sonner"
 import { addVariantToCart } from "~/api/http-requests"
-import { useRefreshCart } from "../../../../hooks/use-cart"
+import useCartStore, { useRefreshCart } from "../../../../hooks/use-cart"
 import { HttpException, type FormatedResponse } from "~/api/app-fetch";
 
 export function useAddToCart() {
     const refreshCart = useRefreshCart();
+    const { drawerOpen, setDrawerOpen } = useCartStore();
 
     return async function (data: { variant_id: number, count: number }, options?: {
         onSuccess?: (response: FormatedResponse<{ cart_item: CartItem }>) => void,
@@ -12,8 +13,9 @@ export function useAddToCart() {
     }) {
         toast.promise(addVariantToCart(data), {
             loading: "Adding to cart...",
-            success: (response) => {
-                refreshCart();
+            success: async (response) => {
+                await refreshCart();
+                if (!drawerOpen) setDrawerOpen(true);
                 options?.onSuccess?.(response);
                 return "Product successfully added to your cart!";
             },

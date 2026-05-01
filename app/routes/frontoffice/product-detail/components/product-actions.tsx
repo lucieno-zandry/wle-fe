@@ -1,5 +1,4 @@
 // routes/frontoffice/product-detail/components/product-actions.tsx
-
 import { type Dispatch, type SetStateAction } from "react";
 import { Button } from "~/components/ui/button";
 import { Minus, Plus, ShoppingCart, Zap } from "lucide-react";
@@ -42,21 +41,21 @@ export function ProductActionsView({
             {/* Quantity + Add to Cart row */}
             <div className="flex gap-3">
                 {/* Quantity selector */}
-                <div className="flex items-center rounded-xl border border-neutral-200 bg-neutral-50 overflow-hidden shrink-0">
+                <div className="flex items-center rounded-xl border border-input bg-background overflow-hidden shrink-0">
                     <button
                         disabled={!canDecrement}
                         onClick={onDecrease}
-                        className="flex h-11 w-10 items-center justify-center text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="flex h-11 w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         <Minus className="h-3.5 w-3.5" />
                     </button>
-                    <span className="w-10 text-center text-sm font-semibold text-neutral-800 select-none">
+                    <span className="w-10 text-center text-sm font-semibold text-foreground select-none">
                         {quantity}
                     </span>
                     <button
                         disabled={!canIncrement}
                         onClick={onIncrease}
-                        className="flex h-11 w-10 items-center justify-center text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="flex h-11 w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         <Plus className="h-3.5 w-3.5" />
                     </button>
@@ -64,7 +63,8 @@ export function ProductActionsView({
 
                 {/* Add to Cart */}
                 <Button
-                    className="flex-1 h-11 gap-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white font-medium text-sm transition-all duration-150 shadow-none"
+                    variant="secondary"
+                    className="flex-1 h-11 gap-2 rounded-xl font-medium text-sm transition-all duration-150 shadow-none"
                     onClick={onAddToCart}
                     disabled={isDisabled}
                 >
@@ -73,9 +73,10 @@ export function ProductActionsView({
                 </Button>
             </div>
 
-            {/* Buy Now — full width, accent */}
+            {/* Buy Now — full width, primary accent */}
             <Button
-                className="w-full h-11 rounded-xl bg-amber-500 hover:bg-amber-400 text-white font-semibold text-sm gap-2 transition-all duration-150 shadow-sm shadow-amber-200"
+                variant="default"
+                className="w-full h-11 rounded-xl font-semibold text-sm gap-2 transition-all duration-150"
                 onClick={onBuyNow}
                 disabled={isDisabled}
             >
@@ -84,7 +85,7 @@ export function ProductActionsView({
             </Button>
 
             {isOutOfStock && (
-                <p className="text-xs text-red-500 text-center">{outOfStockMessage}</p>
+                <p className="text-xs text-destructive text-center font-medium">{outOfStockMessage}</p>
             )}
         </div>
     );

@@ -11,13 +11,14 @@ import {
 } from "~/components/ui/dialog";
 import Button from "../custom-components/button";
 import { AlertTriangle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type ConfirmDeleteDialogProps = {
     ids: number[];
     trigger: React.ReactNode;
-    title?: string;
-    description?: string;
     isLoading: boolean;
+    paragraph?: string;
+    cancelText?: string;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
 };
@@ -25,12 +26,12 @@ type ConfirmDeleteDialogProps = {
 export default function ConfirmDeleteDialog({
     ids,
     trigger,
-    title = "Confirm deletion",
-    description = "This action cannot be undone. Are you sure you want to delete the selected address(es)?",
     isLoading = false,
     open,
-    onOpenChange
+    onOpenChange,
 }: ConfirmDeleteDialogProps) {
+    const { t } = useTranslation('addresses');
+
     const intent = ids.length > 1 ? "bulk-delete" : "delete";
     const itemCount = ids.length;
 
@@ -43,12 +44,12 @@ export default function ConfirmDeleteDialog({
                     <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 mb-2">
                         <AlertTriangle className="h-6 w-6 text-destructive" />
                     </div>
-                    <DialogTitle className="text-xl">{title}</DialogTitle>
+                    <DialogTitle className="text-xl">{t('dialog.delete_title')}</DialogTitle>
                     <DialogDescription id="delete-dialog-description" className="text-base">
-                        {description}
+                        {t('dialog.delete_description')}
                         {itemCount > 1 && (
                             <span className="block mt-2 font-medium text-foreground">
-                                You are about to delete {itemCount} addresses.
+                                {t('dialog.delete_paragraph', itemCount.toString())}
                             </span>
                         )}
                     </DialogDescription>
@@ -65,9 +66,9 @@ export default function ConfirmDeleteDialog({
                         ))
                     )}
 
-                    <DialogFooter className="gap-2 sm:gap-0 mt-4">
+                    <DialogFooter className="gap-2 mt-4">
                         <DialogClose asChild>
-                            <Button variant="ghost" className="w-full sm:w-auto">Cancel</Button>
+                            <Button variant="ghost" className="w-full sm:w-auto">{t('cancel')}</Button>
                         </DialogClose>
 
                         <Button
@@ -76,7 +77,7 @@ export default function ConfirmDeleteDialog({
                             isLoading={isLoading}
                             className="w-full sm:w-auto"
                         >
-                            {isLoading ? "Deleting..." : "Yes, delete"}
+                            {isLoading ? t('dialog.deleting') : t('dialog.confirm_delete')}
                         </Button>
                     </DialogFooter>
                 </Form>
