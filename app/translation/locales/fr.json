@@ -134,5 +134,7 @@
     "serverErrorDescription": "Nos serveurs rencontrent des difficultés à traiter votre demande. Nous avons été avertis et nous examinons le problème.",
     "tryAgain": "Réessayer",
     "systemStatus": "État du système",
-    "serverErrorReferenceDescription": "Si ce problème persiste, veuillez fournir à notre équipe d'assistance la référence suivante :"
+    "serverErrorReferenceDescription": "Si ce problème persiste, veuillez fournir à notre équipe d'assistance la référence suivante :",
+    "logInTitle": "Connectez-vous à votre compte",
+    "logInDescription": "Utilisez votre adresse email pour accéder à des fonctionnalités avancées et des prix réduits."
 }

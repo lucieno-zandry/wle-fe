@@ -17,9 +17,7 @@ export function AuthDialog() {
   return (
     <Dialog
       open={auth.open}
-      onOpenChange={(open) => {
-        if (!open) auth.close();
-      }}
+      onOpenChange={auth.close}
     >
       <DialogContent className="sm:max-w-[400px]">
         <DialogHeader className="space-y-2 text-center">

@@ -16,33 +16,31 @@ import type { loader } from "~/routes/config/config-boundary";
 import { useSettings } from "~/hooks/use-settings";
 import BackButton from "../custom-components/back-button";
 import { ChevronLeft } from "lucide-react";
+import { useAuthDialogStore } from "../stores/use-auth-dialog-store";
 
 type NavbarProps = {
     isUnAuthenticated: boolean,
-    isAuthenticated: boolean,
     t: TFunction;
     navbarSearchVisible: boolean,
     appPathname: typeof appPathname,
     name: string,
     appLogoUrl: string,
-    userCanUseNotifications: boolean,
-    userCanUseSettings: boolean,
     user: User | null,
     showBackButton: boolean,
+    onLogIn: () => void,
 }
 
 export function NavbarView({
-    isAuthenticated,
     isUnAuthenticated,
     t,
     navbarSearchVisible,
     appPathname,
     name,
     appLogoUrl,
-    userCanUseNotifications,
-    userCanUseSettings,
     user,
-    showBackButton
+    showBackButton,
+    onLogIn,
+
 }: NavbarProps) {
     return (
         <header className="flex flex-wrap justify-between items-center px-4 sm:px-8 py-3 shadow-sm bg-background/95 backdrop-blur-md sticky top-0 z-50 gap-4 border-b border-border">
@@ -93,8 +91,8 @@ export function NavbarView({
                 <Cart />
 
                 {(isUnAuthenticated || user?.permissions?.can_log_in) &&
-                    <Button variant="default" size="sm" className="shadow-sm" asChild>
-                        <Link to={appPathname('/auth')}>{t('common:logIn')}</Link>
+                    <Button variant="default" size="sm" type="button" onClick={onLogIn} className="shadow-sm">
+                        {t('common:logIn')}
                     </Button>}
 
                 {user?.permissions?.can_use_notifications &&
@@ -122,29 +120,35 @@ export default function Navbar() {
     const { t } = useTranslation();
     const { pathname } = useLocation();
     const appPathname = useAppPathname();
+    const { openDialog } = useAuthDialogStore();
 
     const name: string = get('app_name', 'Alofo');
     const appLogoUrl: string = get('app_logo', '');
 
     const isUnAuthenticated = useMemo(() => authStatus === "unauthenticated", [authStatus])
-    const isAuthenticated = useMemo(() => authStatus === "authenticated", [authStatus])
     const navbarSearchVisible = useMemo(() => (!pathname.includes('/search') && !pathname.includes('/settings')), [pathname]);
 
     const userCanUseNotifications = !!user?.permissions?.can_use_notifications;
     const userCanUseSettings = !!user?.permissions?.can_use_settings;
     const showBackButton = pathname !== appPathname('') && pathname !== appPathname('/');
 
+    const handleLogIn = () => {
+        openDialog({
+            action: 'AUTHENTICATE',
+            title: t('common:logInTitle'),
+            description: t('common:logInDescription')
+        })
+    }
+
     return <NavbarView
         t={t}
-        isAuthenticated={isAuthenticated}
         isUnAuthenticated={isUnAuthenticated}
         navbarSearchVisible={navbarSearchVisible}
         appPathname={appPathname}
         name={name}
         appLogoUrl={appLogoUrl}
-        userCanUseNotifications={userCanUseNotifications}
-        userCanUseSettings={userCanUseSettings}
         user={user}
         showBackButton={showBackButton}
+        onLogIn={handleLogIn}
     />
 }

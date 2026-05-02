@@ -162,6 +162,6 @@ export function useAuthDialog() {
         // forgot‑password status
         forgotPasswordSent,
         // close
-        close: () => store.closeDialog,
+        close: store.closeDialog,
     };
 }

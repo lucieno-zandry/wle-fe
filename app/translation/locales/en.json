@@ -134,5 +134,7 @@
     "serverErrorDescription": "Our servers are having a bit of trouble processing your request. We've been notified and are looking into it.",
     "tryAgain": "Try Again",
     "systemStatus": "System Status",
-    "serverErrorReferenceDescription": "If this issue persists, please provide our support team with the following reference:"
+    "serverErrorReferenceDescription": "If this issue persists, please provide our support team with the following reference:",
+    "logInTitle": "Log in to your account",
+    "logInDescription": "Use your email and have access to more advanced features and pricings."
 }
