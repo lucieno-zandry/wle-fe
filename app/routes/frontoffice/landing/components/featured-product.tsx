@@ -2,6 +2,7 @@ import { ProductGrid } from "~/components/products/product-grid";
 import { Button } from "~/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router";
+import appPathname from "~/lib/app-pathname";
 
 interface FeaturedProductsViewProps {
   eyebrow?: string;
@@ -23,7 +24,7 @@ export function FeaturedProductsView({ eyebrow, title, subtitle, products }: Fea
 
       <div className="featured-products__footer">
         <Button asChild variant="outline" className="featured-products__view-all">
-          <Link to="/products">
+          <Link to={appPathname('/products')}>
             View all products
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>

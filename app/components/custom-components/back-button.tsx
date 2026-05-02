@@ -5,9 +5,10 @@ import { useCallback } from "react";
 
 type BackButtonProps = {
     path?: string,
+    withLabel?: boolean,
 }
 
-export default function ({ path }: BackButtonProps) {
+export default function ({ path, withLabel }: BackButtonProps) {
 
     const navigate = useNavigate();
 
@@ -27,7 +28,8 @@ export default function ({ path }: BackButtonProps) {
             onClick={handleClick}
         >
             <ArrowLeft className="w-4 h-4" />
-            Back
+            {withLabel &&
+                "Back"}
         </Button>
     </div>
 }

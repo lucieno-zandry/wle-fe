@@ -14,6 +14,8 @@ import { NavSearch } from "./nav-search";
 import { NotificationsPopover } from "../notifications/notifications-popover";
 import type { loader } from "~/routes/config/config-boundary";
 import { useSettings } from "~/hooks/use-settings";
+import BackButton from "../custom-components/back-button";
+import { ChevronLeft } from "lucide-react";
 
 type NavbarProps = {
     isUnAuthenticated: boolean,
@@ -26,6 +28,7 @@ type NavbarProps = {
     userCanUseNotifications: boolean,
     userCanUseSettings: boolean,
     user: User | null,
+    showBackButton: boolean,
 }
 
 export function NavbarView({
@@ -38,7 +41,8 @@ export function NavbarView({
     appLogoUrl,
     userCanUseNotifications,
     userCanUseSettings,
-    user
+    user,
+    showBackButton
 }: NavbarProps) {
     return (
         <header className="flex flex-wrap justify-between items-center px-4 sm:px-8 py-3 shadow-sm bg-background/95 backdrop-blur-md sticky top-0 z-50 gap-4 border-b border-border">
@@ -47,9 +51,11 @@ export function NavbarView({
             <div className="flex items-center gap-6 md:gap-8">
                 <h1>
                     <Link
-                        to={appPathname('/')}
+                        to={appPathname('')}
                         className="flex items-center gap-2.5 transition-opacity hover:opacity-80"
                     >
+                        {showBackButton &&
+                            <ChevronLeft />}
                         {appLogoUrl && (
                             <img
                                 src={appLogoUrl}
@@ -74,11 +80,13 @@ export function NavbarView({
             </div>
 
             {/* Middle Section: Desktop Search */}
-            {navbarSearchVisible && (
-                <div className="flex-1 max-w-md hidden md:block">
-                    <NavSearch />
-                </div>
-            )}
+            {
+                navbarSearchVisible && (
+                    <div className="flex-1 max-w-md hidden md:block">
+                        <NavSearch />
+                    </div>
+                )
+            }
 
             {/* Right Section: Settings & Auth/User Actions */}
             <div className="flex items-center gap-3 sm:gap-4">
@@ -96,12 +104,14 @@ export function NavbarView({
             </div>
 
             {/* Mobile Search */}
-            {navbarSearchVisible && (
-                <div className="w-full block md:hidden mt-1">
-                    <NavSearch />
-                </div>
-            )}
-        </header>
+            {
+                navbarSearchVisible && (
+                    <div className="w-full block md:hidden mt-1">
+                        <NavSearch />
+                    </div>
+                )
+            }
+        </header >
     )
 }
 
@@ -122,6 +132,7 @@ export default function Navbar() {
 
     const userCanUseNotifications = !!user?.permissions?.can_use_notifications;
     const userCanUseSettings = !!user?.permissions?.can_use_settings;
+    const showBackButton = pathname !== appPathname('') && pathname !== appPathname('/');
 
     return <NavbarView
         t={t}
@@ -134,5 +145,6 @@ export default function Navbar() {
         userCanUseNotifications={userCanUseNotifications}
         userCanUseSettings={userCanUseSettings}
         user={user}
+        showBackButton={showBackButton}
     />
 }
