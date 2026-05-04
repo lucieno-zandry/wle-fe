@@ -4,13 +4,13 @@ import { initReactI18next } from "react-i18next";
 import enCommon from "~/translation/locales/en.json";
 import frCommon from "~/translation/locales/fr.json";
 
-import enAddresses from "./locales/en/addresses.json";
-import frAddresses from "./locales/fr/addresses.json";
+import enAddresses from "~/routes/frontoffice/addresses/translation/locales/en.json";
+import frAddresses from "~/routes/frontoffice/addresses/translation/locales/fr.json";
 
 import enCheckout from "~/routes/frontoffice/checkout/translation/locales/en.json";
 import frCheckout from "~/routes/frontoffice/checkout/translation/locales/fr.json";
 
-import enLanding from "~/routes/frontoffice/landing/translation/locales/fr.json";
+import enLanding from "~/routes/frontoffice/landing/translation/locales/en.json";
 import frLanding from "~/routes/frontoffice/landing/translation/locales/fr.json";
 
 

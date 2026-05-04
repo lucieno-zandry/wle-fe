@@ -5,7 +5,7 @@ import CustomField from "~/components/custom-components/field";
 import Button from "./custom-components/button";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
-import { useState, useMemo, type FocusEvent, useEffect } from "react";
+import { useState, useMemo, type FocusEvent, useEffect, useCallback } from "react";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { useTranslation } from "react-i18next";
@@ -13,28 +13,26 @@ import type { TFunction } from "i18next";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import getValidationError from "~/lib/get-validation-error";
 
-// Updated validation to comfortably handle spaces, parentheses, and dashes
-const addressSchema = {
-    label: z.string().max(50).optional(),
-    recipient_name: z.string().min(2, "Name is required"),
-    phone: z.string().regex(/^\+?[\d\s\-\(\)]{7,20}$/, "Invalid phone number format"),
-    phone_alt: z.string().regex(/^\+?[\d\s\-\(\)]{7,20}$/, "Invalid phone number format").optional().or(z.literal('')),
-    line1: z.string().min(5, "Address is too short"),
+// Helper to create schema with translated messages
+const createAddressSchema = (t: TFunction) => z.object({
+    label: z.string().max(50, t('addresses:validation.label_max')).optional(),
+    recipient_name: z.string().min(2, t('addresses:validation.recipient_name_required')),
+    phone: z.string().regex(/^\+?[\d\s\-\(\)]{7,20}$/, t('addresses:validation.phone_invalid')),
+    phone_alt: z.string().regex(/^\+?[\d\s\-\(\)]{7,20}$/, t('addresses:validation.phone_alt_invalid')).optional().or(z.literal('')),
+    line1: z.string().min(5, t('addresses:validation.line1_too_short')),
     line2: z.string().optional(),
-    city: z.string().min(2, "City is required"),
+    city: z.string().min(2, t('addresses:validation.city_required')),
     state: z.string().optional(),
-    postal_code: z.string().min(2, "Postal code is required"),
-    country: z.string().length(2, "Country code must be 2 letters"),
+    postal_code: z.string().min(2, t('addresses:validation.postal_code_required')),
+    country: z.string().length(2, t('addresses:validation.country_invalid')),
     address_type: z.enum(["billing", "shipping", "both"]).optional(),
     is_default: z.boolean().optional(),
-};
+});
 
 // Formatter for UI/UX friendly phone numbers: (XXX) XXX-XXXX
 const formatPhoneNumber = (value: string) => {
     if (!value) return value;
-    // Leave international numbers alone to prevent breaking formatting
     if (value.startsWith('+')) return value;
-
     const cleaned = value.replace(/\D/g, '');
     const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
     if (match) {
@@ -45,9 +43,9 @@ const formatPhoneNumber = (value: string) => {
 
 type AddressDialogProps = {
     address?: Address;
-    isLoading?: boolean; // legacy (still works)
-    loading?: boolean;   // new controlled loading
-    onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void; // new
+    isLoading?: boolean;
+    loading?: boolean;
+    onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
     isEdit: boolean;
     open: boolean;
     onOpenChange: (open: boolean) => void;
@@ -69,8 +67,9 @@ export function AddressDialog({
     t,
     onSubmit
 }: AddressDialogProps) {
+    // Create schema once per t function
+    const addressSchema = useMemo(() => createAddressSchema(t), [t]);
 
-    // Intercept phone input to auto-format
     const handlePhoneFormatting = (e: React.ChangeEvent<HTMLInputElement>) => {
         const formatted = formatPhoneNumber(e.target.value);
         e.target.value = formatted;
@@ -106,7 +105,7 @@ export function AddressDialog({
                             name="recipient_name"
                             label={t('addresses:recipient_name')}
                             defaultValue={address?.recipient_name}
-                            dataFormat={addressSchema.recipient_name}
+                            dataFormat={addressSchema.shape.recipient_name}
                             onValidationErrorsChange={onValidationChange}
                             validationErrors={formErrors?.recipient_name}
                             required
@@ -120,7 +119,7 @@ export function AddressDialog({
                                 placeholder="(555) 555-5555"
                                 defaultValue={address?.phone}
                                 onChange={handlePhoneFormatting}
-                                dataFormat={addressSchema.phone}
+                                dataFormat={addressSchema.shape.phone}
                                 onValidationErrorsChange={onValidationChange}
                                 validationErrors={formErrors?.phone}
                                 required
@@ -132,7 +131,7 @@ export function AddressDialog({
                                 placeholder="(555) 555-5555"
                                 defaultValue={address?.phone_alt ?? ""}
                                 onChange={handlePhoneFormatting}
-                                dataFormat={addressSchema.phone_alt}
+                                dataFormat={addressSchema.shape.phone_alt}
                                 onValidationErrorsChange={onValidationChange}
                                 validationErrors={formErrors?.phone_alt}
                             />
@@ -143,7 +142,7 @@ export function AddressDialog({
                             label={t('addresses:label')}
                             placeholder={t('addresses:label_placeholder')}
                             defaultValue={address?.label ?? ""}
-                            dataFormat={addressSchema.label}
+                            dataFormat={addressSchema.shape.label}
                             onValidationErrorsChange={onValidationChange}
                             validationErrors={formErrors?.label}
                         />
@@ -153,7 +152,7 @@ export function AddressDialog({
                             label={t('addresses:line1')}
                             placeholder={t('addresses:line1_placeholder')}
                             defaultValue={address?.line1}
-                            dataFormat={addressSchema.line1}
+                            dataFormat={addressSchema.shape.line1}
                             onValidationErrorsChange={onValidationChange}
                             validationErrors={formErrors?.line1}
                             required
@@ -164,7 +163,7 @@ export function AddressDialog({
                             label={t('addresses:line2_optional')}
                             placeholder={t('addresses:line2_placeholder')}
                             defaultValue={address?.line2 ?? ""}
-                            dataFormat={addressSchema.line2}
+                            dataFormat={addressSchema.shape.line2}
                             onValidationErrorsChange={onValidationChange}
                             validationErrors={formErrors?.line2}
                         />
@@ -174,7 +173,7 @@ export function AddressDialog({
                                 name="city"
                                 label={t('addresses:city')}
                                 defaultValue={address?.city}
-                                dataFormat={addressSchema.city}
+                                dataFormat={addressSchema.shape.city}
                                 onValidationErrorsChange={onValidationChange}
                                 validationErrors={formErrors?.city}
                                 required
@@ -184,7 +183,7 @@ export function AddressDialog({
                                 label={t('addresses:state')}
                                 placeholder={t('addresses:state_placeholder')}
                                 defaultValue={address?.state ?? ""}
-                                dataFormat={addressSchema.state}
+                                dataFormat={addressSchema.shape.state}
                                 onValidationErrorsChange={onValidationChange}
                                 validationErrors={formErrors?.state}
                             />
@@ -195,7 +194,7 @@ export function AddressDialog({
                                 name="postal_code"
                                 label={t('addresses:postal_code')}
                                 defaultValue={address?.postal_code}
-                                dataFormat={addressSchema.postal_code}
+                                dataFormat={addressSchema.shape.postal_code}
                                 onValidationErrorsChange={onValidationChange}
                                 validationErrors={formErrors?.postal_code}
                                 required
@@ -205,7 +204,7 @@ export function AddressDialog({
                                 label={t('addresses:country')}
                                 placeholder={t('addresses:country_placeholder')}
                                 defaultValue={address?.country}
-                                dataFormat={addressSchema.country}
+                                dataFormat={addressSchema.shape.country}
                                 onValidationErrorsChange={onValidationChange}
                                 validationErrors={formErrors?.country}
                                 required
@@ -216,7 +215,7 @@ export function AddressDialog({
                             <FieldLabel>{t('addresses:address_type')}</FieldLabel>
                             <Select name="address_type"
                                 defaultValue={address?.address_type ?? "shipping"}
-                                onValueChange={(value) => onValidationChange(getValidationError({ value, dataFormat: addressSchema.address_type }), "address_type")}>
+                                onValueChange={(value) => onValidationChange(getValidationError({ value, dataFormat: addressSchema.shape.address_type }), "address_type")}>
                                 <SelectTrigger>
                                     <SelectValue placeholder={t('addresses:address_type')} />
                                 </SelectTrigger>
@@ -238,7 +237,6 @@ export function AddressDialog({
                         </Field>
                     </FieldGroup>
 
-                    {/* Switch for default */}
                     <div className="flex items-center justify-between rounded-xl border bg-muted/40 p-4 transition-colors hover:bg-muted/60">
                         <div className="space-y-1">
                             <Label htmlFor="is_default" className="text-sm font-semibold cursor-pointer">
@@ -283,29 +281,31 @@ export default function ({
 }: Pick<AddressDialogProps, "address" | "open" | "onOpenChange" | "loading" | "onSubmit"> & { errors?: null | Record<string, string[]> }) {
     const isEdit = useMemo(() => Boolean(address), [address]);
     const navigation = useNavigation();
-
     const isLoading = useMemo(() => navigation.state === "submitting" || navigation.state === "loading", [navigation.state]);
     const computedLoading = loading ?? isLoading ?? false;
-
     const [formErrors, setFormErrors] = useState<Record<string, string[]> | null>(null);
+    const { t } = useTranslation(["addresses", "common"]);
 
     useEffect(() => {
         if (errors) {
             setFormErrors(errors);
         }
-    }, [errors]);
 
-    const handleValidationChange = (errors: string[] | null, e: FocusEvent<HTMLInputElement> | string) => {
+        if (!props.open) {
+            setFormErrors(null)
+        }
+    }, [errors, props.open]);
+
+    const handleValidationChange = useCallback((errors: string[] | null, e: FocusEvent<HTMLInputElement> | string) => {
         const updatedErrors = getUpdatedFormErrors({
             formErrors: formErrors,
             name: typeof e === "string" ? e : e.target.name,
             validationErrors: errors
         });
         setFormErrors(updatedErrors);
-    };
+    }, [formErrors]);
 
     const canSubmit = useMemo(() => !formErrors, [formErrors]);
-    const { t } = useTranslation(["addresses", "common"]);
 
     return (
         <AddressDialog

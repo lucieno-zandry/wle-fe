@@ -20,10 +20,10 @@ import {
 import { createAddress, getAuthAddresses, removeAddresses, updateAddress } from "~/api/http-requests"
 import AddressDialog from "~/components/address-dialog"
 import { toast } from "sonner"
-import AddressCard from "~/components/addresses/address-card"
+import AddressCard from "~/routes/frontoffice/addresses/components/address-card"
 import { useUserStore } from "~/hooks/use-user"
 import useAddressStore from "~/hooks/use-address-store"
-import ConfirmDeleteDialog from "~/components/addresses/confirm-delete-dialog"
+import ConfirmDeleteDialog from "~/routes/frontoffice/addresses/components/confirm-delete-dialog"
 import { HttpException, ValidationException } from "~/api/app-fetch"
 import i18next from "i18next";
 

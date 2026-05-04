@@ -10,7 +10,7 @@ export default [
             route("products", "routes/frontoffice/products.tsx"),
             route("product/:slug", "routes/frontoffice/product-detail/product-detail.tsx"),
             route("settings", "routes/common/settings.tsx"),
-            route("addresses", "routes/frontoffice/addresses.tsx"),
+            route("addresses", "routes/frontoffice/addresses/addresses.tsx"),
             route("checkout", "routes/frontoffice/checkout/checkout.tsx"),
             route("orders", "routes/frontoffice/orders/orders.tsx"),
             route("orders/:uuid", "routes/frontoffice/order-details/order-details.tsx"),

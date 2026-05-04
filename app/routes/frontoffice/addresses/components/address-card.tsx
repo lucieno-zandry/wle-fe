@@ -9,9 +9,9 @@ import {
 import { Button } from "~/components/ui/button";
 import { Pencil, Trash2, MapPin, Phone, Building2 } from "lucide-react";
 import useAddressStore from "~/hooks/use-address-store";
-import { Checkbox } from "../ui/checkbox";
-import ConfirmDeleteDialog from "./confirm-delete-dialog";
+import { Checkbox } from "../../../../components/ui/checkbox";
 import { useTranslation } from "react-i18next";
+import ConfirmDeleteDialog from "./confirm-delete-dialog";
 
 type AddressCardProps = {
     address: Address;
@@ -51,8 +51,8 @@ export default function AddressCard({ address, onEdit }: AddressCardProps) {
     return (
         <Card
             className={`transition-all duration-200 relative overflow-hidden ${isChecked
-                    ? "ring-2 ring-primary border-primary bg-primary/5"
-                    : "hover:border-primary/40 border-border"
+                ? "ring-2 ring-primary border-primary bg-primary/5"
+                : "hover:border-primary/40 border-border"
                 }`}
         >
             <CardHeader className="flex flex-row items-start justify-between pb-3">

@@ -57,5 +57,16 @@
   "selected_count_one": "{{count}} address selected",
   "selected_count_other": "{{count}} addresses selected",
   "line1_placeholder": "Street address, P.O. box",
-  "line2_placeholder": "Apt, suite, unit, building, floor"
+  "line2_placeholder": "Apt, suite, unit, building, floor",
+  "validation": {
+    "recipient_name_required": "Full name is required",
+    "phone_invalid": "Invalid phone number format",
+    "phone_alt_invalid": "Invalid phone number format",
+    "line1_too_short": "Address is too short",
+    "city_required": "City is required",
+    "postal_code_required": "Postal code is required",
+    "country_invalid": "Country code must be 2 letters",
+    "label_max": "Label must be at most 50 characters",
+    "address_type_invalid": "Please select a valid address type"
+  }
 }
