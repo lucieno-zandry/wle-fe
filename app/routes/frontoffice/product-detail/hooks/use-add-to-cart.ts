@@ -21,7 +21,6 @@ export function useAddToCart() {
             },
             error: (error) => {
                 if (error instanceof HttpException) {
-                    console.log(error.data.message);
                     options?.onError?.(error);
                     return error.data?.message || "Something went wrong, please, try again";
                 }

@@ -8,8 +8,9 @@ import { ProductCard } from "../../../../components/product-card";
 import { SkeletonCard } from "./skeleton-card";
 import { EmptyState } from "./empty-state";
 import { ErrorState } from "./error-state";
-import { useLocation, useParams } from "react-router";
+import { useLoaderData, useLocation, useParams } from "react-router";
 import { useFormatMoney } from "~/lib/format-money";
+import type { loader } from "../search";
 
 export function ProductGrid() {
     const { t } = useTranslation("search");
@@ -36,6 +37,10 @@ export function ProductGrid() {
     const sentinelRef = useRef<HTMLDivElement>(null);
     const isFetchingRef = useRef(false);
 
+    // Flag to remember that we already used the initial loader data
+    const hasUsedInitialData = useRef(false);
+    const initialProducts = useLoaderData<typeof loader>().products;
+
     const fetchInitial = useCallback(async () => {
         if (isFetchingRef.current) return;
         isFetchingRef.current = true;
@@ -55,10 +60,10 @@ export function ProductGrid() {
         isFetchingRef.current = false;
     }, [filters, query, search, currency, t]);
 
-    useEffect(() => {
-        if (!urlHydrated) return;
-        fetchInitial();
-    }, [fetchInitial, urlHydrated]);
+    // useEffect(() => {
+    //     if (!urlHydrated) return;
+    //     fetchInitial();
+    // }, [fetchInitial, urlHydrated]);
 
     const fetchMore = useCallback(async () => {
         if (isFetchingRef.current || !hasMore) return;
@@ -76,6 +81,34 @@ export function ProductGrid() {
         setProductsLoadingMore(false);
         isFetchingRef.current = false;
     }, [hasMore, currentPage, filters]);
+
+    // 1) Populate store from loader data (once)
+    useEffect(() => {
+        if (initialProducts && !hasUsedInitialData.current) {
+            setProducts(
+                initialProducts.data,
+                initialProducts.current_page,
+                initialProducts.last_page,
+                initialProducts.total
+            );
+            hasUsedInitialData.current = true;
+        }
+    }, []);
+
+    //    - If we already used loader data, skip the very first automatic fetch
+    //    - Otherwise (no loader data, or later filter changes), fetch normally
+    useEffect(() => {
+        if (!urlHydrated) return;
+
+        // If we already populated from loader, clear the flag and do NOT fetch now.
+        // The store already contains the initial products.
+        if (hasUsedInitialData.current) {
+            hasUsedInitialData.current = false; // allow future fetches (filter changes)
+            return;
+        }
+
+        fetchInitial();
+    }, [fetchInitial, urlHydrated]);
 
     useEffect(() => {
         const el = sentinelRef.current;

@@ -101,8 +101,6 @@ export async function action({ request }: ActionFunctionArgs) {
             { headers } // pass cookies for authentication
         );
 
-        console.log(transactionResp);
-
         const transaction = transactionResp.data!.transaction;
 
         // If the transaction contains a payment_url, redirect there
@@ -115,7 +113,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
         // Otherwise, redirect to a success/pending page
     } catch (err) {
-        console.log(err);
         return redirect(appPathname(`/orders/${order.uuid}`));
     }
 }

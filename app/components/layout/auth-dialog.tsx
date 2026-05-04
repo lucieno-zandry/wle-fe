@@ -228,7 +228,6 @@ function VerificationStep() {
       toast.success(t("common:newVerificationCodeSent"));
     } catch (e) {
       toast.error(t("common:failedToSendVerificationCode"));
-      console.log(e);
     }
   };
 
