@@ -3,8 +3,9 @@ import buildQuery from "~/lib/build-query";
 import executeRequest from "~/lib/execute-request";
 import { ALLOWED_LANGUAGES, extractLang, langIsValid } from "~/lib/lang-helpers";
 import isCsr from "~/lib/is-csr";
+import { env } from "~/lib/env";
 
-export const API_URL = import.meta.env.VITE_API_URL;
+export const API_URL = env.API_URL;
 
 export class ValidationException {
     errors: Record<string, string[]>;

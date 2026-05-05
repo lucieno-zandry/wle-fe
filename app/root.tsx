@@ -5,6 +5,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
+  type LoaderFunctionArgs,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -12,6 +14,15 @@ import "./app.css";
 import RouterContextInjector from "./lib/router-context-injector";
 import { Toaster } from "./components/ui/sonner";
 import './i18n/i18n';
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return {
+    ENV: {
+      API_BASE_URL: process.env.API_BASE_URL,
+      API_URL: process.env.API_BASE_URL + "/api", // compose if needed
+    },
+  };
+};
 
 
 export const links: Route.LinksFunction = () => [
@@ -28,6 +39,9 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useLoaderData<typeof loader>();
+  const { ENV } = data;
+
   return (
     <html lang="en">
       <head>
@@ -35,11 +49,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <script src="/env.js" />
       </head>
       <body className="custom-scrollbar">
         {children}
         <ScrollRestoration />
         <Scripts />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__env = ${JSON.stringify(ENV)};`,
+          }}
+        />
       </body>
     </html>
   );
