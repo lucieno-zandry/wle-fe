@@ -43,9 +43,7 @@ export function useBuyNow() {
                         return openDialog({
                             action: e.data.action,
                             onSuccessParams: params,
-                            successAction: 'BUY_NOW',
-                            title: "Sign in to checkout",
-                            description: "Please log in to securely complete your purchase and track your order.",
+                            successAction: 'BUY_NOW'
                         });
                     }
                 }

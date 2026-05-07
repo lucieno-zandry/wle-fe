@@ -35,13 +35,10 @@ export function AuthDialog() {
                       : t("common:resetPassword")
             )}
           </DialogTitle>
-
-          {/* Render description if it exists */}
-          {auth.description && (
-            <DialogDescription className="text-center">
-              {auth.description}
-            </DialogDescription>
-          )}
+          
+          <DialogDescription className="text-center">
+            {auth.description || t('common:logInDescription')}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="mt-4">

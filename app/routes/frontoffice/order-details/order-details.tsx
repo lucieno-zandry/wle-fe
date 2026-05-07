@@ -9,12 +9,12 @@ import { getOrder } from "~/api/http-requests";
 import useCheckoutStore from "~/hooks/use-checkout-store";
 import { getOrderStatusConfig } from "~/lib/get-order-status-config";
 import { ShippingAddress } from "./components/shipping-address";
-import PaymentMethodSelector from "./components/payment-method-selector";
 import PaymentIncompleteAlert from "./components/payment-incomplete-alert";
 import ShipmentStatus from "./components/shipment-status";
 import { TransactionList } from "./components/transactions/transaction-list";
 import { useFormatMoney } from "~/lib/format-money";
 import NotFoundErrorPage from "~/routes/common/not-found-error-page";
+import { PaymentMethodSelector } from "~/components/payment-method-selector";
 
 export const clientLoader = async ({ params }: LoaderFunctionArgs) => {
     if (!params.uuid) return redirect(`/${params.lang}/403`);
@@ -62,8 +62,8 @@ export default function OrderDetails() {
                     )}
                     {statusConfig.showCTA && (
                         <PaymentMethodSelector
-                            currentMethod={method}
-                            onMethodChange={setMethod}
+                            selectedValue={method}
+                            onChange={setMethod}
                         />
                     )}
                     <OrderSummary
