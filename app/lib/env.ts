@@ -19,10 +19,10 @@ function getEnv() {
         return window.__env;
     }
 
-    const serverApiBaseUrl = process.env.SERVER_API_BASE_URL;
-    const clientApiBaseUrl = process.env.API_BASE_URL;
+    const clientApiBaseUrl = process.env.API_BASE_URL || "http://localhost:8000";
+    const serverApiBaseUrl = process.env.SERVER_API_BASE_URL || clientApiBaseUrl;
 
-    const apiBaseUrl = (isCsr() ? clientApiBaseUrl : serverApiBaseUrl) || "http://localhost:8000"
+    const apiBaseUrl = isCsr() ? clientApiBaseUrl : serverApiBaseUrl
     // On the server, fall back to process.env (or a safe default)
     return {
         API_BASE_URL: apiBaseUrl,
