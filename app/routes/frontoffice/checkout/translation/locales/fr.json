@@ -65,7 +65,8 @@
             "paypal": "PayPal",
             "orangemoney": "Orange Money",
             "airtelmoney": "Airtel Money",
-            "mvola": "MVola"
+            "mvola": "MVola",
+            "vanilla_pay": "Vanilla Pay"
         }
     },
     "shipping_toasts": {
