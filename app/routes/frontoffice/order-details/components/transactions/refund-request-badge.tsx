@@ -1,5 +1,6 @@
 import { Badge } from "~/components/ui/badge";
 import { useTranslation } from "react-i18next";
+import type { RefundRequest } from "wle-core";
 
 const statusColor = {
     pending: "secondary",

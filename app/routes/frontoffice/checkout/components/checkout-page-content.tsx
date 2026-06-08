@@ -7,6 +7,7 @@ import ShippingStep from "./shipping-step";
 import OrderSummary from "./order-summary";
 import useCheckoutStore from "../stores/use-checkout-store";
 import PaymentStep from "./payment-step";
+import type { CartItem, Coupon } from "wle-core";
 
 type Props = {
     initialData: {

@@ -1,6 +1,7 @@
 import { ImageOff } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { PromotionPill } from "./promotion-pill";
+import type { Product } from "wle-core";
 
 export function ProductImage({
     product,

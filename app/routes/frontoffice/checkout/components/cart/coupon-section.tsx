@@ -8,6 +8,7 @@ import { getCouponFromCode, unuseCoupon } from "~/api/http-requests";
 import { toast } from "sonner";
 import { HttpException } from "~/api/app-fetch";
 import { Ticket, X, CheckCircle2 } from "lucide-react";
+import type { Coupon } from "wle-core";
 
 type CouponSectionSmartProps = {
     initialCoupon: Coupon | null;

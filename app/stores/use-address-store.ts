@@ -1,3 +1,4 @@
+import type { Address } from "wle-core";
 import { create } from "zustand";
 
 type AddressStore = {

@@ -13,6 +13,7 @@ import type { TFunction } from "i18next";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import getValidationError from "~/lib/get-validation-error";
 import { CountrySelector } from "./custom-components/country-selector";
+import type { Address } from "wle-core";
 
 // Helper to create schema with translated messages
 const createAddressSchema = (t: TFunction) => z.object({

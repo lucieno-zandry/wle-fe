@@ -16,6 +16,7 @@ import { cn } from "~/lib/utils";
 import { NotificationIcon } from "./notification-icon";
 import { timeAgo } from "../helpers/notification-helpers";
 import type { NotificationMeta } from "../types/notification-types";
+import type { AppNotification } from "wle-core";
 
 type NotificationItemViewProps = {
     notification: AppNotification;
@@ -157,7 +158,7 @@ export function NotificationItem({ notification }: Props) {
     const isSelected = selectedIds.has(notification.id);
     const isPending = pendingIds.has(notification.id);
     const isRead = !!notification.read_at;
-    
+
     return (
         <NotificationItemView
             notification={notification}

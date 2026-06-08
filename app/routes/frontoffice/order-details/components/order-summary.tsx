@@ -11,6 +11,7 @@ import { useFormatMoney } from "~/lib/format-money";
 import { HttpException, ValidationException } from "~/api/app-fetch";
 import { DeleteOrderDialog } from "../../../../components/delete-order-dialog";
 import { useTranslation } from "react-i18next";
+import type { Order, Transaction } from "wle-core";
 
 function OrderSummary({ order, statusConfig, method }: { order: Order; statusConfig: any; method: Transaction['payment_method'] }) {
     const subtotal = order.cart_items?.reduce((acc, item) => acc + item.total, 0) ?? 0;

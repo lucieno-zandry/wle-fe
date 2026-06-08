@@ -3,6 +3,7 @@ import { cancelDispute } from "~/api/http-requests";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import type { Transaction } from "wle-core";
 
 export function CancelDisputeButton({ transaction, onComplete }: { transaction: Transaction; onComplete: () => void }) {
     const { t } = useTranslation("order-details");

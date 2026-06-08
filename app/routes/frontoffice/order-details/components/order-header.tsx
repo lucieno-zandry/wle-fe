@@ -5,6 +5,7 @@ import { Button } from "../../../../components/ui/button";
 import appPathname from "~/lib/app-pathname";
 import { useTranslation } from "react-i18next";
 import formatDate from "~/lib/format-date";
+import type { Order } from "wle-core";
 
 function OrderHeader({ order, statusConfig }: { order: Order; statusConfig: any }) {
     const { t, i18n } = useTranslation("order-details");

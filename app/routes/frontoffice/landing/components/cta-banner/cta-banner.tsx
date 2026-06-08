@@ -1,6 +1,7 @@
 import { CtaBannerView } from "wle-ui-package";
 import { Actions } from "./actions";
 import { useTranslation } from "react-i18next";
+import type { CtaBannerContent, LandingBlock } from "wle-core";
 
 export function CtaBanner({ block }: { block: LandingBlock<CtaBannerContent> }) {
   const { t } = useTranslation("landing");

@@ -6,6 +6,7 @@ import { PriceDisplay } from "./price-display";
 import { ProductImage } from "./product-image";
 import { PromotionPill } from "./promotion-pill";
 import { useFormatMoney } from "~/lib/format-money";
+import type { Product } from "wle-core";
 
 export function GridCard({ product, onAddToCart }: { product: Product; onAddToCart: (variantId: number) => void }) {
     const { t } = useTranslation("search");

@@ -3,6 +3,7 @@ import { useAddToCart } from "~/routes/frontoffice/product-detail/hooks/use-add-
 import { useFormatMoney } from "~/lib/format-money";
 import { useTranslation } from "react-i18next";
 import { StickyCTABarView } from "wle-ui-package";
+import type { Product } from "wle-core";
 
 
 interface StickyCTABarProps {

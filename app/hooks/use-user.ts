@@ -1,3 +1,4 @@
+import type { User } from 'wle-core'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 

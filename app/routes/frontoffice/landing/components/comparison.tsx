@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import type { ComparisonContent, LandingBlock } from "wle-core";
 import { ComparisonView } from "wle-ui-package";
 
 export function Comparison({ block }: { block: LandingBlock<ComparisonContent> }) {

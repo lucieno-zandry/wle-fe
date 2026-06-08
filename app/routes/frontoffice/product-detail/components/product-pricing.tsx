@@ -9,6 +9,7 @@ import { useFormatMoney } from "~/lib/format-money";
 import { useTranslation } from "react-i18next";
 import type { ShippingOption } from "../types/shipping";
 import { Tag, X, Clock, Percent, Truck, ChevronDown, ChevronUp } from "lucide-react";
+import type { Coupon, Promotion, Variant } from "wle-core";
 
 // ── Dumb (View) ──────────────────────────────────────────────────────────────
 interface ProductPricingViewProps {

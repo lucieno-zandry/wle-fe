@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { HttpException } from "~/api/app-fetch";
 import { useTranslation } from "react-i18next";
 import { Loader2, ShoppingCart } from "lucide-react";
+import type { CartItem } from "wle-core";
 
 type CartItemListSmartProps = {
     items: CartItem[];

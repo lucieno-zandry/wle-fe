@@ -11,6 +11,7 @@ import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
 import { HttpException } from "~/api/app-fetch";
 import useCheckoutStore from "../stores/use-checkout-store";
+import type { CartItem, ShippingMethod } from "wle-core";
 
 let promise: Promise<void> | null = null;
 

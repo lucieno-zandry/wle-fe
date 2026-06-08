@@ -5,6 +5,7 @@ import CartItemList from "./cart/cart-item-list";
 import CouponSection from "./cart/coupon-section";
 import { Button } from "~/components/ui/button";
 import useCheckoutStore from "../stores/use-checkout-store";
+import type { CartItem, Coupon } from "wle-core";
 
 type Props = {
     cartItems: CartItem[];

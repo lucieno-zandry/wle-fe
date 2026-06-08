@@ -1,3 +1,4 @@
+import type { Transaction } from "wle-core";
 import { TransactionCard } from "./transaction-card";
 import { useTranslation } from "react-i18next";
 

@@ -1,4 +1,5 @@
 // routes/frontoffice/product-detail/components/product-variant-picker.tsx
+import type { Product, Variant, VariantGroup } from "wle-core";
 import { useSyncVariantToUrl } from "../hooks/use-sync-variant-to-url";
 import { useState, useEffect } from "react";
 

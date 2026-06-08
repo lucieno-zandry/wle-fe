@@ -10,6 +10,7 @@ import useDebounce from "~/hooks/use-debounce";
 import { LoadMoreButton } from "~/components/custom-components/load-more-button";
 import { ProductGridSkeleton } from "./components/product-grid-skeleton";
 import { getPreferencesFromLoaderFunctionArgs } from "~/lib/app-pathname";
+import type { Product } from "wle-core";
 
 export const loader = async (args: LoaderFunctionArgs) => {
     const { request } = args;

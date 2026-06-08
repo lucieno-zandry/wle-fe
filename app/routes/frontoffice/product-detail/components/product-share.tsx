@@ -6,6 +6,7 @@ import { useAppPathname } from "~/lib/app-pathname";
 import isCsr from "~/lib/is-csr";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import type { Product } from "wle-core";
 
 // ── Dumb (View) ──────────────────────────────────────────────────────────────
 interface ProductShareViewProps {

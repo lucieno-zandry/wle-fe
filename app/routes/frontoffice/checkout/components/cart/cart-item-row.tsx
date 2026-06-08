@@ -7,6 +7,7 @@ import { useFormatMoney } from "~/lib/format-money";
 import { useEffect, useRef, useState } from "react";
 import useDebounce from "~/hooks/use-debounce";
 import { cn } from "~/lib/utils";
+import type { CartItem } from "wle-core";
 
 type Props = {
     item: CartItem;

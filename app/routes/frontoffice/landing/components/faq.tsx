@@ -1,6 +1,7 @@
 import { FaqView } from "wle-ui-package";
 import { useLandingUIStore } from "../stores/use-landing-ui-store";
 import { useTranslation } from "react-i18next";
+import type { FaqContent, LandingBlock } from "wle-core";
 
 export function Faq({ block }: { block: LandingBlock<FaqContent> }) {
   const { t } = useTranslation("landing");

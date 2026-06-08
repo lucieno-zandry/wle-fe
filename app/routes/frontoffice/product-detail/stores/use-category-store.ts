@@ -1,3 +1,4 @@
+import type { Category } from "wle-core";
 import { create } from "zustand"
 
 export type CategoryStore = {

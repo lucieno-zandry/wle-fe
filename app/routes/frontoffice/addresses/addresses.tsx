@@ -26,6 +26,7 @@ import useAddressStore from "~/stores/use-address-store"
 import ConfirmDeleteDialog from "~/routes/frontoffice/addresses/components/confirm-delete-dialog"
 import { HttpException, ValidationException } from "~/api/app-fetch"
 import i18next from "i18next";
+import type { Address } from "wle-core";
 
 export async function clientLoader() {
     const { authAddresses, setAuthAddresses } = useAddressStore.getState();

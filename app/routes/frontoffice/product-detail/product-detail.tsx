@@ -18,6 +18,7 @@ import { ProductShare } from "./components/product-share";
 import { ProductCrossSell } from "./components/product-cross-sell";
 import { ProductRelatedLanding } from "./components/product-related-landing";
 import type { ShippingOption } from "./types/shipping";
+import type { Product, Variant } from "wle-core";
 
 export const loader = async (args: LoaderFunctionArgs) => {
     const { request, params } = args;

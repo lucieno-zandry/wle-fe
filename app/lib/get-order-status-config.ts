@@ -1,4 +1,5 @@
 import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import type { Order } from "wle-core";
 
 // lib/order-utils.ts
 export function getOrderStatusConfig(order: Order) {

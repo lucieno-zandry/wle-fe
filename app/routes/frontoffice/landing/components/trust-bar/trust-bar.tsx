@@ -1,3 +1,4 @@
+import type { LandingBlock } from "wle-core";
 import { TrustBarView, type TrustPillar } from "wle-ui-package";
 
 // Smart component – reads from block.content

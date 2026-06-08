@@ -1,4 +1,5 @@
 // stores/userPreferencesStore.ts
+import type { UserPreference } from 'wle-core';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 

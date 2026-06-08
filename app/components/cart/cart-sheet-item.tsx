@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Badge } from "~/components/ui/badge"; // adjust import path as needed
 import { Tag } from "lucide-react";
 import { useFormatMoney } from "~/lib/format-money";
+import type { CartItem } from "wle-core";
 
 export type CartSheetItemProps = {
     item: CartItem;

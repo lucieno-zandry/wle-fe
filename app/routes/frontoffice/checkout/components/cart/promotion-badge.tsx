@@ -1,5 +1,6 @@
 // routes/checkout/components/promotion-badge.tsx
 import { Tag } from "lucide-react";
+import type { AppliedPromotion } from "wle-core";
 import { Badge } from "~/components/ui/badge";
 
 export default function PromotionBadge({ promotion }: { promotion: AppliedPromotion }) {

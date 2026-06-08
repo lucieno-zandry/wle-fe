@@ -21,9 +21,10 @@ import { LanguageSwitcher } from './language-switcher';
 import { ThemeSelector } from './theme-selector';
 import { CurrencySelector } from './currency-selector';
 import { useSettings } from '~/hooks/use-settings';
+import * as Core from 'wle-core';
 
 type UserDropdownProps = {
-    user: User | null;
+    user: Core.User | null;
     setIsOpen: (open: boolean) => void;
     setLogoutOpen: (open: boolean) => void;
     logoutOpen: boolean;

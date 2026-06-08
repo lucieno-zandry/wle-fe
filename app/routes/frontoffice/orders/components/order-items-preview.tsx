@@ -1,5 +1,6 @@
 // components/orders/OrderItemsPreview.tsx
 import { useTranslation } from "react-i18next";
+import type { CartItem } from "wle-core";
 
 interface OrderItemsPreviewProps {
     items: CartItem[];

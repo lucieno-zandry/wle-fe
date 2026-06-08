@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import type { LandingBlock, StoryContent } from "wle-core";
 import { StoryView } from "wle-ui-package";
 
 export function Story({ block }: { block: LandingBlock<StoryContent> }) {

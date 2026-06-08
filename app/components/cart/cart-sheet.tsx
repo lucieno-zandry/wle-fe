@@ -14,6 +14,7 @@ import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { useFormatMoney } from "~/lib/format-money";
 import { useBuyNow } from "~/routes/frontoffice/product-detail/hooks/use-buy-now";
+import type { CartItem } from "wle-core";
 
 type CartSheetProps = {
     open: boolean;

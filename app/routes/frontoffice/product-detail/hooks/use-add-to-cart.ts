@@ -2,6 +2,7 @@ import { toast } from "sonner"
 import { addVariantToCart } from "~/api/http-requests"
 import useCartStore, { useRefreshCart } from "../../../../hooks/use-cart"
 import { HttpException, type FormatedResponse } from "~/api/app-fetch";
+import type { CartItem } from "wle-core";
 
 export function useAddToCart() {
     const refreshCart = useRefreshCart();

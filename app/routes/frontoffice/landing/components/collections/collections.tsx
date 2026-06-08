@@ -1,3 +1,4 @@
+import type { CollectionContent, LandingBlock } from "wle-core";
 import { CollectionItem } from "./collection-item";
 import { useTranslation } from "react-i18next";
 

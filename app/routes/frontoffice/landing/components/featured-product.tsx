@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import type { FeaturedProductsContent, LandingBlock } from "wle-core";
 import { FeaturedProductsView } from "wle-ui-package";
 import { ProductGrid } from "~/components/product-grid";
 import { useAppPathname } from "~/lib/app-pathname";

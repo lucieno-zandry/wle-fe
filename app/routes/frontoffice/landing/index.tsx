@@ -34,6 +34,7 @@ import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { isProduct } from "./helpers/landing-able-guards";
 import { useTranslation } from "react-i18next";
+import type { CollectionContent, ComparisonContent, CtaBannerContent, FaqContent, FeaturedProductsContent, LandingBlock, Product, StoryContent, TestimonialsContent } from "wle-core";
 
 // ─── Loader ───────────────────────────────────────────────────────────────────
 export const loader = async (args: LoaderFunctionArgs) => {

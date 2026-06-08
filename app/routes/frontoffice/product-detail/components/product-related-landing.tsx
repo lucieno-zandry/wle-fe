@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { getLandingBlocksPublic } from "~/api/http-requests";
 import { LandingPageView } from "../../landing";
+import type { LandingBlock, Product } from "wle-core";
 
 // ── Dumb (View) ──────────────────────────────────────────────────────────────
 interface ProductRelatedLandingViewProps {

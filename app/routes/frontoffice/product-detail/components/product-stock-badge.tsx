@@ -1,6 +1,7 @@
 // routes/frontoffice/product-detail/components/product-stock-badge.tsx
 import { useTranslation } from "react-i18next";
 import { AlertTriangle, CheckCircle2, XCircle, Package } from "lucide-react";
+import type { Variant } from "wle-core";
 
 // ── Dumb (View) ──────────────────────────────────────────────────────────────
 interface ProductStockBadgeViewProps {

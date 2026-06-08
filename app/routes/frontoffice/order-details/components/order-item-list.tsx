@@ -6,6 +6,7 @@ import { Badge } from "../../../../components/ui/badge"; // assuming you have a 
 import appPathname from "~/lib/app-pathname";
 import type { useFormatMoney } from "~/lib/format-money";
 import { useTranslation } from "react-i18next";
+import type { CartItem } from "wle-core";
 
 function OrderItemList({ items, formatMoney}: { items: CartItem[], formatMoney: ReturnType<typeof useFormatMoney> }) {
     const { t } = useTranslation("order-details");

@@ -3,6 +3,7 @@ import appNavigate from "~/lib/app-navigate";
 import { GridCard } from "../routes/frontoffice/search/components/grid-card";
 import { ListCard } from "../routes/frontoffice/search/components/list-card";
 import { useAddToCart } from "~/routes/frontoffice/product-detail/hooks/use-add-to-cart";
+import type { Product } from "wle-core";
 
 export interface ProductCardViewProps {
     product: Product;

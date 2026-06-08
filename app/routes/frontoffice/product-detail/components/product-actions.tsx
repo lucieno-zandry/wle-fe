@@ -5,6 +5,7 @@ import { Minus, Plus, ShoppingCart, Zap } from "lucide-react";
 import { useAddToCart } from "../hooks/use-add-to-cart";
 import { useBuyNow } from "../hooks/use-buy-now";
 import { useTranslation } from "react-i18next";
+import type { Variant } from "wle-core";
 
 // ── Dumb (View) ──────────────────────────────────────────────────────────────
 interface ProductActionsViewProps {

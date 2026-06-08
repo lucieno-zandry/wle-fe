@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useAddToCart } from "~/routes/frontoffice/product-detail/hooks/use-add-to-cart";
 import { useTranslation } from "react-i18next";
 import { HeroView } from "wle-ui-package";
+import type { LandingBlock, Product } from "wle-core";
 
 // ----------------------------------------------------------------------------
 // Hero Smart Component
@@ -27,7 +28,7 @@ export function Hero({ block }: { block: LandingBlock }) {
 
     if (!block.landing_able || !isProduct(block.landing_able)) return null;
 
-    const product = block.landing_able;
+    const product = block.landing_able as Product;
     const variants = product.variants ?? [];
     const addToCart = useAddToCart();
 

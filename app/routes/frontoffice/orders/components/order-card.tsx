@@ -10,6 +10,7 @@ import { DeleteOrderDialog } from "../../../../components/delete-order-dialog";
 import { useRevalidator } from "react-router";
 import { useFormatMoney } from "~/lib/format-money";
 import { useTranslation } from "react-i18next";
+import type { Order } from "wle-core";
 
 interface OrderCardProps {
     order: Order;

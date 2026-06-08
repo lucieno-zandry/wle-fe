@@ -8,6 +8,7 @@ import { requestRefund } from "~/api/http-requests";
 import { toast } from "sonner";
 import { Textarea } from "~/components/ui/textarea";
 import { useTranslation } from "react-i18next";
+import type { Transaction } from "wle-core";
 
 interface Props {
     open: boolean;

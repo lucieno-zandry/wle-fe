@@ -12,6 +12,7 @@ import useAddressStore from "~/stores/use-address-store";
 import { Checkbox } from "../../../../components/ui/checkbox";
 import { useTranslation } from "react-i18next";
 import ConfirmDeleteDialog from "./confirm-delete-dialog";
+import type { Address } from "wle-core";
 
 type AddressCardProps = {
     address: Address;

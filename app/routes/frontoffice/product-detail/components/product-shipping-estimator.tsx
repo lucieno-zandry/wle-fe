@@ -10,6 +10,7 @@ import type { ShippingOption } from "../types/shipping";
 import { MapPin, Package, CheckCircle2, Truck } from "lucide-react";
 import useDebounce from "~/hooks/use-debounce";
 import { throttle } from "~/lib/throttle";
+import type { Variant } from "wle-core";
 
 interface ProductShippingEstimatorViewProps {
     options: ShippingOption[];

@@ -5,6 +5,7 @@ import { updateUserPreferences } from "~/api/http-requests";
 import { HttpException } from "~/api/app-fetch";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import type { UserPreference } from "wle-core";
 
 const useUpdatePreferences = () => {
     const { setPreferences, preferences } = usePreferencesStore();

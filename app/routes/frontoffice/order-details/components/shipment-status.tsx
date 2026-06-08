@@ -1,6 +1,7 @@
 import { Package, Truck, CheckCircle, Clock } from 'lucide-react';
 import formatDate from '~/lib/format-date';
 import { useTranslation } from "react-i18next";
+import type { Shipment, ShipmentData } from 'wle-core';
 
 type ShipmentStatusProps = {
   shipments: Shipment[];

@@ -1,5 +1,7 @@
 // lib/organize-categories.ts
 
+import type { Category } from "wle-core";
+
 export type CategoryWithChildren = Category & { children?: CategoryWithChildren[] };
 
 export function organizeCategories(categories: Category[]): CategoryWithChildren[] {

@@ -48,6 +48,7 @@
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "vaul": "^1.1.2",
+    "wle-core": "github:lucieno-zandry/wle-core-package",
     "wle-ui-package": "github:lucieno-zandry/wle-ui-package",
     "zod": "^4.1.12",
     "zustand": "^5.0.8"

@@ -7,6 +7,7 @@ import { useAppPathname } from "~/lib/app-pathname";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, ImageIcon } from "lucide-react";
 import { Skeleton } from "~/components/ui/skeleton";
+import type { Product, Variant } from "wle-core";
 
 // ── Dumb (View) ──────────────────────────────────────────────────────────────
 interface CrossSellProduct {

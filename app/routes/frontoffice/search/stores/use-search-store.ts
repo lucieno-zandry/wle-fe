@@ -1,3 +1,4 @@
+import type { Category, Product } from "wle-core";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import type { ProductQueryParams } from "~/lib/serialize-product-params";

@@ -1,3 +1,4 @@
+import type { Product } from "wle-core";
 import { ProductCard } from "~/components/product-card";
 
 interface ProductGridProps {

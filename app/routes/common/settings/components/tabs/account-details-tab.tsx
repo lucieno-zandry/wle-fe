@@ -7,9 +7,10 @@ import formatDate from "~/lib/format-date";
 import { useUserStore } from "~/hooks/use-user";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
+import * as Core from "wle-core";
 
 export type AccountDetailsTabProps = {
-    user: User,
+    user: Core.User,
     t: TFunction,
 }
 

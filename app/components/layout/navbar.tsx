@@ -17,6 +17,7 @@ import { useSettings } from "~/hooks/use-settings";
 import BackButton from "../custom-components/back-button";
 import { ChevronLeft } from "lucide-react";
 import { useAuthDialogStore } from "../../stores/use-auth-dialog-store";
+import type { User } from "wle-core";
 
 type NavbarProps = {
     isUnAuthenticated: boolean,

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~
 import { Slider } from "~/components/ui/slider";
 import { getCurrencySymbol } from "~/lib/format-money";
 import { FilterSection } from "./filter-section";
+import type { Category } from "wle-core";
 
 export interface FilterSidebarViewProps {
     filters: SearchFilters;

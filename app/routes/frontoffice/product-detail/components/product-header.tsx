@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import appPathname from "~/lib/app-pathname";
 import { useTranslation } from "react-i18next";
 import { ChevronRight, Tag } from "lucide-react";
+import type { Category, Product } from "wle-core";
 
 // ── Dumb (View) ──────────────────────────────────────────────────────────────
 interface ProductHeaderViewProps {

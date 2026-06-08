@@ -1,4 +1,5 @@
 import React from 'react'
+import type { CartItem } from 'wle-core';
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { getCartItems } from '~/api/http-requests'

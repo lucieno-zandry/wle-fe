@@ -3,6 +3,7 @@ import appFetch, { API_URL, HttpException, type FormatedResponse, type Paginated
 import buildWhereParam, { type WhereConditions, type WhereInConditions } from "~/lib/build-where-param";
 import type { NotificationsQueryParams } from "~/components/notifications/types/notifications-query-params";
 import type { LandingBlocksRequestParams } from "~/routes/frontoffice/landing/types/landing-blocks-request-types";
+import type { Address, AppNotification, CartItem, Category, ClientCode, Coupon, LandingBlock, Order, Product, RefundRequest, ShippingMethod, Transaction, User, UserPreference } from "wle-core";
 
 export function getEmailInfo(email: string) {
     return appFetch.post<{ is_taken: boolean }>('/auth/email/info', { email });

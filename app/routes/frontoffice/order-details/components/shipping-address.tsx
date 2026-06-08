@@ -1,6 +1,7 @@
 import { MapPin, Phone } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { useTranslation } from "react-i18next";
+import type { Address } from "wle-core";
 
 export function ShippingAddress({ address }: { address: Address }) {
     const { t } = useTranslation("order-details");

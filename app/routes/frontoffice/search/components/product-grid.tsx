@@ -11,6 +11,7 @@ import { ErrorState } from "./error-state";
 import { useLoaderData, useLocation, useParams } from "react-router";
 import { useFormatMoney } from "~/lib/format-money";
 import type { loader } from "../search";
+import type { Product } from "wle-core";
 
 export function ProductGrid() {
     const { t } = useTranslation("search");

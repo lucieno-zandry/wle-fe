@@ -15,6 +15,7 @@ import { TransactionList } from "./components/transactions/transaction-list";
 import { useFormatMoney } from "~/lib/format-money";
 import NotFoundErrorPage from "~/routes/common/not-found-error-page";
 import { PaymentMethodSelector } from "~/components/payment-method-selector";
+import type { Order } from "wle-core";
 
 export const clientLoader = async ({ params }: LoaderFunctionArgs) => {
     if (!params.uuid) return redirect(`/${params.lang}/403`);

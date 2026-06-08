@@ -4,6 +4,7 @@ import useCheckoutStore from "../stores/use-checkout-store";
 import { useFormatMoney } from "~/lib/format-money";
 import { AlertCircle, Receipt, Scale, Truck } from "lucide-react";
 import { cn } from "~/lib/utils";
+import type { CartItem, Coupon } from "wle-core";
 
 type Props = {
     cartItems: CartItem[];

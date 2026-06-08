@@ -2,6 +2,7 @@ import { useFormatMoney } from "~/lib/format-money";
 import { useAppPathname } from "~/lib/app-pathname";
 import { useTranslation } from "react-i18next";
 import { CollectionItemView } from "wle-ui-package";
+import type { CollectionContentItem } from "wle-core";
 
 
 // ----------------------------------------------------------------------------

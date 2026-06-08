@@ -1,4 +1,5 @@
 import { Zap } from "lucide-react";
+import type { AppliedPromotion } from "wle-core";
 
 export function PromotionPill({ promotion }: { promotion: AppliedPromotion }) {
     const label =

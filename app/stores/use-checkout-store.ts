@@ -1,3 +1,4 @@
+import type { CartItem, Coupon, ShippingMethod, Transaction } from "wle-core";
 import { create } from "zustand";
 import { getCartItems } from "~/api/http-requests";
 

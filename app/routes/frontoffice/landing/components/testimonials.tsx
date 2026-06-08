@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import type { LandingBlock, TestimonialsContent } from "wle-core";
 import { TestimonialsView } from "wle-ui-package";
 
 export function Testimonials({ block }: { block: LandingBlock<TestimonialsContent> }) {

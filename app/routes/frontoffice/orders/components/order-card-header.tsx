@@ -7,6 +7,7 @@ import { OrderStatusBadge } from "./order-status-badge";
 import appPathname from "~/lib/app-pathname";
 import type { useFormatMoney } from "~/lib/format-money";
 import { useTranslation } from "react-i18next";
+import type { Order } from "wle-core";
 
 interface OrderCardHeaderProps {
     order: Order;

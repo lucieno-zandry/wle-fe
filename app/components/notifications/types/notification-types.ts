@@ -1,5 +1,7 @@
 // ─── Filter Tab ──────────────────────────────────────────────────────────────
 
+import type { AppNotification } from "wle-core";
+
 export type NotificationFilter = "all" | "unread" | "transaction" | "shipment" | "refund" | "dispute" | "client_code" | "system";
 
 // ─── UI-enriched notification (wraps AppNotification) ────────────────────────

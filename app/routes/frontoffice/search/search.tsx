@@ -4,6 +4,7 @@ import { type LoaderFunctionArgs } from "react-router";
 import { getProducts } from "~/api/http-requests";
 import { productQueryParamsFromUrl } from "./helpers/product-query-params-from-url";
 import type { PaginatedResponse } from "~/api/app-fetch";
+import type { Product } from "wle-core";
 
 const searchPlaceholders = ['all', '*'];
 

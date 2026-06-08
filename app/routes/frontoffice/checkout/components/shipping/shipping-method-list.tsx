@@ -3,6 +3,7 @@ import { cn } from "~/lib/utils";
 import { Truck, CheckCircle2, Clock } from "lucide-react";
 import { useFormatMoney } from "~/lib/format-money";
 import { useTranslation } from "react-i18next";
+import type { ShippingMethod } from "wle-core";
 
 type Props = {
     methods: { method: ShippingMethod; cost: number }[];

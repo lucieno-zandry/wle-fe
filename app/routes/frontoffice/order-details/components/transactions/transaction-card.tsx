@@ -11,6 +11,7 @@ import { DisputeDialog } from "./dispute-dialog";
 import formatDate from "~/lib/format-date";
 import { useFormatMoney } from "~/lib/format-money";
 import { useTranslation } from "react-i18next";
+import type { Transaction } from "wle-core";
 
 interface TransactionCardProps {
     transaction: Transaction;

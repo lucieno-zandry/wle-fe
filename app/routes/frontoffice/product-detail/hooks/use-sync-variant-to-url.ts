@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import type { Product, Variant } from "wle-core";
 
 type Props = {
     product: Product | null,
