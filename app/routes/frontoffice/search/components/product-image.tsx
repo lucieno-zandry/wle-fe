@@ -17,8 +17,8 @@ export function ProductImage({
     return (
         <div
             className={cn(
-                "relative overflow-hidden bg-muted",
-                compact ? "h-44 w-full rounded-t-xl" : "h-52 w-36 shrink-0 rounded-l-xl"
+                "relative overflow-hidden bg-white dark:bg-muted flex items-center justify-center p-4",
+                compact ? "aspect-square w-full rounded-t-xl" : "h-52 w-36 shrink-0 rounded-l-xl"
             )}
         >
             {firstImage ? (
@@ -28,9 +28,7 @@ export function ProductImage({
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
             ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                    <ImageOff className="size-8 text-muted-foreground/40" />
-                </div>
+                <ImageOff className="size-8 text-muted-foreground/40" />
             )}
 
             {promotions.length > 0 && (
