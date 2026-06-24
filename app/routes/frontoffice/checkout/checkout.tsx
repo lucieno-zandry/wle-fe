@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const cartItemsIds: number[] = parsedCookies.cart_items_ids?.split(',')?.map(Number) ?? [];
     const couponCode = parsedCookies.coupon_code || "";
 
-    if (cartItemsIds.length === 0) return redirect(appPathname('/cart'));
+    if (cartItemsIds.length === 0) return redirect(appPathname(''));
 
     try {
         const [cartItemsResponse, couponResponse] = await Promise.all([
