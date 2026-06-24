@@ -16,3 +16,13 @@ export function getCookie(name: string, cookies: string | null): string | undefi
     if (!cookies) return;
     return parseCookies(cookies)[name];
 }
+
+export function parseClientCookies() {
+    return document.cookie
+        .split("; ")
+        .reduce<Record<string, string>>((acc, cookie) => {
+            const [key, value] = cookie.split("=");
+            acc[key] = decodeURIComponent(value);
+            return acc;
+        }, {});
+}

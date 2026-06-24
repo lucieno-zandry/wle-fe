@@ -1,5 +1,5 @@
 import { redirect, useActionData, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
-import { parseCookies } from "~/lib/cookie-helpers";
+import { parseClientCookies, parseCookies } from "~/lib/cookie-helpers";
 import { getCartItems, getCouponFromCode, createOrder, createTransaction } from "~/api/http-requests";
 import { HttpException } from "~/api/app-fetch";
 import appPathname from "~/lib/app-pathname";
@@ -36,9 +36,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 // action for checkout
-export async function clientAction({ request }: ActionFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
     const cookies = request.headers.get('cookie');
-    const parsedCookies = parseCookies(cookies);
+    // const parsedCookies = parseCookies(cookies);
+    const parsedCookies = parseClientCookies();
     const headers: HeadersInit = {};
 
     if (cookies) headers['Cookie'] = cookies;
