@@ -8,18 +8,38 @@ import CustomField from "~/components/custom-components/field";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import BackButton from "~/components/custom-components/back-button";
+import { HttpException, ValidationException } from '~/api/app-fetch';
+import appPathname from '~/lib/app-pathname';
 
 export async function action({ request, params }: ClientActionFunctionArgs) {
-    const { lang = 'en' } = params;
     const formData = await request.formData();
     const email = formData.get('email') as string;
-    const response = await getEmailInfo(email);
-    if (response.data) {
-        return response.data.is_taken
-            ? redirect(`/${lang}/auth/login?email=` + email)
-            : redirect(`/${lang}/auth/register?email=` + email);
+
+    try {
+        const response = await getEmailInfo(email);
+
+        if (response.data) {
+            return response.data.is_taken
+                ? redirect(appPathname(`/auth/login?email=` + email))
+                : redirect(appPathname(`/auth/register?email=` + email));
+        }
+    } catch (e) {
+        if (e instanceof HttpException) {
+            return {
+                error: e.data?.message || `Something went wrong, status : ${e.status}`
+            }
+        }
+
+        if (e instanceof ValidationException) {
+            return {
+                error: e.message
+            }
+        }
+
+        return {
+            error: e
+        }
     }
-    return response.error;
 }
 
 export default function () {
