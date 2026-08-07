@@ -36,5 +36,13 @@
     "confirm": "Delete Order",
     "toastSuccess": "Order #{{orderNumber}} has been deleted.",
     "toastError": "Failed to delete order #{{orderNumber}}. Please try again."
+  },
+  "cancelDialog": {
+    "title": "Cancel Order?",
+    "description": "Are you sure you want to cancel order #{{orderNumber}}? Your refund will be processed up to 20 days from now.",
+    "cancel": "Cancel",
+    "confirm": "Cancel Order",
+    "toastSuccess": "Order #{{orderNumber}} has been canceled.",
+    "toastError": "Failed to cancel order #{{orderNumber}}. Please try again later."
   }
 }

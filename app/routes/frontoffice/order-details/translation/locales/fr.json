@@ -28,6 +28,7 @@
         "pay": "Payer {{amount}}",
         "downloadInvoice": "Télécharger la facture",
         "deleteOrder": "Supprimer la commande",
+        "cancelOrder": "Annuler la commande",
         "toast": {
             "failedToInitiate": "Échec de l'initialisation du paiement (Statut {{status}})",
             "somethingWentWrong": "Une erreur s'est produite"

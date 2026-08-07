@@ -7,7 +7,6 @@ import OrderSummary from "./components/order-summary";
 
 import { getOrder } from "~/api/http-requests";
 import useCheckoutStore from "~/stores/use-checkout-store";
-import { getOrderStatusConfig } from "~/lib/get-order-status-config";
 import { ShippingAddress } from "./components/shipping-address";
 import PaymentIncompleteAlert from "./components/payment-incomplete-alert";
 import ShipmentStatus from "./components/shipment-status";
@@ -16,6 +15,7 @@ import { useFormatMoney } from "~/lib/format-money";
 import NotFoundErrorPage from "~/routes/common/not-found-error-page";
 import { PaymentMethodSelector } from "~/components/payment-method-selector";
 import type { Order } from "wle-core";
+import { getOrderStatusConfig } from "./helpers/get-order-status-config";
 
 export const clientLoader = async ({ params }: LoaderFunctionArgs) => {
     if (!params.uuid) return redirect(`/${params.lang}/403`);

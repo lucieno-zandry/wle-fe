@@ -1,0 +1,575 @@
+type User = {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at: string;
+    role: "admin" | "manager" | "client" | "guest";
+    avatar_image_id?: number;
+    created_at: string;
+    updated_at: string;
+    client_code_id?: number;
+    blocked_by_id?: number;
+    deleted_at?: string;
+    status: UserStatus | null;
+    permissions?: {
+        can_use_special_prices: boolean;
+        can_use_notifications: boolean;
+        can_use_preferences: boolean;
+        can_use_settings: boolean;
+        can_log_in: boolean;
+        can_use_order: boolean;
+    };
+    avatar_image?: AppImage;
+    client_code?: ClientCode;
+    cart_items?: CartItem[];
+    addresses?: Address[];
+    orders?: Order[];
+    transactions?: Transaction[];
+    refund_requests?: RefundRequest[];
+    reviewed_refund_requests?: RefundRequest[];
+    performed_transaction_audit_logs?: TransactionAuditLog[];
+    reviewed_transactions?: Transaction[];
+    statuses?: UserStatus[];
+    set_statuses?: UserStatus[];
+    preferences?: UserPreference;
+};
+type UserStatus = {
+    id: number;
+    user_id: number;
+    status: "approved" | "blocked" | "suspended";
+    reason?: string;
+    set_by?: number;
+    created_at: string;
+    expires_at?: string;
+    user?: User;
+    set_by_user?: User;
+};
+type UserPreference = {
+    id: number;
+    user_id: number;
+    theme: 'light' | 'dark' | 'system';
+    language: string;
+    timezone: string;
+    currency: string;
+    created_at: string;
+    updated_at: string;
+    user?: User;
+};
+type Product = {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    slug: string;
+    title: string;
+    description: string;
+    category_id?: number;
+    cart_items?: CartItem[];
+    category?: Category;
+    variants?: Variant[];
+    images?: AppImage[];
+    variant_groups?: VariantGroup[];
+};
+type Category = {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    title: string;
+    parent_id?: number;
+};
+type Variant = {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    product_id: number;
+    sku: string;
+    price: number;
+    stock: number;
+    image_id: string | null;
+    effective_price?: number;
+    applied_promotions?: Promotion[];
+    product?: Product;
+    variant_options?: VariantOption[];
+    promotions?: Promotion[];
+    image?: AppImage;
+    weight_kg?: number;
+    length_cm?: number;
+    width_cm?: number;
+    height_cm?: number;
+};
+type VariantGroup = {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    product_id: number;
+    name: string;
+    variant_options?: VariantOption[];
+};
+type AppImage = {
+    id: number;
+    url: string;
+    width: number;
+    height: number;
+};
+type VariantOption = {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    value: string;
+    variant_group_id: number;
+    variants?: Variant[];
+    variant_group?: VariantGroup;
+};
+type Promotion = {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    discount: number;
+    type: "PERCENTAGE" | "FIXED_AMOUNT";
+    start_date: string;
+    end_date: string;
+    is_active: boolean;
+    name: string;
+    badge?: string;
+    applies_to: "all" | "client_code_only" | "regular_only";
+    stackable: boolean;
+    priority: number;
+    apply_order?: "percentage_first" | "fixed_first";
+    max_discount?: number;
+    variants?: Variant[];
+};
+type AppliedPromotion = {
+    id: number;
+    name: string;
+    badge?: string;
+    discount: number;
+    type: "PERCENTAGE" | "FIXED_AMOUNT";
+};
+type CartItem = {
+    id: number;
+    order_uuid: string | null;
+    user_id: number;
+    product_id: number;
+    variant_id: number;
+    count: number;
+    unit_price: number;
+    promotion_discount_applied: number;
+    total: number;
+    product_snapshot: ProductSnapshot;
+    variant_snapshot: VariantSnapshot;
+    variant_options_snapshot: VariantOptionsSnapshot;
+    applied_promotions_snapshot?: AppliedPromotion[];
+    created_at: string;
+    updated_at: string;
+    variant?: Variant;
+    product?: Product;
+    user?: User;
+    order?: Order;
+};
+type ProductSnapshot = {
+    id: number;
+    title: string;
+    slug: string;
+    main_image: string | null;
+    category_id?: number;
+};
+type VariantSnapshot = {
+    id: number;
+    sku: string;
+    price: number;
+    image: string | null;
+    weight_kg?: number;
+    length_cm?: number;
+    width_cm?: number;
+    height_cm?: number;
+};
+type VariantOptionsSnapshot = {
+    [group: string]: string;
+};
+type Address = {
+    id: number;
+    user_id: number;
+    label?: string;
+    recipient_name: string;
+    phone: string;
+    phone_alt?: string;
+    line1: string;
+    line2?: string;
+    city: string;
+    state?: string;
+    postal_code: string;
+    country: string;
+    address_type?: "billing" | "shipping" | "both";
+    is_default: boolean;
+    created_at: string;
+    updated_at: string;
+    user?: User;
+};
+type ShippingMethodSnapshot = Pick<ShippingMethod, 'name' | 'carrier'> & {
+    estimated_days: number;
+};
+type Order = {
+    uuid: string;
+    created_at: string;
+    updated_at: string;
+    total: number;
+    user_id: number;
+    notes: string;
+    address_id: number;
+    coupon_id: number | null;
+    coupon_discount_applied: number;
+    deleted_at: string | null;
+    shipping_method_id?: number;
+    shipping_cost: number;
+    shipping_method_snapshot?: ShippingMethodSnapshot;
+    total_weight_kg?: number;
+    address_snapshot: Address;
+    coupon_snapshot?: Pick<Coupon, "id" | "code" | "type" | "discount" | "min_order_value">;
+    cart_items?: CartItem[];
+    shipments?: Shipment[];
+    transactions?: Transaction[];
+    user?: User;
+    refund_requests?: RefundRequest[];
+    coupon?: Coupon;
+};
+type Coupon = {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    code: string;
+    type: "FIXED_AMOUNT" | "PERCENTAGE";
+    discount: number;
+    min_order_value: number;
+    max_uses: number;
+    uses_count: number;
+    start_date: string;
+    end_date: string;
+    is_active: boolean;
+    orders?: Order[];
+};
+type Shipment = {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    status: "PROCESSING" | "SHIPPED" | "DELIVERED" | "PENDING";
+    data?: ShipmentData;
+    order_uuid: string;
+    is_active: boolean;
+    order?: Order;
+};
+type ShipmentData = {
+    carrier?: string;
+    tracking_number?: string;
+    estimated_delivery?: string;
+    shipped_date?: string;
+};
+type TransactionType = "PAYMENT" | "REFUND" | "MANUAL";
+type DisputeStatus = "OPEN" | "RESOLVED" | "LOST";
+type Transaction = {
+    uuid: string;
+    created_at: string;
+    updated_at: string;
+    status: "FAILED" | "PENDING" | "SUCCESS" | "PENDING";
+    informations: Record<string, any>;
+    user_id: number;
+    order_uuid: string;
+    deleted_at?: string;
+    payment_method: "card" | "paypal" | "apple_pay" | "google_pay" | "bank_transfer" | string;
+    card_brand?: "visa" | "mastercard" | "amex" | "discover" | "diners" | "jcb" | string;
+    payment_method_label?: string;
+    amount: number;
+    type: TransactionType;
+    parent_transaction_uuid?: string;
+    payment_reference?: string;
+    reviewed_at?: string;
+    reviewed_by?: number;
+    notes?: string;
+    dispute_status?: DisputeStatus;
+    dispute_opened_at?: string;
+    dispute_resolved_at?: string;
+    dispute_reason?: string;
+    user?: User;
+    order?: Order;
+    parent_transaction?: Transaction | null;
+    child_transactions?: Transaction[];
+    audit_logs?: TransactionAuditLog[];
+    webhook_logs?: PaymentWebhookLog[];
+    refund_requests?: RefundRequest[];
+    reviewer?: User;
+};
+type TransactionAuditLog = {
+    id: number;
+    transaction_uuid: string;
+    performed_by?: number | null;
+    action: string;
+    old_value?: string | null;
+    new_value?: string | null;
+    reason?: string | null;
+    metadata?: Record<string, any> | null;
+    created_at: string;
+    performed_by_user?: User | null;
+};
+type WebhookLogStatus = "RECEIVED" | "PROCESSED" | "FAILED" | "IGNORED";
+type PaymentWebhookLog = {
+    id: number;
+    transaction_uuid?: string | null;
+    order_uuid?: string | null;
+    gateway: string;
+    event_type?: string | null;
+    payload: Record<string, any>;
+    response?: Record<string, any> | null;
+    status: WebhookLogStatus;
+    error_message?: string | null;
+    source_ip?: string | null;
+    created_at: string;
+    updated_at: string;
+};
+type RefundRequest = {
+    id: number;
+    uuid: string;
+    user_id: number;
+    transaction_uuid: string;
+    order_uuid: string;
+    amount: number;
+    reason: string;
+    status: "pending" | "approved" | "rejected";
+    admin_notes?: string | null;
+    reviewed_by?: number | null;
+    reviewed_at?: string | null;
+    created_at: string;
+    updated_at: string;
+    user?: User;
+    transaction?: Transaction;
+    reviewer?: User;
+    order?: Order;
+};
+type TransactionNotificationData = {
+    notification_type: "transaction";
+    type: "payment_success" | "payment_failed";
+    transaction_uuid?: string;
+    order_uuid: string;
+    amount: number;
+    payment_method: string;
+    message: string;
+    order_total: number;
+};
+type ShipmentNotificationData = {
+    notification_type: "shipment";
+    shipment_id: number;
+    order_uuid: string;
+    status: "PROCESSING" | "SHIPPED" | "DELIVERED";
+    message: string;
+    shipment_data?: {
+        carrier?: string;
+        tracking_number?: string;
+        estimated_delivery?: string;
+    };
+};
+type RefundNotificationData = {
+    notification_type: "refund";
+    type: "refund_requested" | "refund_approved" | "refund_rejected";
+    refund_request_uuid?: string;
+    transaction_uuid?: string;
+    refund_transaction_uuid?: string;
+    order_uuid?: string;
+    amount?: number;
+    customer_name?: string;
+    reason?: string;
+    admin_notes?: string;
+    message: string;
+};
+type DisputeNotificationData = {
+    notification_type: "dispute";
+    type: "dispute_opened" | "dispute_resolved" | "dispute_cancelled";
+    transaction_uuid: string;
+    order_uuid?: string;
+    customer_name?: string;
+    reason?: string;
+    outcome?: string;
+    amount?: number;
+    message: string;
+};
+type ClientCodeNotificationData = {
+    notification_type: "client_code";
+    action: "attach" | "detach";
+    user_id: number;
+    user_name: string;
+    client_code: string;
+    performed_by?: number;
+    performed_by_name?: string;
+    message: string;
+};
+type UserNotificationData = {
+    notification_type: 'user';
+    type: 'user_waiting_approval' | 'user_registration';
+    'user_id': number;
+    'user_name': string;
+    'user_email': string;
+    'user_role': User['role'];
+    'registered_at': string;
+    'message': string;
+};
+type OtherNotificationData = {
+    notification_type: "system";
+    title: string;
+    message: string;
+};
+type NotificationData = TransactionNotificationData | ShipmentNotificationData | RefundNotificationData | DisputeNotificationData | OtherNotificationData | ClientCodeNotificationData | UserNotificationData;
+type AppNotification = {
+    id: string;
+    type: string;
+    data: NotificationData;
+    read_at: string | null;
+    created_at: string;
+    updated_at: string;
+};
+type ClientCode = {
+    id: number;
+    code: string;
+    is_active: boolean;
+    max_uses?: number;
+    created_at: string;
+    users?: User[];
+};
+type ShippingMethod = {
+    id: number;
+    name: string;
+    carrier: 'custom' | 'fedex' | 'colissimo';
+    is_active: boolean;
+    calculation_type: 'flat_rate' | 'weight_based' | 'api';
+    flat_rate?: number;
+    free_shipping_threshold?: number;
+    rate_per_kg?: number;
+    api_config?: Record<string, any>;
+    min_delivery_days?: number;
+    max_delivery_days?: number;
+    allowed_countries?: string[];
+    created_at: string;
+    updated_at: string;
+    shipping_rates?: ShippingRate[];
+};
+type ShippingRate = {
+    id: number;
+    shipping_method_id: number;
+    country_code: string;
+    city_pattern?: string;
+    min_weight_kg?: number;
+    max_weight_kg?: number;
+    rate: number;
+    rate_per_kg?: number;
+    shipping_method?: ShippingMethod;
+};
+type Setting = {
+    key: string;
+    value: any;
+    type: 'string' | 'integer' | 'float' | 'boolean' | 'json';
+    group?: string | null;
+    label?: string | null;
+    description?: string | null;
+    is_public: boolean;
+    updated_at: string;
+};
+/**
+ * Polymorphic relation – can be a Product, Variant, Category, AppImage, etc.
+ * In practice, the actual object will be received from the API when loaded with `landing_able`.
+ */
+type LandingAble = Product | Category | Variant | AppImage | null;
+type LandingBlock<Content = unknown> = {
+    id: number;
+    block_type: 'hero' | 'collection_grid' | 'featured_products' | 'story' | 'comparison' | 'testimonials' | 'faq' | 'cta_banner' | 'trust_bar';
+    title: string | null;
+    subtitle: string | null;
+    content: (Record<string, any> & Content) | null;
+    landing_able_type: string | null;
+    landing_able_id: number | null;
+    image_id: number | null;
+    display_order: number;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+    landing_able?: LandingAble;
+    image?: AppImage | null;
+};
+type HeroContent = {
+    eyebrow?: string;
+    headlineSuffix?: string;
+    trustLine?: string;
+};
+type CategoryBlock = Category & {
+    cheapest_variant?: Variant;
+};
+type CollectionContentItem = {
+    id: string;
+    category_id: number;
+    image_id?: number | null;
+    subtitle?: string;
+    display_order: number;
+    category?: CategoryBlock;
+    image?: AppImage;
+};
+type CollectionContent = {
+    items: CollectionContentItem[];
+    eyebrow?: string;
+};
+type ComparisonRow = {
+    id: string;
+    criteria: string;
+    ours: string | boolean;
+    theirs: string | boolean;
+};
+type ComparisonContent = {
+    eyebrow?: string;
+    ourLabel?: string;
+    theirLabel?: string;
+    rows: ComparisonRow[];
+};
+type FaqItem = {
+    id: string;
+    question: string;
+    answer: string;
+};
+type FaqContent = {
+    eyebrow?: string;
+    items: FaqItem[];
+};
+type FeaturedProductsContent = {
+    eyebrow?: string;
+    product_ids: number[];
+    products?: Product[];
+};
+type StoryStat = {
+    value: string;
+    label: string;
+};
+type StoryContent = {
+    eyebrow?: string;
+    body: string;
+    imageCaption?: string;
+    stats?: StoryStat[];
+};
+type Testimonial = {
+    id: string;
+    author: string;
+    location: string;
+    avatar?: string;
+    rating: number;
+    text: string;
+    verified: boolean;
+};
+type TestimonialsContent = {
+    eyebrow?: string;
+    testimonials: Testimonial[];
+};
+type CtaBannerContent = {
+    eyebrow?: string;
+};
+
+declare function isProduct(able: LandingAble): able is Product;
+declare function isVariant(able: LandingAble): able is Variant;
+declare function isCategory(able: LandingAble): able is CategoryBlock;
+declare function isAppImage(able: LandingAble): able is AppImage;
+declare function getLandingAbleLabel(able: LandingAble): string;
+declare function getLandingAbleType(able: LandingAble): string;
+declare function getLandingAbleThumbnail(able: LandingAble): string | null;
+declare function getLandingAbleMeta(able: LandingAble): string;
+
+export { type Address, type AppImage, type AppNotification, type AppliedPromotion, type CartItem, type Category, type CategoryBlock, type ClientCode, type ClientCodeNotificationData, type CollectionContent, type CollectionContentItem, type ComparisonContent, type ComparisonRow, type Coupon, type CtaBannerContent, type DisputeNotificationData, type DisputeStatus, type FaqContent, type FaqItem, type FeaturedProductsContent, type HeroContent, type LandingAble, type LandingBlock, type NotificationData, type Order, type OtherNotificationData, type PaymentWebhookLog, type Product, type ProductSnapshot, type Promotion, type RefundNotificationData, type RefundRequest, type Setting, type Shipment, type ShipmentData, type ShipmentNotificationData, type ShippingMethod, type ShippingMethodSnapshot, type ShippingRate, type StoryContent, type StoryStat, type Testimonial, type TestimonialsContent, type Transaction, type TransactionAuditLog, type TransactionNotificationData, type TransactionType, type User, type UserNotificationData, type UserPreference, type UserStatus, type Variant, type VariantGroup, type VariantOption, type VariantOptionsSnapshot, type VariantSnapshot, type WebhookLogStatus, getLandingAbleLabel, getLandingAbleMeta, getLandingAbleThumbnail, getLandingAbleType, isAppImage, isCategory, isProduct, isVariant };

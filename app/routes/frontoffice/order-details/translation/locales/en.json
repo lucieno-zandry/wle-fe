@@ -28,6 +28,7 @@
         "pay": "Pay {{amount}}",
         "downloadInvoice": "Download Invoice",
         "deleteOrder": "Delete Order",
+        "cancelOrder": "Cancel Order",
         "toast": {
             "failedToInitiate": "Failed to initiate payment (Status {{status}})",
             "somethingWentWrong": "Something went wrong"

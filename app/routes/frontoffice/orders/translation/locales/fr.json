@@ -36,5 +36,13 @@
     "confirm": "Supprimer la commande",
     "toastSuccess": "La commande n°{{orderNumber}} a été supprimée.",
     "toastError": "Échec de la suppression de la commande n°{{orderNumber}}. Veuillez réessayer."
+  },
+  "cancelDialog": {
+    "title": "Annuler la commande ?",
+    "description": "Êtes-vous sûr de vouloir annuler la commande n°{{orderNumber}} ? Le traitement de votre remboursement peut prendre jusqu'à 20 jours.",
+    "cancel": "Annuler",
+    "confirm": "Annuler la commande",
+    "toastSuccess": "La commande n°{{orderNumber}} a été annulée.",
+    "toastError": "Échec de l'annulation de la commande n°{{orderNumber}}. Veuillez réessayer."
   }
 }

@@ -118,7 +118,7 @@ async function post<T>(path: string, payload: FormData | Object, { headers, ...o
     return response;
 }
 
-async function put<T>(path: string, payload: FormData | Object, { headers, ...options }: RequestInit = {}): Promise<FormatedResponse<T>> {
+async function put<T>(path: string, payload: FormData | Object = {}, { headers, ...options }: RequestInit = {}): Promise<FormatedResponse<T>> {
     let body: BodyInit;
     const init: RequestInit = { headers: { ...defaultHeaders(), ...headers }, ...options }
 
@@ -142,7 +142,7 @@ async function put<T>(path: string, payload: FormData | Object, { headers, ...op
     return response;
 }
 
-async function patch<T>(path: string, payload: FormData | Object, init: RequestInit = { headers: defaultHeaders() }): Promise<FormatedResponse<T>> {
+async function patch<T>(path: string, payload: FormData | Object = {}, init: RequestInit = { headers: defaultHeaders() }): Promise<FormatedResponse<T>> {
     let body: BodyInit;
 
     if (payload instanceof FormData) {

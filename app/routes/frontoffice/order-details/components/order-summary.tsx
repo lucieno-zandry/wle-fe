@@ -12,13 +12,16 @@ import { HttpException, ValidationException } from "~/api/app-fetch";
 import { DeleteOrderDialog } from "../../../../components/delete-order-dialog";
 import { useTranslation } from "react-i18next";
 import type { Order, Transaction } from "wle-core";
+import type { OrderStatusConfig } from "../helpers/get-order-status-config";
+import { CancelOrderDialog } from "./cancel-order-dialog";
 
-function OrderSummary({ order, statusConfig, method }: { order: Order; statusConfig: any; method: Transaction['payment_method'] }) {
+function OrderSummary({ order, statusConfig, method }: { order: Order; statusConfig: OrderStatusConfig; method: Transaction['payment_method'] }) {
     const subtotal = order.cart_items?.reduce((acc, item) => acc + item.total, 0) ?? 0;
     const shippingCost = order.shipping_cost ?? 0;
     const shippingMethodName = order.shipping_method_snapshot?.name;
     const [loading, setLoading] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
     const formatMoney = useFormatMoney();
     const { t } = useTranslation("order-details");
 
@@ -47,7 +50,7 @@ function OrderSummary({ order, statusConfig, method }: { order: Order; statusCon
             })
     }
 
-    const handleDeleteSuccess = () => {
+    const handleDesctructiveActionSuccess = () => {
         appNavigate("/orders");
     };
 
@@ -109,6 +112,15 @@ function OrderSummary({ order, statusConfig, method }: { order: Order; statusCon
                             </Button>
                         )}
 
+                        {statusConfig.canCancel && <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => setShowDeleteDialog(true)}
+                            className="w-full">
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            {t("summary.cancelOrder")}
+                        </Button>}
+
                         <Button
                             variant="outline"
                             size="sm"
@@ -126,7 +138,14 @@ function OrderSummary({ order, statusConfig, method }: { order: Order; statusCon
                 open={showDeleteDialog}
                 onOpenChange={setShowDeleteDialog}
                 orderUuid={order.uuid}
-                onSuccess={handleDeleteSuccess}
+                onSuccess={handleDesctructiveActionSuccess}
+            />
+
+            <CancelOrderDialog
+                open={showCancelDialog}
+                onOpenChange={setShowCancelDialog}
+                orderUuid={order.uuid}
+                onSuccess={handleDesctructiveActionSuccess}
             />
         </>
     );

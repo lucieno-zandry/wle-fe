@@ -225,6 +225,10 @@ export function deleteOrder(uuid: string) {
     return appFetch.delete<{ message: string }>(`/order/delete?order_uuids=${uuid}`);
 }
 
+export function cancelOrder(uuid: string) {
+    return appFetch.patch<{ message: string }>(`/order/cancel/${uuid}`);
+}
+
 export function getCategories() {
     return appFetch.get<{ categories: Category[] }>('/category/all');
 }
