@@ -16,7 +16,6 @@ import NotFoundErrorPage from "~/routes/common/not-found-error-page";
 import { PaymentMethodSelector } from "~/components/payment-method-selector";
 import type { Order } from "wle-core";
 import { getStatusConfig } from "./helpers/get-order-status-config";
-import { useTranslation } from "react-i18next";
 
 export const clientLoader = async ({ params }: LoaderFunctionArgs) => {
     if (!params.uuid) return redirect(`/${params.lang}/403`);

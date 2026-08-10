@@ -23,7 +23,7 @@ function OrderItemList({ items, formatMoney}: { items: CartItem[], formatMoney: 
                 {items.map((item) => (
                     <div key={item.id} className="p-6 flex gap-4 transition-colors hover:bg-muted/30">
                         <Link
-                            to={appPathname(`/product/${item.product_snapshot.slug}`)}
+                            to={appPathname(`/product/${item.product_snapshot.slug}?variant=${item.variant_id}`)}
                             className="w-20 h-20 rounded-lg bg-muted overflow-hidden border flex-shrink-0 hover:opacity-80 transition-opacity"
                         >
                             <img
