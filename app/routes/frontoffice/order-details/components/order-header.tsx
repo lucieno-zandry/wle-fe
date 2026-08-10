@@ -6,10 +6,10 @@ import appPathname from "~/lib/app-pathname";
 import { useTranslation } from "react-i18next";
 import formatDate from "~/lib/format-date";
 import type { Order } from "wle-core";
+import type { StatusConfig } from "../helpers/get-order-status-config";
 
-function OrderHeader({ order, statusConfig }: { order: Order; statusConfig: any }) {
-    const { t, i18n } = useTranslation("order-details");
-    const locale = i18n.resolvedLanguage === "fr" ? "fr-FR" : "en-US";
+function OrderHeader({ order, statusConfig }: { order: Order; statusConfig: StatusConfig }) {
+    const { t } = useTranslation("order-details");
 
     return (
         <div className="flex flex-col gap-4">
@@ -26,7 +26,7 @@ function OrderHeader({ order, statusConfig }: { order: Order; statusConfig: any 
                 </div>
                 <Badge className="w-fit px-4 py-1 text-sm flex items-center gap-2" variant={statusConfig.variant}>
                     <statusConfig.icon className="w-4 h-4" />
-                    {t(statusConfig.labelKey)}
+                    {t(statusConfig.label)}
                 </Badge>
             </div>
         </div>

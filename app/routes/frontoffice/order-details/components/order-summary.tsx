@@ -1,4 +1,4 @@
-import { CreditCard, Receipt, TicketPercent, Trash2, Truck } from "lucide-react";
+import { CircleOff, CreditCard, Receipt, TicketPercent, Trash2, Truck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
 
 import { Separator } from "../../../../components/ui/separator";
@@ -12,10 +12,10 @@ import { HttpException, ValidationException } from "~/api/app-fetch";
 import { DeleteOrderDialog } from "../../../../components/delete-order-dialog";
 import { useTranslation } from "react-i18next";
 import type { Order, Transaction } from "wle-core";
-import type { OrderStatusConfig } from "../helpers/get-order-status-config";
+import type { StatusConfig } from "../helpers/get-order-status-config";
 import { CancelOrderDialog } from "./cancel-order-dialog";
 
-function OrderSummary({ order, statusConfig, method }: { order: Order; statusConfig: OrderStatusConfig; method: Transaction['payment_method'] }) {
+function OrderSummary({ order, statusConfig, method }: { order: Order; statusConfig: StatusConfig; method: Transaction['payment_method'] }) {
     const subtotal = order.cart_items?.reduce((acc, item) => acc + item.total, 0) ?? 0;
     const shippingCost = order.shipping_cost ?? 0;
     const shippingMethodName = order.shipping_method_snapshot?.name;
@@ -115,9 +115,9 @@ function OrderSummary({ order, statusConfig, method }: { order: Order; statusCon
                         {statusConfig.canCancel && <Button
                             variant="destructive"
                             size="sm"
-                            onClick={() => setShowDeleteDialog(true)}
+                            onClick={() => setShowCancelDialog(true)}
                             className="w-full">
-                            <Trash2 className="w-4 h-4 mr-2" />
+                            <CircleOff className="w-4 h-4 mr-2" />
                             {t("summary.cancelOrder")}
                         </Button>}
 

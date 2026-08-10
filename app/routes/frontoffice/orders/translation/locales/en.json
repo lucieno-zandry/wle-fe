@@ -11,7 +11,9 @@
   "status": {
     "awaitingPayment": "Awaiting Payment",
     "paid": "Paid",
-    "processing": "Processing"
+    "processing": "Processing",
+    "cancelled": "Cancelled",
+    "completed": "Completed"
   },
   "card": {
     "orderNumber": "Order Number",

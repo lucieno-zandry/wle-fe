@@ -15,7 +15,8 @@ import { useFormatMoney } from "~/lib/format-money";
 import NotFoundErrorPage from "~/routes/common/not-found-error-page";
 import { PaymentMethodSelector } from "~/components/payment-method-selector";
 import type { Order } from "wle-core";
-import { getOrderStatusConfig } from "./helpers/get-order-status-config";
+import { getStatusConfig } from "./helpers/get-order-status-config";
+import { useTranslation } from "react-i18next";
 
 export const clientLoader = async ({ params }: LoaderFunctionArgs) => {
     if (!params.uuid) return redirect(`/${params.lang}/403`);
@@ -30,7 +31,7 @@ export default function OrderDetails() {
 
     if (!order) return <NotFoundErrorPage />;
 
-    const statusConfig = getOrderStatusConfig(order);
+    const statusConfig = getStatusConfig(order);
     const handleActionComplete = () => revalidator.revalidate();
     const formatMoney = useFormatMoney();
 

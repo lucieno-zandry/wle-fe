@@ -4,13 +4,13 @@ import { OrderCardHeader } from "./order-card-header";
 import { OrderItemsPreview } from "./order-items-preview";
 import { OrderInfoSection } from "./order-info-section";
 import { OrderActionButton } from "./order-action-button";
-import { CheckCircle2, Clock, Wallet } from "lucide-react";
 import { useState } from "react";
 import { DeleteOrderDialog } from "../../../../components/delete-order-dialog";
 import { useRevalidator } from "react-router";
 import { useFormatMoney } from "~/lib/format-money";
 import { useTranslation } from "react-i18next";
 import type { Order } from "wle-core";
+import { getStatusConfig } from "../helpers/get-status-config";
 
 interface OrderCardProps {
     order: Order;
@@ -19,39 +19,11 @@ interface OrderCardProps {
 export function OrderCard({ order }: OrderCardProps) {
     const { t } = useTranslation("orders");
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const statusConfig = getStatusConfig(order);
 
-    const transactions = order.transactions ?? [];
-    const hasSucceeded = transactions.some(t => t.status === 'SUCCESS');
-    const hasPending = transactions.some(t => t.status === 'PENDING');
     const formatMoney = useFormatMoney();
 
     const revalidator = useRevalidator();
-
-    let statusConfig = {
-        label: t("status.awaitingPayment"),
-        variant: "secondary" as 'default' | 'outline' | 'secondary',
-        icon: Wallet,
-        colorClass: "text-muted-foreground",
-        requiresReview: true
-    };
-
-    if (hasSucceeded) {
-        statusConfig = {
-            label: t("status.paid"),
-            variant: "default" as const,
-            icon: CheckCircle2,
-            colorClass: "text-primary",
-            requiresReview: false
-        };
-    } else if (hasPending) {
-        statusConfig = {
-            label: t("status.processing"),
-            variant: "outline" as const,
-            icon: Clock,
-            colorClass: "text-orange-500",
-            requiresReview: false
-        };
-    }
 
     return (
         <>

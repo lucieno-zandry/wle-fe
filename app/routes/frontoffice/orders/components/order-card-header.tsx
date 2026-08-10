@@ -8,12 +8,11 @@ import appPathname from "~/lib/app-pathname";
 import type { useFormatMoney } from "~/lib/format-money";
 import { useTranslation } from "react-i18next";
 import type { Order } from "wle-core";
+import type { StatusConfig } from "../helpers/get-status-config";
 
 interface OrderCardHeaderProps {
     order: Order;
-    statusConfig: {
-        colorClass: string;
-    };
+    statusConfig: StatusConfig;
     onDelete: () => void;
     formatMoney: ReturnType<typeof useFormatMoney>
 }
@@ -21,6 +20,8 @@ interface OrderCardHeaderProps {
 export function OrderCardHeader({ order, statusConfig, onDelete, formatMoney }: OrderCardHeaderProps) {
     const { t, i18n } = useTranslation("orders");
     const locale = i18n.resolvedLanguage === "fr" ? "fr-FR" : "en-US";
+
+    console.log(statusConfig);
 
     const date = new Date(order.created_at).toLocaleDateString(locale, {
         month: "long",
@@ -40,7 +41,7 @@ export function OrderCardHeader({ order, statusConfig, onDelete, formatMoney }: 
                             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider leading-none">
                                 {t("card.orderNumber")}
                             </p>
-                            <OrderStatusBadge transactions={order.transactions ?? []} />
+                            <OrderStatusBadge transactions={order.transactions ?? []} statusConfig={statusConfig} />
                         </div>
                         <CardTitle className="text-base font-mono">#{order.uuid.split("-")[0]}</CardTitle>
                     </div>

@@ -31,12 +31,12 @@ export function CancelOrderDialog({ open, onOpenChange, orderUuid, onSuccess }: 
         setLoading(true);
         cancelOrder(orderUuid)
             .then(() => {
-                toast.success(t("cancelOrder.toastSuccess", { orderNumber }));
+                toast.success(t("cancelDialog.toastSuccess", { orderNumber }));
                 onOpenChange(false);
                 onSuccess?.();
             })
             .catch(() => {
-                toast.error(t("cancelOrder.toastError", { orderNumber }));
+                toast.error(t("cancelDialog.toastError", { orderNumber }));
             })
             .finally(() => {
                 setLoading(false);
@@ -47,18 +47,16 @@ export function CancelOrderDialog({ open, onOpenChange, orderUuid, onSuccess }: 
         <AlertDialog open={open} onOpenChange={onOpenChange}>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>{t("cancelOrder.title")}</AlertDialogTitle>
+                    <AlertDialogTitle>{t("cancelDialog.title")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        {t("cancelOrder.description", { orderNumber })}
+                        {t("cancelDialog.description", { orderNumber })}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>{t("cancelOrder.cancel")}</AlertDialogCancel>
+                    <AlertDialogCancel>{t("cancelDialog.cancel")}</AlertDialogCancel>
                     <Button type="button" variant="destructive" onClick={handleCancel} isLoading={loading}>
-                        {t("cancelOrder.confirm")}
+                        {t("cancelDialog.confirm")}
                     </Button>
-                    {/* <AlertDialogAction asChild>
-                    </AlertDialogAction> */}
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
