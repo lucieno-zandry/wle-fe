@@ -3,12 +3,13 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Checkbox } from "~/components/ui/checkbox";
+import { Trash2 } from "lucide-react";
 import CartEmpty from "./cart-empty";
 import CartSheetItem from "./cart-sheet-item";
 
 import { Form } from "react-router";
 import { toast } from "sonner";
-import { removeCartItem } from "~/api/http-requests";
+import { removeCartItems } from "~/api/http-requests";
 import { useRefreshCart } from "~/hooks/use-cart";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
@@ -30,6 +31,7 @@ type CartSheetProps = {
     canCheckout: boolean;
     handleCheckout: () => void;
     onRemove: (itemId: number) => void;
+    onRemoveBulk: () => void;
     refreshCart: () => Promise<void>;
     t: TFunction;
 };
@@ -48,13 +50,14 @@ export function CartSheet({
     canCheckout,
     handleCheckout,
     onRemove,
+    onRemoveBulk,
     refreshCart,
     t
 }: CartSheetProps) {
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetContent side="right" className="p-0 w-full max-w-[400px]">
-                <Form className="flex flex-col overflow-y-auto">
+                <Form className="flex flex-col overflow-y-auto h-full">
                     <div className="p-6 pb-2">
                         <SheetHeader>
                             <SheetTitle className="text-2xl">{t('common:yourCart')}</SheetTitle>
@@ -78,9 +81,24 @@ export function CartSheet({
                                         {t('common:selectAll', { count: items.length })}
                                     </label>
                                 </div>
-                                <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
-                                    {t('common:selected', { count: checkedItemsCount })}
-                                </span>
+                                <div className="flex items-center gap-3">
+                                    <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+                                        {t('common:selected', { count: checkedItemsCount })}
+                                    </span>
+                                    {checkedItemsCount > 0 && (
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-6 w-6 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                                            onClick={onRemoveBulk}
+                                            title={t('common:remove')}
+                                            aria-label="Delete selected items"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -144,7 +162,6 @@ export function CartSheet({
     );
 }
 
-
 export default function ({ items, open, setOpen }: Pick<CartSheetProps, 'items' | 'open' | 'setOpen'>) {
     const refreshCart = useRefreshCart();
     const buyNow = useBuyNow();
@@ -197,21 +214,42 @@ export default function ({ items, open, setOpen }: Pick<CartSheetProps, 'items' 
 
     const handleCheckout = useCallback(() => {
         setOpen(false);
-        buyNow({ cart_items_ids: Array.from(checkedIds) })
-    }, [checkedIds, setOpen]);
+        buyNow({ cart_items_ids: Array.from(checkedIds) });
+    }, [checkedIds, setOpen, buyNow]);
 
     const onRemove = useCallback((itemId: number) => {
-        const loadingToast = toast.loading('Removing cart item...');
+        const loadingToast = toast.loading(t('common:toast.removingSelectedCartItems'));
 
-        removeCartItem(itemId)
+        removeCartItems(itemId)
             .then(() => {
                 refreshCart()
                     .then(() => {
                         toast.dismiss(loadingToast);
-                        toast.success('Cart item removed.');
+                        toast.success(t('common:toast.selectedCartItemsRemoved'));
                     });
             });
-    }, []);
+    }, [refreshCart]);
+
+    const onRemoveBulk = useCallback(() => {
+        if (checkedIds.size === 0) return;
+
+        const loadingToast = toast.loading(t('common:toast.removingSelectedCartItems'));
+        const idsToRemove = Array.from(checkedIds);
+
+        removeCartItems(idsToRemove)
+            .then(() => {
+                refreshCart()
+                    .then(() => {
+                        toast.success(t('common:toast.selectedCartItemsRemoved'));
+                    });
+            })
+            .catch(() => {
+                toast.error(t('common:toast.failedToRemoveCartItems'));
+            })
+            .finally(() => {
+                toast.dismiss(loadingToast);
+            });
+    }, [checkedIds, refreshCart]);
 
     return <CartSheet
         canCheckout={canCheckout}
@@ -222,6 +260,7 @@ export default function ({ items, open, setOpen }: Pick<CartSheetProps, 'items' 
         isAllSelected={isAllSelected}
         items={items}
         onRemove={onRemove}
+        onRemoveBulk={onRemoveBulk}
         open={open}
         refreshCart={refreshCart}
         setOpen={setOpen}

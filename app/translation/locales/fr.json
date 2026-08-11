@@ -137,5 +137,8 @@
     "serverErrorReferenceDescription": "Si ce problème persiste, veuillez fournir à notre équipe d'assistance la référence suivante :",
     "logInTitle": "Connectez-vous à votre compte",
     "logInDescription": "Utilisez votre adresse email pour accéder à des fonctionnalités avancées et des prix réduits.",
-    "back_button_aria": "Retour"
+    "back_button_aria": "Retour",
+    "toast.selectedCartItemsRemoved": "Les éléments séléctionnés sont supprimés.",
+    "toast.failedToRemoveCartItems": "Certains éléments n'ont pu être supprimés.",
+    "toast.removingSelectedCartItems": "Suppression des éléments séléctionnés..."
 }

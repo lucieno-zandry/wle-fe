@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import { useTranslation } from "react-i18next";
 import PromotionBadge from "./promotion-badge";
 import { useFormatMoney } from "~/lib/format-money";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useDebounce from "~/hooks/use-debounce";
 import { cn } from "~/lib/utils";
 import type { CartItem } from "wle-core";
@@ -41,6 +41,19 @@ export default function CartItemRow({ item, onQuantityCommit, onRemove, isUpdati
     const variantOptionsText = Object.entries(variant_options_snapshot)
         .map(([group, value]) => `${group}: ${value}`)
         .join(" • ");
+
+    const canIncrement = useMemo(() => !isUpdating && (!item.variant || localCount < item.variant.stock), [item.variant?.stock, localCount, isUpdating])
+    const canDecrement = useMemo(() => !isUpdating && localCount > 1, [localCount, isUpdating])
+
+    const increment = useCallback(() => {
+        if (!canIncrement) return;
+        setLocalCount((prev) => prev + 1);
+    }, [canIncrement]);
+
+    const decrement = useCallback(() => {
+        if (!canDecrement) return;
+        setLocalCount((prev) => Math.max(1, prev - 1));
+    }, [canDecrement]);
 
     return (
         <div className={cn("group flex gap-4 p-4 sm:gap-6 sm:p-6 transition-opacity", isUpdating && "opacity-60 pointer-events-none")}>
@@ -90,8 +103,8 @@ export default function CartItemRow({ item, onQuantityCommit, onRemove, isUpdati
                             variant="ghost"
                             size="icon"
                             className="h-7 w-7 rounded-full hover:bg-muted"
-                            disabled={isUpdating || localCount <= 1}
-                            onClick={() => setLocalCount((prev) => Math.max(1, prev - 1))}
+                            disabled={!canDecrement}
+                            onClick={decrement}
                         >
                             <Minus className="h-3 w-3" />
                         </Button>
@@ -100,8 +113,8 @@ export default function CartItemRow({ item, onQuantityCommit, onRemove, isUpdati
                             variant="ghost"
                             size="icon"
                             className="h-7 w-7 rounded-full hover:bg-muted"
-                            disabled={isUpdating}
-                            onClick={() => setLocalCount((prev) => prev + 1)}
+                            disabled={!canIncrement}
+                            onClick={increment}
                         >
                             <Plus className="h-3 w-3" />
                         </Button>

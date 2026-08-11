@@ -47,5 +47,9 @@
     "share.share": "Partager",
     "share.copyLink": "Copier le lien",
     "share.copySuccess": "Lien copié dans le presse-papier",
-    "share.copyFailed": "Échec de la copie du lien"
+    "share.copyFailed": "Échec de la copie du lien",
+    "toast.preparingCheckoutPage": "Préparation de la commande...",
+    "toast.addingToCart": "Ajout au panier en cours...",
+    "toast.addedToCart": "Produit ajouté au panier avec succès !",
+    "toast.addToCartError": "Produit non ajouté au panier. Veuillez réessayer!"
 }

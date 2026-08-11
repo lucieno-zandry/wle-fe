@@ -137,5 +137,8 @@
     "serverErrorReferenceDescription": "If this issue persists, please provide our support team with the following reference:",
     "logInTitle": "Log in to your account",
     "logInDescription": "Use your email and have access to more advanced features and pricings.",
-    "back_button_aria": "Back"
+    "back_button_aria": "Back",
+    "toast.selectedCartItemsRemoved": "Selected cart items removed.",
+    "toast.failedToRemoveCartItems": "Failed to remove some items.",
+    "toast.removingSelectedCartItems": "Removing selected cart items..."
 }

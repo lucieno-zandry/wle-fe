@@ -21,8 +21,6 @@ export function OrderCardHeader({ order, statusConfig, onDelete, formatMoney }: 
     const { t, i18n } = useTranslation("orders");
     const locale = i18n.resolvedLanguage === "fr" ? "fr-FR" : "en-US";
 
-    console.log(statusConfig);
-
     const date = new Date(order.created_at).toLocaleDateString(locale, {
         month: "long",
         day: "numeric",

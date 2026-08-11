@@ -1,7 +1,7 @@
 // routes/checkout/components/cart/cart-item-list.ts
 import CartItemRow from "./cart-item-row";
 import { useRevalidator } from "react-router";
-import { removeCartItem, updateCartItem } from "~/api/http-requests";
+import { removeCartItems, updateCartItem } from "~/api/http-requests";
 import { useState } from "react";
 import { toast } from "sonner";
 import { HttpException } from "~/api/app-fetch";
@@ -102,7 +102,7 @@ export default function CartItemList({ items }: CartItemListSmartProps) {
     const handleRemove = async (id: number) => {
         setIsRemoving(true);
         try {
-            await removeCartItem(id);
+            await removeCartItems(id);
             revalidator.revalidate();
         } catch (err) {
             if (err instanceof HttpException) {

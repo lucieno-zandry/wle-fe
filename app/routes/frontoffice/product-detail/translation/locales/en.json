@@ -47,5 +47,9 @@
     "share.share": "Share",
     "share.copyLink": "Copy Link",
     "share.copySuccess": "Link copied to clipboard",
-    "share.copyFailed": "Failed to copy link"
+    "share.copyFailed": "Failed to copy link",
+    "toast.preparingCheckoutPage": "Order preparation...",
+    "toast.addingToCart": "Adding to cart...",
+    "toast.addedToCart": "Product successfully added to your cart!",
+    "toast.addToCartError": "Failed to add product to cart. Please, try again!"
 }

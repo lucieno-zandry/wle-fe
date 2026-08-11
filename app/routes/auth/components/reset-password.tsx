@@ -39,7 +39,7 @@ export default function () {
     const navigation = useNavigation();
     const token = useLoaderData<string>();
     const canSubmit = useMemo(() => !formValidationErrors, [formValidationErrors]);
-    const isLoading = useMemo(() => navigation.state === "loading", [navigation]);
+    const isLoading = useMemo(() => navigation.state !== 'idle', [navigation]);
     const error = useActionData();
 
     const createPasswordSchema = (t: any) =>

@@ -80,27 +80,36 @@ export function addVariantToCart(payload: {
     return appFetch.post<{ cart_item: CartItem }>(`/cart/create/${payload.variant_id}`, { count: payload.count });
 }
 
-export function getCartItems({
-    where,
-    whereIn,
-}: {
+export function getCartItems(params: {
     where?: WhereConditions<CartItem>;
     whereIn?: WhereInConditions;
+    with?: ('product' | 'order' | 'user' | 'variant')[]
 } = {}, init: RequestInit = {}) {
-    return appFetch.get<{ cart_items: CartItem[] }>('/cart/all', {
-        ...init,
-        params: {
-            where: buildWhereParam(where, whereIn),
-        },
-    });
+    const { where, whereIn } = params;
+
+    return appFetch.get<{ cart_items: CartItem[] }>(
+        "/cart/all",
+        {
+            ...init,
+            params: {
+                where: buildWhereParam(where, whereIn),
+                with: params.with
+            },
+        }
+    );
 }
 
 export function updateCartItem(cartItemId: number, payload: { count: number }) {
     return appFetch.put<{ cart_item: CartItem }>(`/cart/update/${cartItemId}`, payload);
 }
 
-export function removeCartItem(cartItemId: number) {
-    return appFetch.delete(`/cart/delete?cart_item_ids=${cartItemId}`);
+export function removeCartItems(cartItemIds: number | number[]) {
+    let value: string = cartItemIds.toString();
+
+    if(typeof cartItemIds !== 'number')
+        value = cartItemIds.join(',');
+
+    return appFetch.delete(`/cart/delete?cart_item_ids=${value}`);
 }
 
 export function sendPasswordResetLink(email: FormDataEntryValue) {

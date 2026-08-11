@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { HttpException } from "~/api/app-fetch";
 import { useAuthDialogStore } from "~/stores/use-auth-dialog-store";
 import { useState } from "react";
+import { t } from "i18next";
 
 export type BuyNow = ((data: {
     cart_items_ids?: number[];
@@ -28,7 +29,7 @@ export function useBuyNow() {
     const buyNow: BuyNow = async (params) => {
         setLoading(true);
 
-        const loadingToast = toast.loading('Preparing checkout page ...');
+        const loadingToast = toast.loading(t('product-detail:toast.preparingCheckoutPage'));
 
         try {
             const response = await checkout(params);

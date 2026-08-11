@@ -105,7 +105,7 @@ export function AddressDialog({
                     <FieldGroup className="space-y-4">
                         <CustomField
                             name="recipient_name"
-                            label={t('addresses:recipient_name')}
+                            label={t('addresses:recipient_name') + ' *'}
                             defaultValue={address?.recipient_name}
                             dataFormat={addressSchema.shape.recipient_name}
                             onValidationErrorsChange={onValidationChange}
@@ -116,7 +116,7 @@ export function AddressDialog({
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <CustomField
                                 name="phone"
-                                label={t('addresses:phone')}
+                                label={t('addresses:phone') + ' *'}
                                 type="tel"
                                 placeholder="(555) 555-5555"
                                 defaultValue={address?.phone}
@@ -151,7 +151,7 @@ export function AddressDialog({
 
                         <CustomField
                             name="line1"
-                            label={t('addresses:line1')}
+                            label={t('addresses:line1') + ' *'}
                             placeholder={t('addresses:line1_placeholder')}
                             defaultValue={address?.line1}
                             dataFormat={addressSchema.shape.line1}
@@ -173,7 +173,7 @@ export function AddressDialog({
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <CustomField
                                 name="city"
-                                label={t('addresses:city')}
+                                label={t('addresses:city') + ' *'}
                                 defaultValue={address?.city}
                                 dataFormat={addressSchema.shape.city}
                                 onValidationErrorsChange={onValidationChange}
@@ -194,7 +194,7 @@ export function AddressDialog({
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <CustomField
                                 name="postal_code"
-                                label={t('addresses:postal_code')}
+                                label={t('addresses:postal_code') + ' *'}
                                 defaultValue={address?.postal_code}
                                 dataFormat={addressSchema.shape.postal_code}
                                 onValidationErrorsChange={onValidationChange}

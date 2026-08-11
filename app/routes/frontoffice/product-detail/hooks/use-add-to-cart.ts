@@ -3,6 +3,7 @@ import { addVariantToCart } from "~/api/http-requests"
 import useCartStore, { useRefreshCart } from "../../../../hooks/use-cart"
 import { HttpException, type FormatedResponse } from "~/api/app-fetch";
 import type { CartItem } from "wle-core";
+import { t } from "i18next";
 
 export function useAddToCart() {
     const refreshCart = useRefreshCart();
@@ -13,17 +14,17 @@ export function useAddToCart() {
         onError?: (e: HttpException) => void
     }) {
         toast.promise(addVariantToCart(data), {
-            loading: "Adding to cart...",
+            loading: t('product-detail:toast.addingToCart'),
             success: async (response) => {
                 await refreshCart();
                 if (!drawerOpen) setDrawerOpen(true);
                 options?.onSuccess?.(response);
-                return "Product successfully added to your cart!";
+                return t('product-detail:toast.addedToCart');
             },
             error: (error) => {
                 if (error instanceof HttpException) {
                     options?.onError?.(error);
-                    return error.data?.message || "Something went wrong, please, try again";
+                    return error.data?.message || t('product-detail:toast.addToCartError');
                 }
             }
         })

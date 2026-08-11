@@ -22,7 +22,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     try {
         const [cartItemsResponse, couponResponse] = await Promise.all([
-            getCartItems({ whereIn: { id: cartItemsIds } }, { headers }),
+            getCartItems({ whereIn: { id: cartItemsIds }, with: ['variant'] }, { headers }),
             couponCode ? getCouponFromCode(couponCode) : Promise.resolve({ data: null }),
         ]);
         if (!cartItemsResponse.data?.cart_items?.length) throw new HttpException(403);
@@ -30,7 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
             cart_items: cartItemsResponse.data.cart_items,
             coupon: couponResponse.data?.coupon ?? null,
         };
-    } catch {
+    } catch(e) {
         return redirect(appPathname('/'));
     }
 }
