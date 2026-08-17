@@ -1,14 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import Button from "~/components/custom-components/button";
+import { Button } from "wle-ui-package"
 import { Field, FieldGroup } from "~/components/ui/field";
 import { sendPasswordResetLink } from "~/api/http-requests";
 import { Form, useActionData, useLoaderData, useNavigation, type ClientActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import React from "react";
-import CustomField from "~/components/custom-components/field";
+import { AppUI } from "wle-ui-package";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { toast } from "sonner";
-import BackButton from "~/components/custom-components/back-button";
 
 export function loader({ request }: LoaderFunctionArgs) {
     const url = new URL(request.url);
@@ -63,14 +62,14 @@ export default function () {
 
     return (
         <Form className="p-6 md:p-8" method="post">
-            <BackButton />
+            <AppUI.BackButton />
             <FieldGroup>
                 <div className="flex flex-col items-center gap-2 text-center">
                     <h1 className="text-2xl font-bold">{t('reset_password_title')}</h1>
                     <p className="text-muted-foreground text-balance">{t('reset_password_instruction')}</p>
                 </div>
 
-                <CustomField
+                <AppUI.Field
                     validationErrors={actionData?.errors?.email}
                     label={t('email_label')}
                     id="email"

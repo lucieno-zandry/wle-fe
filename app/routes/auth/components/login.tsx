@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import Button from "~/components/custom-components/button"
+import { Button, BackButton } from "wle-ui-package"
 import { Field, FieldGroup, FieldLabel, FieldSeparator } from "~/components/ui/field"
-import CustomField from "~/components/custom-components/field";
+import { AppUI } from "wle-ui-package";
 import z from "zod";
 import { Link, redirect, useLoaderData, useNavigate, type LoaderFunctionArgs } from "react-router";
 import { getEmailInfo, logInWithEmail } from "~/api/http-requests";
@@ -10,7 +10,6 @@ import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { useSuccessRedirect } from "~/hooks/use-redirect-action";
 import { toast } from "sonner";
 import { ValidationException } from "~/api/app-fetch";
-import BackButton from "~/components/custom-components/back-button";
 import appPathname from "~/lib/app-pathname";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -85,7 +84,7 @@ export default function () {
           <p className="text-muted-foreground text-balance">{t('login_to_account')}</p>
         </div>
 
-        <CustomField
+        <AppUI.Field
           label={t('email_label')}
           id="email"
           type="email"
@@ -98,7 +97,7 @@ export default function () {
           required
         />
 
-        <CustomField
+        <AppUI.Field
           id="password"
           type="password"
           name="password"
@@ -116,7 +115,7 @@ export default function () {
               {t('forgot_password')}
             </Link>
           </div>
-        </CustomField>
+        </AppUI.Field>
 
         <Field>
           <Button type="submit" disabled={!canSubmit} isLoading={isLoading}>

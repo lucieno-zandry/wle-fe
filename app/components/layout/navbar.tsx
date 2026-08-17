@@ -1,20 +1,15 @@
-import { Link, useLoaderData, useLocation, useNavigate } from "react-router"
+import { Link, useLocation, useNavigate } from "react-router"
 import { useUserStore } from "~/hooks/use-user"
 import { Button } from "../ui/button";
 import UserDropdown from "./user-dropdown";
 import Cart from "../cart/cart";
-import { LanguageSwitcher } from "~/components/layout/language-switcher";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
-import { CurrencySelector } from "./currency-selector";
 import appPathname, { useAppPathname } from "~/lib/app-pathname";
-import { ThemeSelector } from "./theme-selector";
 import { useMemo } from "react";
 import { NavSearch } from "./nav-search";
 import { NotificationsPopover } from "../notifications/notifications-popover";
-import type { loader } from "~/routes/config/config-boundary";
 import { useSettings } from "~/hooks/use-settings";
-import BackButton from "../custom-components/back-button";
 import { ChevronLeft } from "lucide-react";
 import { useAuthDialogStore } from "../../stores/use-auth-dialog-store";
 import type { User } from "wle-core";

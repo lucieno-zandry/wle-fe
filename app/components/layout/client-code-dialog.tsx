@@ -12,8 +12,8 @@ import { useUserStore } from "~/hooks/use-user";
 import { getClientCode, updateAuthUser } from "~/api/http-requests";
 import { ValidationException } from "~/api/app-fetch";
 import { toast } from "sonner";
-import Button from "~/components/custom-components/button";
-import CustomField from "~/components/custom-components/field";
+import { Button } from "wle-ui-package"
+import { AppUI } from "wle-ui-package";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { useRevalidator } from "react-router";
@@ -150,7 +150,7 @@ export function ClientCodeDialog() {
                     </DialogHeader>
 
                     <div className="grid gap-4 py-4">
-                        <CustomField
+                        <AppUI.Field
                             name="code"
                             id="code"
                             placeholder={t("common:enterClientCodePlaceholder")}

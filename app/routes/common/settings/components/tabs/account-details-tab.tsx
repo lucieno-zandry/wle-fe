@@ -2,7 +2,7 @@ import { Calendar, CheckCircle2, Shield, User } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../../components/ui/card";
 import { TabsContent } from "../../../../../components/ui/tabs";
 import { Separator } from "../../../../../components/ui/separator";
-import Button from "../../../../../components/custom-components/button";
+import { Button } from "wle-ui-package";
 import formatDate from "~/lib/format-date";
 import { useUserStore } from "~/hooks/use-user";
 import type { TFunction } from "i18next";

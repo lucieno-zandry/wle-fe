@@ -10,7 +10,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
-import Button from "~/components/custom-components/button";
+import { Button } from "wle-ui-package"
 import { deleteOrder } from "~/api/http-requests";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";

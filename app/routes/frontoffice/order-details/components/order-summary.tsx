@@ -5,7 +5,7 @@ import { Separator } from "../../../../components/ui/separator";
 import { useState } from "react";
 import { createTransaction } from "~/api/http-requests";
 import { toast } from "sonner";
-import Button from "../../../../components/custom-components/button";
+import { Button } from "wle-ui-package";
 import appNavigate from "~/lib/app-navigate";
 import { useFormatMoney } from "~/lib/format-money";
 import { HttpException, ValidationException } from "~/api/app-fetch";

@@ -1,7 +1,7 @@
 import z from "zod";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "~/components/ui/dialog";
-import Field from "~/components/custom-components/field";
-import Button from "~/components/custom-components/button";
+import { Field } from "wle-ui-package";
+import { Button } from "wle-ui-package"
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 

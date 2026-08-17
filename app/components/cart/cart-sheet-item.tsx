@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Button from "../custom-components/button";
+import { Button } from "wle-ui-package";
 import { updateCartItem } from "~/api/http-requests";
 import { toast } from "sonner";
 import type { TFunction } from "i18next";

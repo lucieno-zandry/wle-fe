@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import Button from "~/components/custom-components/button";
+import { Button } from "wle-ui-package"
 import { Field, FieldGroup, FieldSeparator } from "~/components/ui/field";
 import { getEmailInfo } from "~/api/http-requests";
 import { Form, redirect, useActionData, useNavigation, type ClientActionFunctionArgs } from "react-router";
 import React from "react";
-import CustomField from "~/components/custom-components/field";
+import { AppUI } from "wle-ui-package";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
-import BackButton from "~/components/custom-components/back-button";
+import { BackButton } from "wle-ui-package";
 import { HttpException, ValidationException } from '~/api/app-fetch';
 import appPathname from '~/lib/app-pathname';
 
@@ -43,14 +43,14 @@ export async function action({ request, params }: ClientActionFunctionArgs) {
 }
 
 export default function () {
-    const { t } = useTranslation('auth');
+    const { t } = useTranslation();
     const actionData = useActionData<any>();
     const navigation = useNavigation();
     const isLoading = React.useMemo(() => navigation.state === "submitting", [navigation.state]);
 
     // Create schema with translation
     const createEmailSchema = (t: any) =>
-        z.string().email(t('validation.email_invalid'));
+        z.string().email(t('auth:validation.email_invalid'));
     const emailSchema = React.useMemo(() => createEmailSchema(t), [t]);
 
     const [state, setState] = React.useState({
@@ -71,20 +71,20 @@ export default function () {
 
     return (
         <Form className="p-6 md:p-8" method="post">
-            <BackButton path="/" withLabel />
+            <BackButton path="/" label={t('common:back_button_aria')} />
             <FieldGroup>
                 <div className="flex flex-col items-center gap-2 text-center">
-                    <h1 className="text-2xl font-bold">{t('welcome_back')}</h1>
-                    <p className="text-muted-foreground text-balance">{t('login_to_account')}</p>
+                    <h1 className="text-2xl font-bold">{t('auth:welcome_back')}</h1>
+                    <p className="text-muted-foreground text-balance">{t('auth:login_to_account')}</p>
                 </div>
 
-                <CustomField
+                <AppUI.Field
                     validationErrors={actionData?.errors?.email}
-                    label={t('email_label')}
+                    label={t('auth:email_label')}
                     id="email"
                     type="email"
                     name="email"
-                    placeholder={t('email_placeholder')}
+                    placeholder={t('auth:email_placeholder')}
                     dataFormat={emailSchema}
                     onValidationErrorsChange={handleValidationErrorsChange}
                     required
@@ -92,12 +92,12 @@ export default function () {
 
                 <Field>
                     <Button type="submit" isLoading={isLoading} disabled={!userCanSubmit}>
-                        {t('continue_button')}
+                        {t('auth:continue_button')}
                     </Button>
                 </Field>
 
                 <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                    {t('or_continue_with')}
+                    {t('auth:or_continue_with')}
                 </FieldSeparator>
 
                 <Field className="grid grid-cols-2 gap-4">
@@ -108,7 +108,7 @@ export default function () {
                                 fill="currentColor"
                             />
                         </svg>
-                        <span className="sr-only">{t('google_login_aria')}</span>
+                        <span className="sr-only">{t('auth:google_login_aria')}</span>
                     </Button>
                     <Button variant="outline" type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -117,7 +117,7 @@ export default function () {
                                 fill="currentColor"
                             />
                         </svg>
-                        <span className="sr-only">{t('meta_login_aria')}</span>
+                        <span className="sr-only">{t('auth:meta_login_aria')}</span>
                     </Button>
                 </Field>
             </FieldGroup>

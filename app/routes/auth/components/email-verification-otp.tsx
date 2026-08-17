@@ -15,7 +15,7 @@ import {
 } from "~/components/ui/card";
 import { Form, useNavigation } from "react-router";
 import { Mail, LogOut } from "lucide-react";
-import Button from "../../../components/custom-components/button";
+import { Button } from "wle-ui-package";
 
 export type EmailVerificationOtpProps = {
     email: string;

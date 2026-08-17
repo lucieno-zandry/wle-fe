@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import Button from "~/components/custom-components/button"
 import { Field, FieldGroup } from "~/components/ui/field"
-import CustomField from "~/components/custom-components/field";
+import { AppUI, Button, BackButton } from "wle-ui-package";
 import z from "zod";
 import { redirect, useLoaderData, useNavigate, useParams, type LoaderFunctionArgs } from "react-router";
 import { getEmailInfo, registerUser } from "~/api/http-requests";
@@ -9,7 +8,6 @@ import React, { useMemo, useState, type FormEventHandler } from "react";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { toast } from "sonner";
 import { ValidationException } from "~/api/app-fetch";
-import BackButton from "~/components/custom-components/back-button";
 import { usePreferencesStore } from "~/stores/use-user-preference-store";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -92,7 +90,7 @@ export default function () {
           <p className="text-muted-foreground text-balance">{t('create_account_free')}</p>
         </div>
 
-        <CustomField
+        <AppUI.Field
           label={t('email_label')}
           id="email"
           type="email"
@@ -102,7 +100,7 @@ export default function () {
           required
         />
 
-        <CustomField
+        <AppUI.Field
           id="password"
           type="password"
           name="password"
@@ -113,7 +111,7 @@ export default function () {
           required
         />
 
-        <CustomField
+        <AppUI.Field
           id="password_confirmation"
           type="password"
           name="password_confirmation"

@@ -3,7 +3,7 @@ import getInitials from "~/lib/get-initials";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Card, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Camera, CheckCircle2, Mail, Loader2 } from "lucide-react";
-import Button from "~/components/custom-components/button";
+import { Button } from "wle-ui-package"
 import { useUserStore } from "~/hooks/use-user";
 import { toast } from "sonner";
 import { updateAuthUser } from "~/api/http-requests";

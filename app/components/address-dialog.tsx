@@ -1,8 +1,7 @@
 import { Form, useNavigation } from "react-router";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { Field, FieldError, FieldGroup, FieldLabel } from "./ui/field";
-import CustomField from "~/components/custom-components/field";
-import Button from "./custom-components/button";
+import { AppUI, CountrySelector } from "wle-ui-package";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { useState, useMemo, type FocusEvent, useEffect, useCallback } from "react";
@@ -11,8 +10,7 @@ import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
-import getValidationError from "~/lib/get-validation-error";
-import { CountrySelector } from "./custom-components/country-selector";
+import { getValidationError } from "wle-core";
 import type { Address } from "wle-core";
 
 // Helper to create schema with translated messages
@@ -103,7 +101,7 @@ export function AddressDialog({
                         </>
                     )}
                     <FieldGroup className="space-y-4">
-                        <CustomField
+                        <AppUI.Field
                             name="recipient_name"
                             label={t('addresses:recipient_name') + ' *'}
                             defaultValue={address?.recipient_name}
@@ -114,7 +112,7 @@ export function AddressDialog({
                         />
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <CustomField
+                            <AppUI.Field
                                 name="phone"
                                 label={t('addresses:phone') + ' *'}
                                 type="tel"
@@ -126,7 +124,7 @@ export function AddressDialog({
                                 validationErrors={formErrors?.phone}
                                 required
                             />
-                            <CustomField
+                            <AppUI.Field
                                 name="phone_alt"
                                 label={t('addresses:phone_alt')}
                                 type="tel"
@@ -139,7 +137,7 @@ export function AddressDialog({
                             />
                         </div>
 
-                        <CustomField
+                        <AppUI.Field
                             name="label"
                             label={t('addresses:label')}
                             placeholder={t('addresses:label_placeholder')}
@@ -149,7 +147,7 @@ export function AddressDialog({
                             validationErrors={formErrors?.label}
                         />
 
-                        <CustomField
+                        <AppUI.Field
                             name="line1"
                             label={t('addresses:line1') + ' *'}
                             placeholder={t('addresses:line1_placeholder')}
@@ -160,7 +158,7 @@ export function AddressDialog({
                             required
                         />
 
-                        <CustomField
+                        <AppUI.Field
                             name="line2"
                             label={t('addresses:line2_optional')}
                             placeholder={t('addresses:line2_placeholder')}
@@ -171,7 +169,7 @@ export function AddressDialog({
                         />
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <CustomField
+                            <AppUI.Field
                                 name="city"
                                 label={t('addresses:city') + ' *'}
                                 defaultValue={address?.city}
@@ -180,7 +178,7 @@ export function AddressDialog({
                                 validationErrors={formErrors?.city}
                                 required
                             />
-                            <CustomField
+                            <AppUI.Field
                                 name="state"
                                 label={t('addresses:state')}
                                 placeholder={t('addresses:state_placeholder')}
@@ -192,7 +190,7 @@ export function AddressDialog({
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <CustomField
+                            <AppUI.Field
                                 name="postal_code"
                                 label={t('addresses:postal_code') + ' *'}
                                 defaultValue={address?.postal_code}
@@ -257,20 +255,20 @@ export function AddressDialog({
                     </div>
 
                     <div className="flex justify-end gap-3 border-t pt-6">
-                        <Button
+                        <AppUI.Button
                             variant="ghost"
                             type="button"
                             onClick={() => onOpenChange(false)}
                         >
                             {t("common:cancel")}
-                        </Button>
-                        <Button
+                        </AppUI.Button>
+                        <AppUI.Button
                             type="submit"
                             isLoading={isLoading}
                             disabled={!canSubmit}
                         >
                             {isEdit ? t("addresses:dialog.save_changes") : t("addresses:dialog.create_address")}
-                        </Button>
+                        </AppUI.Button>
                     </div>
                 </FormComponent>
             </DialogContent>

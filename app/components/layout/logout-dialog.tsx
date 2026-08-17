@@ -8,7 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "~/components/ui/dialog"
-import Button from "../custom-components/button"
+import { Button } from "wle-ui-package"
 import { useTranslation } from "react-i18next";
 import { useLogout } from "~/hooks/use-logout"
 

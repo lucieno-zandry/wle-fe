@@ -9,7 +9,7 @@ import {
     DialogFooter,
     DialogClose,
 } from "~/components/ui/dialog";
-import Button from "../../../../components/custom-components/button";
+import { Button } from "wle-ui-package";
 import { AlertTriangle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 

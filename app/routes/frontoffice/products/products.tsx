@@ -7,7 +7,7 @@ import ProductsHeader from "./components/products-header";
 import { ProductGrid } from "../../../components/product-grid";
 import { useEffect, useRef, useState } from "react";
 import useDebounce from "~/hooks/use-debounce";
-import { LoadMoreButton } from "~/components/custom-components/load-more-button";
+import { LoadMoreButton } from "wle-ui-package";
 import { ProductGridSkeleton } from "./components/product-grid-skeleton";
 import { getPreferencesFromLoaderFunctionArgs } from "~/lib/app-pathname";
 import type { Product } from "wle-core";
